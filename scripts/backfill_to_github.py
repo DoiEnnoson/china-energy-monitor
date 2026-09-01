@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 Scans the vault for all Energiebilanz RECH files that contain a <!--machine_data-->
-block, extracts import and production figures from each, and writes all periods
-to data/fuel-imports/gacc_production.csv in the GitHub repo. One commit total.
+block and writes two wide-format CSVs to the GitHub repo:
+  data/production/nbs_production.csv   — one row per period, NBS domestic output
+  data/fuel-imports/gacc_imports.csv   — one row per period, GACC import qty + value
 
 Run once after annotating existing RECH files with machine_data blocks.
 
@@ -19,69 +20,84 @@ from pathlib import Path
 import yaml
 import pandas as pd
 
-VAULT      = Path("/Users/hado/Documents/Arbeit/China-Archiv")
-RECH_DIRS  = [
-    VAULT / "11_Recherche" / "Berichte",
-]
-REPO_URL   = "https://github.com/DoiEnnoson/china-energy-monitor.git"
-REPO_DIR   = Path("/tmp/china-energy-monitor")
-OUT_FILE   = REPO_DIR / "data/fuel-imports/gacc_production.csv"
-COLUMNS    = ["period", "commodity", "flow", "qty", "qty_unit", "value_usd_bn"]
+VAULT     = Path("/Users/hado/Documents/Arbeit/China-Archiv")
+RECH_DIRS = [VAULT / "11_Recherche" / "Berichte"]
+REPO_URL  = "https://github.com/DoiEnnoson/china-energy-monitor.git"
+REPO_DIR  = Path("/tmp/china-energy-monitor")
 
-ENERGIEBILANZ_PATTERN = re.compile(
-    r"energiebilanz|energiebilanz|energy.bilanz|china.energie", re.IGNORECASE
-)
+NBS_FILE  = REPO_DIR / "data/production/nbs_production.csv"
+GACC_FILE = REPO_DIR / "data/fuel-imports/gacc_imports.csv"
+
+NBS_COLS  = ["period", "coal_mt", "crude_oil_mt", "gas_bcm"]
+GACC_COLS = [
+    "period",
+    "coal_mt",        "coal_usd_bn",       "coal_usd_per_mt",
+    "crude_oil_mt",   "crude_oil_usd_bn",  "crude_oil_usd_per_mt",
+    "gas_mt",         "gas_usd_bn",        "gas_usd_per_mt",
+]
+
+ENERGIEBILANZ_RE = re.compile(r"energiebilanz|energy.bilanz|china.energie", re.IGNORECASE)
 
 
 def find_rech_files() -> list[Path]:
     files = []
     for d in RECH_DIRS:
-        for f in d.glob("*.md"):
-            if ENERGIEBILANZ_PATTERN.search(f.name):
+        for f in sorted(d.glob("*.md")):
+            if ENERGIEBILANZ_RE.search(f.name):
                 files.append(f)
-    return sorted(files)
+    return files
 
 
 def extract_yaml(text: str) -> dict | None:
-    match = re.search(r"<!--machine_data\s+(.*?)-->", text, re.DOTALL)
-    if not match:
-        return None
-    return yaml.safe_load(match.group(1))
+    m = re.search(r"<!--machine_data\s+(.*?)-->", text, re.DOTALL)
+    return yaml.safe_load(m.group(1)) if m else None
 
 
-def build_rows(data: dict) -> list[dict]:
-    period = str(data["period"])
-    rows = []
+def vpu(qty, val):
+    """Value per unit in USD/t. None if either input is None/zero."""
+    if qty and val:
+        return round(val * 1000 / qty, 1)
+    return None
 
-    for commodity, vals in data.get("imports", {}).items():
-        rows.append({
-            "period":       period,
-            "commodity":    commodity,
-            "flow":         "import",
-            "qty":          vals.get("qty_mt"),
-            "qty_unit":     "mt",
-            "value_usd_bn": vals.get("value_usd_bn"),
-        })
 
-    for key, val in data.get("production", {}).items():
-        commodity, unit = key.rsplit("_", 1)
-        rows.append({
-            "period":       period,
-            "commodity":    commodity,
-            "flow":         "production",
-            "qty":          val,
-            "qty_unit":     unit,
-            "value_usd_bn": None,
-        })
+def to_nbs_row(data: dict) -> dict:
+    p = data.get("production", {})
+    return {
+        "period":        str(data["period"]),
+        "coal_mt":       p.get("coal_mt"),
+        "crude_oil_mt":  p.get("crude_oil_mt"),
+        "gas_bcm":       p.get("gas_bcm"),
+    }
 
-    return rows
+
+def to_gacc_row(data: dict) -> dict:
+    imp = data.get("imports", {})
+    coal = imp.get("coal", {})
+    oil  = imp.get("crude_oil", {})
+    gas  = imp.get("gas", {})
+
+    cq, cv = coal.get("qty_mt"), coal.get("value_usd_bn")
+    oq, ov = oil.get("qty_mt"),  oil.get("value_usd_bn")
+    gq, gv = gas.get("qty_mt"),  gas.get("value_usd_bn")
+
+    return {
+        "period":              str(data["period"]),
+        "coal_mt":             cq,
+        "coal_usd_bn":         cv,
+        "coal_usd_per_mt":     vpu(cq, cv),
+        "crude_oil_mt":        oq,
+        "crude_oil_usd_bn":    ov,
+        "crude_oil_usd_per_mt": vpu(oq, ov),
+        "gas_mt":              gq,
+        "gas_usd_bn":          gv,
+        "gas_usd_per_mt":      vpu(gq, gv),
+    }
 
 
 def run_git(args: list[str]) -> None:
-    result = subprocess.run(["git"] + args, cwd=REPO_DIR,
-                            capture_output=True, text=True)
-    if result.returncode != 0:
-        raise RuntimeError(f"git {' '.join(args)}:\n{result.stderr}")
+    r = subprocess.run(["git"] + args, cwd=REPO_DIR, capture_output=True, text=True)
+    if r.returncode != 0:
+        raise RuntimeError(f"git {' '.join(args)}:\n{r.stderr}")
 
 
 def get_token() -> str:
@@ -89,74 +105,63 @@ def get_token() -> str:
                           capture_output=True, text=True).stdout.strip()
 
 
-def auth_url(token: str) -> str:
-    return REPO_URL.replace("https://", f"https://DoiEnnoson:{token}@")
-
-
 def ensure_repo() -> None:
     token = get_token()
+    url = REPO_URL.replace("https://", f"https://DoiEnnoson:{token}@")
     if not REPO_DIR.exists():
-        subprocess.run(["git", "clone", auth_url(token), str(REPO_DIR)], check=True)
+        subprocess.run(["git", "clone", url, str(REPO_DIR)], check=True)
     else:
-        run_git(["remote", "set-url", "origin", auth_url(token)])
+        run_git(["remote", "set-url", "origin", url])
         run_git(["pull", "origin", "main"])
 
 
 def main():
-    print(f"[{datetime.utcnow():%Y-%m-%d %H:%M} UTC] Scanning vault for Energiebilanz RECH files...")
+    print(f"[{datetime.now():%Y-%m-%d %H:%M}] Scanning vault for Energiebilanz RECH files...")
 
-    rech_files = find_rech_files()
-    print(f"Found {len(rech_files)} candidates:")
-    for f in rech_files:
-        print(f"  {f.name}")
+    nbs_rows, gacc_rows, periods = [], [], []
 
-    all_rows = []
-    processed = []
-
-    for f in rech_files:
-        text = f.read_text(encoding="utf-8")
-        data = extract_yaml(text)
+    for f in find_rech_files():
+        data = extract_yaml(f.read_text(encoding="utf-8"))
         if data is None:
-            print(f"  [SKIP] {f.name} — no machine_data block")
+            print(f"  [SKIP] {f.name}")
             continue
-        rows = build_rows(data)
-        all_rows.extend(rows)
-        processed.append((str(data["period"]), f.name, len(rows)))
-        print(f"  [OK]   {f.name} — period {data['period']}, {len(rows)} rows")
+        nbs_rows.append(to_nbs_row(data))
+        gacc_rows.append(to_gacc_row(data))
+        periods.append(str(data["period"]))
+        print(f"  [OK]   {f.name} — {data['period']}")
 
-    if not all_rows:
-        print("\nNo data extracted. Annotate RECH files with <!--machine_data--> blocks first.")
+    if not nbs_rows:
+        print("No annotated RECH files found.")
         sys.exit(0)
 
     ensure_repo()
 
-    OUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    result = (
-        pd.DataFrame(all_rows, columns=COLUMNS)
-        .sort_values(["period", "commodity", "flow"])
-        .reset_index(drop=True)
-    )
-
-    result.to_csv(OUT_FILE, index=False)
-    print(f"\nWritten: {OUT_FILE} ({len(result)} rows, {result['period'].nunique()} periods)")
+    for path, rows, cols in [
+        (NBS_FILE,  nbs_rows,  NBS_COLS),
+        (GACC_FILE, gacc_rows, GACC_COLS),
+    ]:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        df = pd.DataFrame(rows, columns=cols).sort_values("period").reset_index(drop=True)
+        df.to_csv(path, index=False)
+        print(f"Written: {path.name} ({len(df)} rows)")
 
     token = get_token()
-    run_git(["remote", "set-url", "origin", auth_url(token)])
-    run_git(["add", "data/fuel-imports/gacc_production.csv"])
+    run_git(["remote", "set-url", "origin",
+             REPO_URL.replace("https://", f"https://DoiEnnoson:{token}@")])
+    run_git(["add", "data/production/", "data/fuel-imports/"])
 
-    no_changes = subprocess.run(
+    no_change = subprocess.run(
         ["git", "diff", "--staged", "--quiet"], cwd=REPO_DIR
     ).returncode == 0
 
-    if no_changes:
-        print("No changes to commit — already up to date.")
+    if no_change:
+        print("No changes to commit.")
     else:
-        periods = sorted({p for p, _, _ in processed})
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        p = sorted(periods)
         run_git(["commit", "-m",
-                 f"data: backfill gacc_production {periods[0]}–{periods[-1]} ({today})"])
+                 f"data: nbs_production + gacc_imports {p[0]}–{p[-1]} ({datetime.now():%Y-%m-%d})"])
         run_git(["push", "origin", "main"])
-        print("Pushed to GitHub.")
+        print("Pushed.")
 
     run_git(["remote", "set-url", "origin", REPO_URL])
 
