@@ -2,3 +2,4 @@ comtradeapicall
 pandas
 requests
 urllib3
+pyyaml
