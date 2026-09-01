@@ -20,7 +20,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install comtradeapicall pandas urllib3
+        run: pip install -r requirements.txt
 
       - name: Fetch ComTrade data
         env:
