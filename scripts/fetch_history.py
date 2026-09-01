@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
 One-time script: fetches monthly China fossil fuel import data 2020-2024
-from UN ComTrade. Writes data/fuel-imports/comtrade_history.csv.
+from UN ComTrade. Writes one CSV per commodity:
+  data/fuel-imports/comtrade_coal.csv
+  data/fuel-imports/comtrade_crude_oil.csv
+  data/fuel-imports/comtrade_lng.csv
+  data/fuel-imports/comtrade_pipeline_gas.csv
 
-Commodities: Coal (2701), Crude Oil (2709), LNG (271111), Pipeline Gas (271121).
-Fields per row: period, commodity, partner, value (bn USD), qty (Mt), value/tonne (USD/t).
+Each file: period, partner, value_usd_bn, qty_mt, value_per_mt_usd
 
 Usage:
     export COMTRADE_PRIMARY_KEY=<key>
@@ -27,7 +30,7 @@ COMMODITIES = {
 }
 
 YEARS = ["2020", "2021", "2022", "2023", "2024"]
-OUT_PATH = "data/fuel-imports/comtrade_history.csv"
+OUT_DIR = "data/fuel-imports"
 
 
 def periods_for_year(year: str) -> str:
@@ -57,7 +60,8 @@ def fetch(cmd_code: str, year: str) -> pd.DataFrame:
 def main():
     print(f"[{datetime.utcnow():%Y-%m-%d %H:%M} UTC] Fetching ComTrade history 2020-2024...")
 
-    frames = []
+    frames = {name: [] for name in COMMODITIES.values()}
+
     for year in YEARS:
         print(f"\n  {year}:")
         for code, name in COMMODITIES.items():
@@ -67,8 +71,6 @@ def main():
                 print("no data")
                 continue
             df = df[df["partnerDesc"] != "World"].copy()
-            df["commodity"] = name
-            df["commodity_code"] = code
             df["value_usd_bn"] = (df["primaryValue"] / 1e9).round(4)
             df["qty_mt"] = (df["netWgt"] / 1e9).round(4)
             df["value_per_mt_usd"] = (
@@ -76,29 +78,25 @@ def main():
                 .where(df["netWgt"] > 0)
                 .round(2)
             )
-            frames.append(
-                df[["period", "commodity", "commodity_code",
-                    "partnerDesc", "value_usd_bn", "qty_mt", "value_per_mt_usd"]]
+            frames[name].append(
+                df[["period", "partnerDesc", "value_usd_bn", "qty_mt", "value_per_mt_usd"]]
                 .rename(columns={"partnerDesc": "partner"})
             )
             print(f"{len(df)} rows")
 
-    if not frames:
-        print("\nNo data fetched. Check API key and connection.")
-        sys.exit(1)
-
-    result = (
-        pd.concat(frames, ignore_index=True)
-        .sort_values(
-            ["period", "commodity", "value_usd_bn"],
-            ascending=[True, True, False],
+    os.makedirs(OUT_DIR, exist_ok=True)
+    for name, parts in frames.items():
+        if not parts:
+            print(f"\n  {name}: no data — skipping")
+            continue
+        out = (
+            pd.concat(parts, ignore_index=True)
+            .sort_values(["period", "value_usd_bn"], ascending=[True, False])
+            .reset_index(drop=True)
         )
-        .reset_index(drop=True)
-    )
-
-    os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
-    result.to_csv(OUT_PATH, index=False)
-    print(f"\nWritten: {OUT_PATH} ({len(result)} rows, {result['period'].nunique()} periods)")
+        path = f"{OUT_DIR}/comtrade_{name}.csv"
+        out.to_csv(path, index=False)
+        print(f"\nWritten: {path} ({len(out)} rows)")
 
 
 if __name__ == "__main__":

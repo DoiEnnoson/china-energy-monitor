@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """
-Fetches monthly China fossil fuel import data from UN ComTrade for 2025.
-Commodities: Coal (2701), Crude Oil (2709), LNG (271111), Pipeline Gas (271121).
-Fields: partner, quantity (Mt), value (bn USD), value per tonne (USD/t).
-Always overwrites data/fuel-imports/comtrade_2025.csv.
+Monthly GitHub Actions script: fetches China fossil fuel import data for 2025
+from UN ComTrade and upserts into the commodity CSVs:
+  data/fuel-imports/comtrade_coal.csv
+  data/fuel-imports/comtrade_crude_oil.csv
+  data/fuel-imports/comtrade_lng.csv
+  data/fuel-imports/comtrade_pipeline_gas.csv
+
+Each file: period, partner, value_usd_bn, qty_mt, value_per_mt_usd
+2025 rows are replaced in full on each run (idempotent).
 
 Usage:
     export COMTRADE_PRIMARY_KEY=<key>
@@ -27,7 +32,7 @@ COMMODITIES = {
 
 YEAR = "2025"
 PERIODS = ",".join(f"{YEAR}{m:02d}" for m in range(1, 13))
-OUT_PATH = "data/fuel-imports/comtrade_2025.csv"
+OUT_DIR = "data/fuel-imports"
 
 
 def fetch(cmd_code: str) -> pd.DataFrame:
@@ -50,10 +55,25 @@ def fetch(cmd_code: str) -> pd.DataFrame:
     return df if df is not None and not df.empty else pd.DataFrame()
 
 
+def upsert_year(path: str, new_rows: pd.DataFrame, year: str) -> pd.DataFrame:
+    if os.path.exists(path):
+        existing = pd.read_csv(path, dtype={"period": str})
+        existing = existing[~existing["period"].str.startswith(year)]
+    else:
+        existing = pd.DataFrame(columns=new_rows.columns)
+    return (
+        pd.concat([existing, new_rows], ignore_index=True)
+        .sort_values(["period", "value_usd_bn"], ascending=[True, False])
+        .reset_index(drop=True)
+    )
+
+
 def main():
     print(f"[{datetime.utcnow():%Y-%m-%d %H:%M} UTC] Fetching ComTrade data for {YEAR}...")
 
-    frames = []
+    any_data = False
+    os.makedirs(OUT_DIR, exist_ok=True)
+
     for code, name in COMMODITIES.items():
         print(f"  {name} ({code})...", end=" ", flush=True)
         df = fetch(code)
@@ -62,8 +82,6 @@ def main():
             continue
 
         df = df[df["partnerDesc"] != "World"].copy()
-        df["commodity"] = name
-        df["commodity_code"] = code
         df["value_usd_bn"] = (df["primaryValue"] / 1e9).round(4)
         df["qty_mt"] = (df["netWgt"] / 1e9).round(4)
         df["value_per_mt_usd"] = (
@@ -71,30 +89,21 @@ def main():
             .where(df["netWgt"] > 0)
             .round(2)
         )
-        frames.append(
-            df[["period", "commodity", "commodity_code",
-                "partnerDesc", "value_usd_bn", "qty_mt", "value_per_mt_usd"]]
+        new_rows = (
+            df[["period", "partnerDesc", "value_usd_bn", "qty_mt", "value_per_mt_usd"]]
             .rename(columns={"partnerDesc": "partner"})
         )
         periods_found = sorted(df["period"].unique())
         print(f"{len(df)} rows — periods: {', '.join(str(p) for p in periods_found)}")
 
-    if not frames:
+        path = f"{OUT_DIR}/comtrade_{name}.csv"
+        result = upsert_year(path, new_rows, YEAR)
+        result.to_csv(path, index=False)
+        any_data = True
+
+    if not any_data:
         print("No 2025 data available yet. Exiting without writing.")
         sys.exit(0)
-
-    result = (
-        pd.concat(frames, ignore_index=True)
-        .sort_values(
-            ["period", "commodity", "value_usd_bn"],
-            ascending=[True, True, False],
-        )
-        .reset_index(drop=True)
-    )
-
-    os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
-    result.to_csv(OUT_PATH, index=False)
-    print(f"\nWritten: {OUT_PATH} ({len(result)} rows, {result['period'].nunique()} periods)")
 
 
 if __name__ == "__main__":
