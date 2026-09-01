@@ -31,5 +31,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add --ignore-missing data/fuel-imports/comtrade_2025.csv
+          git add data/fuel-imports/
           git diff --staged --quiet || (git commit -m "data: update comtrade_2025.csv $(date -u +%Y-%m-%d)" && git push)
