@@ -28,7 +28,7 @@ REPO_DIR  = Path("/tmp/china-energy-monitor")
 NBS_FILE  = REPO_DIR / "data/production/nbs_production.csv"
 GACC_FILE = REPO_DIR / "data/fuel-imports/gacc_imports.csv"
 
-NBS_COLS  = ["period", "coal_mt", "crude_oil_mt", "gas_bcm"]
+NBS_COLS  = ["period", "coal_mt", "coal_mt_yoy_pct", "crude_oil_mt", "crude_oil_mt_yoy_pct", "gas_bcm", "gas_bcm_yoy_pct"]
 GACC_COLS = [
     "period",
     "coal_mt",        "coal_usd_bn",       "coal_usd_per_mt",
@@ -63,10 +63,13 @@ def vpu(qty, val):
 def to_nbs_row(data: dict) -> dict:
     p = data.get("production", {})
     return {
-        "period":        str(data["period"]),
-        "coal_mt":       p.get("coal_mt"),
-        "crude_oil_mt":  p.get("crude_oil_mt"),
-        "gas_bcm":       p.get("gas_bcm"),
+        "period":               str(data["period"]),
+        "coal_mt":              p.get("coal_mt"),
+        "coal_mt_yoy_pct":      p.get("coal_mt_yoy_pct"),
+        "crude_oil_mt":         p.get("crude_oil_mt"),
+        "crude_oil_mt_yoy_pct": p.get("crude_oil_mt_yoy_pct"),
+        "gas_bcm":              p.get("gas_bcm"),
+        "gas_bcm_yoy_pct":      p.get("gas_bcm_yoy_pct"),
     }
 
 

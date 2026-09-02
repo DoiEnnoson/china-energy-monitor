@@ -1,6 +1,6 @@
 # china-energy-monitor
 
-Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung. Drei Datenquellen, acht Tabellen, zwei automatisierte Update-Zyklen.
+Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung. Drei Datenquellen, neun Tabellen, drei automatisierte Update-Zyklen.
 
 ---
 
@@ -35,6 +35,8 @@ data/
   power/
     ember_power.csv             — Stromerzeugung, -nachfrage, CO₂-Intensität (Ember, 2015–)
     ember_capacity.csv          — Installierte Wind-/Solarleistung (Ember, 2015–)
+  combined/
+    fossil_supply.csv           — Import + Inlandsproduktion fossil (Mai 2026–); auto-rebuild
 
 scripts/
   fetch_history.py        — Einmalig: lädt ComTrade-Historie 2020–2024
@@ -43,6 +45,7 @@ scripts/
   backfill_to_github.py   — Einmalig/lokal: verarbeitet alle annotierten RECH-Dateien
   fetch_ember_history.py  — Einmalig: lädt Ember-Stromhistorie ab 2015
   fetch_ember_monthly.py  — Monatlich: prüft auf neue Ember-Daten und aktualisiert CSVs
+  build_supply.py         — Auto: kombiniert GACC-Importe + NBS-Produktion zu fossil_supply.csv
 
 .github/workflows/
   monthly_update.yml          — Cron: 15. jeden Monats, 06:00 UTC (ComTrade)
@@ -50,6 +53,7 @@ scripts/
   fetch_ember_history.yml     — workflow_dispatch, einmalig (Ember)
   monthly_ember_update.yml    — Cron: 17.–31. jeden Monats, 06:00 UTC; deaktiviert sich nach Update
   monthly_ember_reenable.yml  — Cron: 1. jeden Monats, 05:00 UTC; reaktiviert Update-Workflow
+  build_supply.yml            — Push-Trigger: rebuild fossil_supply.csv wenn GACC/NBS sich ändern
 ```
 
 ---
@@ -155,7 +159,44 @@ Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
 | gas_bcm | Mrd. m³ | Erdgasproduktion |
 | gas_bcm_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
 
-**Hinweis Januar/Februar:** NBS und GACC veröffentlichen Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert. Die Zeile mit `period=202601` enthält daher den kumulierten Jan-Feb-Wert (z. B. 760 Mio. t Kohle für zwei Monate). Die YoY-Angaben beziehen sich ebenfalls auf den kombinierten Zweimonatszeitraum. Ab März sind Einzelmonatswerte ausgewiesen. Diese Struktur ist konsistent mit der GACC-Berichtspraxis.
+**Hinweis Januar/Februar (NBS):** NBS und GACC veröffentlichen Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert. Die Zeile mit `period=202601` enthält daher den kumulierten Jan-Feb-Wert (z. B. 760 Mio. t Kohle für zwei Monate). Die YoY-Angaben beziehen sich ebenfalls auf den kombinierten Zweimonatszeitraum. Ab März sind Einzelmonatswerte ausgewiesen. Diese Struktur ist konsistent mit der GACC-Berichtspraxis.
+
+### `data/combined/fossil_supply.csv`
+
+Automatisch generiert aus `gacc_imports.csv` + `nbs_production.csv`. Eine Zeile pro Monat. Pro Energieträger: Import, Inlandsproduktion, Gesamtangebot, YoY für jede Komponente und das Gesamtaggregat, sowie kumulatives Jahresangebot (YTD) mit YTD-YoY.
+
+**Gas-Einheit:** Alle Gasangaben in BCM. GACC-Importe (Mt) werden mit dem Faktor 1 Mt = 1,36 BCM konvertiert (GIIGNL-Standard für LNG; einheitlich auf LNG + Pipeline angewendet, da GACC beide in Masseneinheiten ausweist). Die Ursprungsspalte `gas_import_mt` ist zur Nachvollziehbarkeit enthalten.
+
+| Spalte | Einheit | Beschreibung |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat |
+| coal_import_mt | Mio. t | Kohleeinfuhren (GACC) |
+| coal_prod_mt | Mio. t | Inlandsproduktion Kohle (NBS) |
+| coal_total_mt | Mio. t | Gesamtangebot Kohle |
+| coal_import_yoy_pct | Prozent | YoY Kohleeinfuhren |
+| coal_prod_yoy_pct | Prozent | YoY Kohleproduktion |
+| coal_total_yoy_pct | Prozent | YoY Gesamtangebot Kohle (aus Einzelkomponenten abgeleitet) |
+| coal_ytd_mt | Mio. t | Kumulatives Jahresangebot Kohle |
+| coal_ytd_yoy_pct | Prozent | YoY kumulatives Jahresangebot Kohle |
+| crude_oil_import_mt | Mio. t | Rohöleinfuhren (GACC) |
+| crude_oil_prod_mt | Mio. t | Inlandsproduktion Rohöl (NBS) |
+| crude_oil_total_mt | Mio. t | Gesamtangebot Rohöl |
+| crude_oil_import_yoy_pct | Prozent | YoY Rohöleinfuhren |
+| crude_oil_prod_yoy_pct | Prozent | YoY Rohölproduktion |
+| crude_oil_total_yoy_pct | Prozent | YoY Gesamtangebot Rohöl |
+| crude_oil_ytd_mt | Mio. t | Kumulatives Jahresangebot Rohöl |
+| crude_oil_ytd_yoy_pct | Prozent | YoY kumulatives Jahresangebot Rohöl |
+| gas_import_mt | Mio. t | Gaseinfuhren LNG + Pipeline (GACC, Originaleinheit) |
+| gas_import_bcm | Mrd. m³ | Gaseinfuhren konvertiert (Mt × 1,36) |
+| gas_prod_bcm | Mrd. m³ | Inlandsproduktion Gas (NBS) |
+| gas_total_bcm | Mrd. m³ | Gesamtangebot Gas |
+| gas_import_yoy_pct | Prozent | YoY Gaseinfuhren |
+| gas_prod_yoy_pct | Prozent | YoY Gasproduktion |
+| gas_total_yoy_pct | Prozent | YoY Gesamtangebot Gas |
+| gas_ytd_bcm | Mrd. m³ | Kumulatives Jahresangebot Gas |
+| gas_ytd_yoy_pct | Prozent | YoY kumulatives Jahresangebot Gas |
+
+**YoY-Methode:** Die kombinierten YoY-Werte für Gesamt und YTD werden nicht direkt gemessen, sondern aus den Einzelkomponenten abgeleitet. Dazu werden die 2025-Vorjahreswerte aus den jeweils bekannten Einzelkomponenten-YoY-Angaben zurückgerechnet und anschließend addiert. Die Abweichung gegenüber dem tatsächlichen Vorjahreswert ist bei gut belegten Einzelkomponenten vernachlässigbar.
 
 ---
 
@@ -196,6 +237,18 @@ Das Script gibt `new_data=true/false` und `new_period=YYYYMM` aus. Im GitHub Act
 
 Erforderliche GitHub Secrets:
 - `EMBER_KEY` — Ember API Key
+
+---
+
+## Automatisierung: fossil_supply.csv
+
+`build_supply.yml` triggert automatisch bei jedem Push, der `gacc_imports.csv` oder `nbs_production.csv` verändert. Das Script liest beide CSVs aus dem Repo, berechnet das kombinierte Angebot und committed `data/combined/fossil_supply.csv`. Da der Commit von `github-actions[bot]` stammt, wird kein weiterer Workflow ausgelöst.
+
+Das Script kann auch lokal ausgeführt werden:
+
+```bash
+python scripts/build_supply.py
+```
 
 ---
 

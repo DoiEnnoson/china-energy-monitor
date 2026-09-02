@@ -1,0 +1,37 @@
+name: Build Fossil Supply
+
+on:
+  push:
+    paths:
+      - 'data/fuel-imports/gacc_imports.csv'
+      - 'data/production/nbs_production.csv'
+  workflow_dispatch:   # manual trigger for testing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Build fossil_supply.csv
+        run: python scripts/build_supply.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/combined/fossil_supply.csv
+          git diff --staged --quiet || (
+            git commit -m "data: fossil_supply.csv rebuilt ($(date +%Y-%m-%d))" &&
+            git push
+          )
