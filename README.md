@@ -1,6 +1,6 @@
 # china-energy-monitor
 
-Strukturierte Monatsdaten zu Chinas Energieimporten und -produktion. Zwei Datenquellen, drei Tabellen, ein automatisierter Update-Zyklus.
+Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung. Drei Datenquellen, acht Tabellen, zwei automatisierte Update-Zyklen.
 
 ---
 
@@ -10,10 +10,13 @@ Strukturierte Monatsdaten zu Chinas Energieimporten und -produktion. Zwei Datenq
 |---|---|---|---|
 | UN ComTrade API | Fossile Brennstoffimporte nach Lieferland | 2020–laufend | monatlich automatisch (15.) |
 | GACC / NBS via Vault | Importmengen + -werte (GACC), Inlandsproduktion (NBS) | Mai 2026–laufend | manuell nach jedem Energiebilanz-RECH |
+| Ember API | Stromerzeugung nach Quelle, Nachfrage, CO₂-Intensität, installierte Wind-/Solarleistung | 2015–laufend | monatlich automatisch (17.–31.) |
 
 **ComTrade** liefert granulare Herkunftsland-Daten für Kohle, Rohöl, LNG und Pipelinegas — historisch ab 2020, laufend für 2025 automatisiert per GitHub Actions.
 
 **GACC/NBS** liefert die offiziellen chinesischen Monatszahlen (Generalzollverwaltung für Importe, Nationales Statistikamt für Inlandsproduktion). Diese Daten kommen nicht über eine API, sondern werden aus den monatlichen Energiebilanz-Rechercheberichten (RECH-Dateien im lokalen Vault) extrahiert.
+
+**Ember** liefert monatliche Stromdaten für China ab 2015: Erzeugung nach Energieträger (TWh und Anteil), Gesamtnachfrage, CO₂-Intensität sowie installierte Leistung für Wind (onshore/offshore) und Solar. Neue Monatsdaten erscheinen typischerweise mit ca. 7 Wochen Verzögerung (Augustdaten ca. 20. September). Der Update-Workflow prüft ab dem 17. jeden Monats täglich auf neue Daten und deaktiviert sich nach dem ersten erfolgreichen Update automatisch.
 
 ---
 
@@ -29,16 +32,24 @@ data/
     gacc_imports.csv            — Gesamtimporte Kohle/Rohöl/Gas (GACC, Mai 2026–)
   production/
     nbs_production.csv          — Inlandsproduktion Kohle/Rohöl/Gas (NBS, Mai 2026–)
+  power/
+    ember_power.csv             — Stromerzeugung, -nachfrage, CO₂-Intensität (Ember, 2015–)
+    ember_capacity.csv          — Installierte Wind-/Solarleistung (Ember, 2015–)
 
 scripts/
-  fetch_history.py      — Einmalig: lädt ComTrade-Historie 2020–2024
-  fetch_comtrade.py     — Monatlich: aktualisiert ComTrade-Daten für 2025
-  rech_to_github.py     — Einzeln: extrahiert machine_data aus einer RECH-Datei
-  backfill_to_github.py — Einmalig/lokal: verarbeitet alle annotierten RECH-Dateien
+  fetch_history.py        — Einmalig: lädt ComTrade-Historie 2020–2024
+  fetch_comtrade.py       — Monatlich: aktualisiert ComTrade-Daten für 2025
+  rech_to_github.py       — Einzeln: extrahiert machine_data aus einer RECH-Datei
+  backfill_to_github.py   — Einmalig/lokal: verarbeitet alle annotierten RECH-Dateien
+  fetch_ember_history.py  — Einmalig: lädt Ember-Stromhistorie ab 2015
+  fetch_ember_monthly.py  — Monatlich: prüft auf neue Ember-Daten und aktualisiert CSVs
 
 .github/workflows/
-  monthly_update.yml   — Cron: 15. jeden Monats, 06:00 UTC
-  fetch_history.yml    — workflow_dispatch (manuell, einmalig)
+  monthly_update.yml          — Cron: 15. jeden Monats, 06:00 UTC (ComTrade)
+  fetch_history.yml           — workflow_dispatch, einmalig (ComTrade)
+  fetch_ember_history.yml     — workflow_dispatch, einmalig (Ember)
+  monthly_ember_update.yml    — Cron: 17.–31. jeden Monats, 06:00 UTC; deaktiviert sich nach Update
+  monthly_ember_reenable.yml  — Cron: 1. jeden Monats, 05:00 UTC; reaktiviert Update-Workflow
 ```
 
 ---
@@ -82,6 +93,54 @@ Eine Zeile pro Monat. Gesamtimporte aller Lieferländer (GACC-Aggregat).
 | gas_usd_bn_yoy_pct | Prozent | Veränderung Wert gegenüber Vorjahresmonat |
 | gas_usd_per_mt | USD/t | Gaspreis je Tonne |
 
+### `data/power/ember_power.csv`
+
+Eine Zeile pro Monat. Stromerzeugung nach Energieträger, Gesamtnachfrage und CO₂-Intensität für China.
+
+| Spalte | Einheit | Beschreibung |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat |
+| demand_twh | TWh | Gesamtstromnachfrage |
+| coal_twh | TWh | Stromerzeugung aus Kohle |
+| coal_share_pct | Prozent | Anteil Kohle an Gesamterzeugung |
+| gas_twh | TWh | Stromerzeugung aus Gas |
+| gas_share_pct | Prozent | Anteil Gas |
+| nuclear_twh | TWh | Stromerzeugung aus Kernkraft |
+| nuclear_share_pct | Prozent | Anteil Kernkraft |
+| hydro_twh | TWh | Stromerzeugung aus Wasserkraft |
+| hydro_share_pct | Prozent | Anteil Wasserkraft |
+| wind_twh | TWh | Stromerzeugung aus Wind |
+| wind_share_pct | Prozent | Anteil Wind |
+| solar_twh | TWh | Stromerzeugung aus Solar |
+| solar_share_pct | Prozent | Anteil Solar |
+| bioenergy_twh | TWh | Stromerzeugung aus Bioenergie |
+| bioenergy_share_pct | Prozent | Anteil Bioenergie |
+| other_fossil_twh | TWh | Sonstige fossile Erzeugung |
+| other_fossil_share_pct | Prozent | Anteil sonstige Fossile |
+| net_imports_twh | TWh | Nettostromimporte |
+| net_imports_share_pct | Prozent | Anteil Nettoimporte |
+| fossil_twh | TWh | Summe fossil (Kohle + Gas + sonstige Fossile) |
+| fossil_share_pct | Prozent | Anteil fossil gesamt |
+| clean_twh | TWh | Summe sauber (Erneuerbare + Kernkraft) |
+| clean_share_pct | Prozent | Anteil sauber gesamt |
+| renewables_twh | TWh | Summe erneuerbar (Wasser + Wind + Solar + Bioenergie) |
+| renewables_share_pct | Prozent | Anteil erneuerbar gesamt |
+| carbon_intensity_gco2_kwh | gCO₂/kWh | CO₂-Intensität des Strommixes |
+
+### `data/power/ember_capacity.csv`
+
+Eine Zeile pro Monat. Installierte Leistung Wind und Solar.
+
+**Hinweis:** Ember stellt über die monatliche Kapazitäts-API nur Daten für Onshore-Wind, Offshore-Wind und Solar bereit. Kohle, Gas, Kernkraft und Wasserkraft sind dort nicht verfügbar.
+
+| Spalte | Einheit | Beschreibung |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat |
+| onshore_wind_gw | GW | Installierte Onshore-Windleistung |
+| offshore_wind_gw | GW | Installierte Offshore-Windleistung |
+| wind_gw | GW | Installierte Windleistung gesamt (onshore + offshore) |
+| solar_gw | GW | Installierte Solarleistung |
+
 ### `data/production/nbs_production.csv`
 
 Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
@@ -108,6 +167,35 @@ ComTrade veröffentlicht Monatsdaten typischerweise mit 2–3 Monaten Verzögeru
 
 Erforderliche GitHub Secrets:
 - `COMTRADE_PRIMARY_KEY` — UN ComTrade API Primary Key
+
+---
+
+## Automatisierung: Ember
+
+**GitHub Actions** prüft ab dem 17. jeden Monats täglich (06:00 UTC), ob Ember neue Monatsdaten für China veröffentlicht hat. Liegt ein neuer Monat vor, werden `ember_power.csv` und `ember_capacity.csv` vollständig neu geschrieben und der Workflow deaktiviert sich selbst. Am 1. des Folgemonats (05:00 UTC) reaktiviert ein separater Workflow den Update-Zyklus.
+
+**Warum dieser Mechanismus?** Ember veröffentlicht neue Monatsdaten unregelmäßig, typischerweise mit ca. 7 Wochen Verzögerung. Ein einfacher Tages-Cron würde dauerhaft laufen. Der Selbstdeaktivierungs-Mechanismus stellt sicher, dass der Workflow nach dem ersten erfolgreichen Update bis zum nächsten Monat inaktiv bleibt.
+
+**Einmaliger Historien-Import** (bereits ausgeführt):
+
+```bash
+export EMBER_KEY=<key>
+python scripts/fetch_ember_history.py
+```
+
+Alternativ per `fetch_ember_history`-Workflow (workflow_dispatch). Schreibt beide CSVs mit der vollständigen Geschichte ab 2015.
+
+**Manueller Update-Test:**
+
+```bash
+export EMBER_KEY=<key>
+python scripts/fetch_ember_monthly.py
+```
+
+Das Script gibt `new_data=true/false` und `new_period=YYYYMM` aus. Im GitHub Actions-Kontext werden diese Werte als Step-Outputs gesetzt und steuern Commit und Selbstdeaktivierung.
+
+Erforderliche GitHub Secrets:
+- `EMBER_KEY` — Ember API Key
 
 ---
 
@@ -194,5 +282,5 @@ Lokal: `pip install -r requirements.txt` in einem venv. Auf macOS mit extern ver
 
 ## Offene Erweiterungen
 
-- **Ember API**: Stromerzeugung und -nachfrage (geplant, noch nicht implementiert). Würde eine weitere Tabelle `data/power/ember_power.csv` ergänzen und als separater monatlicher Workflow laufen.
 - **2026 ComTrade**: Sobald UN ComTrade 2026-Daten verfügbar macht, `YEAR` in `fetch_comtrade.py` aktualisieren und den Workflow manuell antriggern.
+- **CREA Kapazitätsdaten**: Monatliche installierte Leistung nach Energieträger (Kohle, Gas, Kernkraft, Wasserkraft, Wind, Solar) — derzeit noch nicht integriert.
