@@ -29,12 +29,12 @@ REPO_DIR = Path("/tmp/china-energy-monitor")
 NBS_FILE  = REPO_DIR / "data/production/nbs_production.csv"
 GACC_FILE = REPO_DIR / "data/fuel-imports/gacc_imports.csv"
 
-NBS_COLS  = ["period", "coal_mt", "crude_oil_mt", "gas_bcm"]
+NBS_COLS  = ["period", "coal_mt", "coal_mt_yoy_pct", "crude_oil_mt", "crude_oil_mt_yoy_pct", "gas_bcm", "gas_bcm_yoy_pct"]
 GACC_COLS = [
     "period",
-    "coal_mt",        "coal_usd_bn",       "coal_usd_per_mt",
-    "crude_oil_mt",   "crude_oil_usd_bn",  "crude_oil_usd_per_mt",
-    "gas_mt",         "gas_usd_bn",        "gas_usd_per_mt",
+    "coal_mt",      "coal_mt_yoy_pct",       "coal_usd_bn",      "coal_usd_bn_yoy_pct",      "coal_usd_per_mt",
+    "crude_oil_mt", "crude_oil_mt_yoy_pct",  "crude_oil_usd_bn", "crude_oil_usd_bn_yoy_pct", "crude_oil_usd_per_mt",
+    "gas_mt",       "gas_mt_yoy_pct",        "gas_usd_bn",       "gas_usd_bn_yoy_pct",       "gas_usd_per_mt",
 ]
 
 
@@ -54,10 +54,13 @@ def vpu(qty, val):
 def to_nbs_row(data: dict) -> dict:
     p = data.get("production", {})
     return {
-        "period":       str(data["period"]),
-        "coal_mt":      p.get("coal_mt"),
-        "crude_oil_mt": p.get("crude_oil_mt"),
-        "gas_bcm":      p.get("gas_bcm"),
+        "period":               str(data["period"]),
+        "coal_mt":              p.get("coal_mt"),
+        "coal_mt_yoy_pct":      p.get("coal_mt_yoy_pct"),
+        "crude_oil_mt":         p.get("crude_oil_mt"),
+        "crude_oil_mt_yoy_pct": p.get("crude_oil_mt_yoy_pct"),
+        "gas_bcm":              p.get("gas_bcm"),
+        "gas_bcm_yoy_pct":      p.get("gas_bcm_yoy_pct"),
     }
 
 
@@ -70,16 +73,22 @@ def to_gacc_row(data: dict) -> dict:
     oq, ov = oil.get("qty_mt"),  oil.get("value_usd_bn")
     gq, gv = gas.get("qty_mt"),  gas.get("value_usd_bn")
     return {
-        "period":               str(data["period"]),
-        "coal_mt":              cq,
-        "coal_usd_bn":          cv,
-        "coal_usd_per_mt":      vpu(cq, cv),
-        "crude_oil_mt":         oq,
-        "crude_oil_usd_bn":     ov,
-        "crude_oil_usd_per_mt": vpu(oq, ov),
-        "gas_mt":               gq,
-        "gas_usd_bn":           gv,
-        "gas_usd_per_mt":       vpu(gq, gv),
+        "period":                    str(data["period"]),
+        "coal_mt":                   cq,
+        "coal_mt_yoy_pct":           coal.get("qty_yoy_pct"),
+        "coal_usd_bn":               cv,
+        "coal_usd_bn_yoy_pct":       coal.get("value_yoy_pct"),
+        "coal_usd_per_mt":           vpu(cq, cv),
+        "crude_oil_mt":              oq,
+        "crude_oil_mt_yoy_pct":      oil.get("qty_yoy_pct"),
+        "crude_oil_usd_bn":          ov,
+        "crude_oil_usd_bn_yoy_pct":  oil.get("value_yoy_pct"),
+        "crude_oil_usd_per_mt":      vpu(oq, ov),
+        "gas_mt":                    gq,
+        "gas_mt_yoy_pct":            gas.get("qty_yoy_pct"),
+        "gas_usd_bn":                gv,
+        "gas_usd_bn_yoy_pct":        gas.get("value_yoy_pct"),
+        "gas_usd_per_mt":            vpu(gq, gv),
     }
 
 

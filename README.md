@@ -67,13 +67,19 @@ Eine Zeile pro Monat. Gesamtimporte aller Lieferländer (GACC-Aggregat).
 |---|---|---|
 | period | YYYYMM | Berichtsmonat |
 | coal_mt | Mio. t | Kohleeinfuhren (Menge) |
+| coal_mt_yoy_pct | Prozent | Veränderung Menge gegenüber Vorjahresmonat |
 | coal_usd_bn | Mrd. USD | Kohleeinfuhren (Wert) |
+| coal_usd_bn_yoy_pct | Prozent | Veränderung Wert gegenüber Vorjahresmonat |
 | coal_usd_per_mt | USD/t | Kohlepreis je Tonne |
 | crude_oil_mt | Mio. t | Rohöleinfuhren (Menge) |
+| crude_oil_mt_yoy_pct | Prozent | Veränderung Menge gegenüber Vorjahresmonat |
 | crude_oil_usd_bn | Mrd. USD | Rohöleinfuhren (Wert) |
+| crude_oil_usd_bn_yoy_pct | Prozent | Veränderung Wert gegenüber Vorjahresmonat |
 | crude_oil_usd_per_mt | USD/t | Rohölpreis je Tonne |
 | gas_mt | Mio. t | Gaseinfuhren LNG + Pipeline (Menge) |
+| gas_mt_yoy_pct | Prozent | Veränderung Menge gegenüber Vorjahresmonat |
 | gas_usd_bn | Mrd. USD | Gaseinfuhren (Wert) |
+| gas_usd_bn_yoy_pct | Prozent | Veränderung Wert gegenüber Vorjahresmonat |
 | gas_usd_per_mt | USD/t | Gaspreis je Tonne |
 
 ### `data/production/nbs_production.csv`
@@ -117,9 +123,9 @@ Jede Energiebilanz-RECH-Datei im Vault enthält am Ende einen HTML-Kommentarbloc
 <!--machine_data
 period: "202607"
 imports:
-  coal:      { qty_mt: 42.73, value_usd_bn: 4.35 }
-  crude_oil: { qty_mt: 35.73, value_usd_bn: 22.78 }
-  gas:       { qty_mt: 10.54, value_usd_bn: 5.70 }
+  coal:      { qty_mt: 42.73, qty_yoy_pct: 20.6,  value_usd_bn: 4.35,  value_yoy_pct: 83.6 }
+  crude_oil: { qty_mt: 35.73, qty_yoy_pct: -24.1, value_usd_bn: 22.78, value_yoy_pct: -5.3 }
+  gas:       { qty_mt: 10.54, qty_yoy_pct: -0.1,  value_usd_bn: 5.70,  value_yoy_pct: 20.8 }
 production:
   coal_mt: 340.0
   crude_oil_mt: 18.27
