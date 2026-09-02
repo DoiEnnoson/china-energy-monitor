@@ -285,9 +285,8 @@ Monatlicher Kapazitätszubau nach Energieträger in Gigawatt (GW). Quelle: CREA 
 | Spalte | Einheit | Inhalt |
 |---|---|---|
 | period | YYYYMM | Berichtsmonat des RECH-Dokuments (NBS/GACC-Periode) |
-| crea_period | YYYYMM | Monat, für den CREA Zubaudaten liefert (= period − 2 Monate) |
-| coal_gw | GW | Neu installierte Kohlekraftwerksleistung |
-| gas_gw | GW | Neu installierte Gaskraftwerksleistung |
+| crea_period | YYYYMM | Monat, für den CREA Zubaudaten liefert (bei Echtzeit-Workflow = period − 2 Monate) |
+| thermal_gw | GW | Neu installierte thermische Kraftwerksleistung (Kohle + Gas kombiniert; CREA weist keine Aufschlüsselung aus) |
 | nuclear_gw | GW | Neu installierte Kernkraftleistung |
 | hydro_gw | GW | Neu installierte Wasserkraftleistung |
 | wind_gw | GW | Neu installierte Windkraftleistung (onshore + offshore) |

@@ -1,1 +1,6 @@
-period,crea_period,coal_gw,gas_gw,nuclear_gw,hydro_gw,wind_gw,solar_gw,total_gw
+period,crea_period,thermal_gw,nuclear_gw,hydro_gw,wind_gw,solar_gw,total_gw
+202601,202601,20.0,1.2,1.2,11.0,32.5,65.9
+202603,202603,4.0,0.0,0.22,4.8,8.9,17.92
+202604,202604,4.0,2.4,1.25,5.5,9.5,22.65
+202605,202605,4.4,0.0,1.6,3.8,8.7,18.5
+202606,202606,6.0,0.0,1.9,13.6,12.5,34.0

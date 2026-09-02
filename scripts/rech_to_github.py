@@ -32,7 +32,7 @@ GACC_FILE     = REPO_DIR / "data/fuel-imports/gacc_imports.csv"
 CAPACITY_FILE = REPO_DIR / "data/power/capacity_additions.csv"
 
 NBS_COLS  = ["period", "coal_mt", "coal_mt_yoy_pct", "crude_oil_mt", "crude_oil_mt_yoy_pct", "gas_bcm", "gas_bcm_yoy_pct"]
-CAPACITY_COLS = ["period", "crea_period", "coal_gw", "gas_gw", "nuclear_gw", "hydro_gw", "wind_gw", "solar_gw", "total_gw"]
+CAPACITY_COLS = ["period", "crea_period", "thermal_gw", "nuclear_gw", "hydro_gw", "wind_gw", "solar_gw", "total_gw"]
 GACC_COLS = [
     "period",
     "coal_mt",      "coal_mt_yoy_pct",       "coal_usd_bn",      "coal_usd_bn_yoy_pct",      "coal_usd_per_mt",
@@ -102,8 +102,7 @@ def to_capacity_row(data: dict) -> dict | None:
     return {
         "period":      str(data["period"]),
         "crea_period": str(cap.get("crea_period", "")),
-        "coal_gw":     cap.get("coal_gw"),
-        "gas_gw":      cap.get("gas_gw"),
+        "thermal_gw":  cap.get("thermal_gw"),
         "nuclear_gw":  cap.get("nuclear_gw"),
         "hydro_gw":    cap.get("hydro_gw"),
         "wind_gw":     cap.get("wind_gw"),
