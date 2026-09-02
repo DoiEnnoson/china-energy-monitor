@@ -208,6 +208,70 @@ gas_import_bcm = gas_import_mt × 1.36
 
 **YoY-Methode:** Die kombinierten YoY-Werte für Gesamt und YTD werden nicht direkt gemessen, sondern aus den Einzelkomponenten abgeleitet. Dazu werden die 2025-Vorjahreswerte aus den jeweils bekannten Einzelkomponenten-YoY-Angaben zurückgerechnet und anschließend addiert. Die Abweichung gegenüber dem tatsächlichen Vorjahreswert ist bei gut belegten Einzelkomponenten vernachlässigbar.
 
+### `data/combined/energy_balance.csv`
+
+Automatisch generiert aus `fossil_supply.csv` + `ember_power.csv`. Bringt alle Energieträger auf eine gemeinsame Einheit (TWh), so dass das Gesamtenergiesystem — fossile Primärenergie plus saubere Stromerzeugung — in einer einzigen Tabelle vergleichbar wird.
+
+#### Umrechnungsfaktoren
+
+Alle fossilen Brennstoffe werden mit Standardfaktoren der IEA und des BP Statistical Review of World Energy in TWh umgerechnet:
+
+| Energieträger | Faktor | Formel | Grundlage |
+|---|---|---|---|
+| Kohle | 8,14 TWh/Mt | `Mt × 8,14` | 29,3 GJ/t (Steinkohle-Einheit, tce) |
+| Rohöl | 11,63 TWh/Mt | `Mt × 11,63` | 41,87 GJ/t (Öleinheit, toe) |
+| Gas | 10,55 TWh/BCM | `BCM × 10,55` | 38 GJ/1.000 m³ (Brennwert, GCV) |
+
+**Quellen:** BP Statistical Review of World Energy, Annex: Conversion Factors (jährlich aktualisiert, bp.com/statisticalreview); IEA Energy Statistics Manual (iea.org), Kapitel: Conversion Factors.
+
+Saubere Stromerzeugung (Kernkraft, Wasserkraft, Wind, Solar, Bioenergie) wird direkt aus Ember in TWh übernommen — keine Umrechnung nötig.
+
+#### Methodischer Hinweis: Primärenergie vs. Endenergie
+
+Fossile Brennstoffmengen entsprechen dem **Primärenergiegehalt** des Brennstoffs (Wärmeinhalt vor Umwandlungsverlusten). Saubere Stromerzeugung ist **Endenergie** (tatsächlich erzeugter Strom). Die Addition beider Größen ergibt einen Proxy für die „ins chinesische Energiesystem eingehende Gesamtenergie" — eine in der journalistischen Energieberichterstattung verbreitete Annäherung, die keine exakte physikalische Äquivalenz beansprucht.
+
+Kohle- und Gasstromerzeugung (Ember) werden **nicht** addiert, um Doppelzählung mit den fossilen Lieferzahlen zu vermeiden.
+
+#### Schema
+
+| Spalte | Einheit | Beschreibung |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat |
+| coal_import_twh | TWh | Kohleeinfuhren in Primärenergie |
+| coal_prod_twh | TWh | Inlandsproduktion Kohle in Primärenergie |
+| coal_total_twh | TWh | Gesamtangebot Kohle |
+| coal_total_yoy_pct | Prozent | YoY Gesamtangebot Kohle |
+| coal_ytd_twh | TWh | Kumulatives Jahresangebot Kohle |
+| crude_oil_import_twh | TWh | Rohöleinfuhren in Primärenergie |
+| crude_oil_prod_twh | TWh | Inlandsproduktion Rohöl in Primärenergie |
+| crude_oil_total_twh | TWh | Gesamtangebot Rohöl |
+| crude_oil_total_yoy_pct | Prozent | YoY Gesamtangebot Rohöl |
+| crude_oil_ytd_twh | TWh | Kumulatives Jahresangebot Rohöl |
+| gas_import_twh | TWh | Gaseinfuhren in Primärenergie |
+| gas_prod_twh | TWh | Inlandsproduktion Gas in Primärenergie |
+| gas_total_twh | TWh | Gesamtangebot Gas |
+| gas_total_yoy_pct | Prozent | YoY Gesamtangebot Gas |
+| gas_ytd_twh | TWh | Kumulatives Jahresangebot Gas |
+| fossil_total_twh | TWh | Fossile Primärenergie gesamt (Kohle + Öl + Gas) |
+| fossil_total_yoy_pct | Prozent | YoY fossile Primärenergie gesamt |
+| fossil_ytd_twh | TWh | Kumulativ fossile Primärenergie |
+| fossil_ytd_yoy_pct | Prozent | YoY kumulativ fossile Primärenergie |
+| nuclear_twh | TWh | Stromerzeugung Kernkraft (Ember) |
+| hydro_twh | TWh | Stromerzeugung Wasserkraft (Ember) |
+| wind_twh | TWh | Stromerzeugung Wind (Ember) |
+| solar_twh | TWh | Stromerzeugung Solar (Ember) |
+| bioenergy_twh | TWh | Stromerzeugung Bioenergie (Ember) |
+| clean_power_twh | TWh | Saubere Stromerzeugung gesamt |
+| clean_power_yoy_pct | Prozent | YoY saubere Stromerzeugung |
+| clean_power_ytd_twh | TWh | Kumulativ saubere Stromerzeugung |
+| clean_power_ytd_yoy_pct | Prozent | YoY kumulativ saubere Stromerzeugung |
+| total_twh | TWh | Gesamtenergiesystem (fossil + sauber) |
+| total_yoy_pct | Prozent | YoY Gesamtenergiesystem |
+| total_ytd_twh | TWh | Kumulativ Gesamtenergiesystem |
+| total_ytd_yoy_pct | Prozent | YoY kumulativ Gesamtenergiesystem |
+
+**Jan-Feb-Konvention:** Fossil-Perioden folgen der NBS/GACC-Praxis (202601 = Jan+Feb kombiniert). Die entsprechenden Ember-Perioden 202601 und 202602 werden automatisch summiert, bevor sie mit den fossilen Werten zusammengeführt werden.
+
 ---
 
 ## Automatisierung: ComTrade
