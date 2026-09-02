@@ -33,7 +33,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/combined/fossil_supply.csv data/combined/energy_balance.csv
+          git add data/combined/fossil_supply.csv data/combined/energy_balance.csv data/power/capacity_additions.csv
           git diff --staged --quiet || (
             git commit -m "data: fossil_supply + energy_balance rebuilt ($(date +%Y-%m-%d))" &&
             git push

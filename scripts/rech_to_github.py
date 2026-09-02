@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
 Reads the <!--machine_data ... --> YAML block from a monthly Energiebilanz RECH file,
-updates two wide-format CSVs in the GitHub repo, commits and pushes.
+updates three wide-format CSVs in the GitHub repo, commits and pushes.
   data/production/nbs_production.csv   — NBS domestic output
   data/fuel-imports/gacc_imports.csv   — GACC import qty + value + value per unit
+  data/power/capacity_additions.csv    — CREA capacity additions by fuel type
 
 Existing rows for the same period are replaced (idempotent).
 
@@ -26,10 +27,12 @@ VAULT    = Path("/Users/hado/Documents/Arbeit/China-Archiv")
 REPO_URL = "https://github.com/DoiEnnoson/china-energy-monitor.git"
 REPO_DIR = Path("/tmp/china-energy-monitor")
 
-NBS_FILE  = REPO_DIR / "data/production/nbs_production.csv"
-GACC_FILE = REPO_DIR / "data/fuel-imports/gacc_imports.csv"
+NBS_FILE      = REPO_DIR / "data/production/nbs_production.csv"
+GACC_FILE     = REPO_DIR / "data/fuel-imports/gacc_imports.csv"
+CAPACITY_FILE = REPO_DIR / "data/power/capacity_additions.csv"
 
 NBS_COLS  = ["period", "coal_mt", "coal_mt_yoy_pct", "crude_oil_mt", "crude_oil_mt_yoy_pct", "gas_bcm", "gas_bcm_yoy_pct"]
+CAPACITY_COLS = ["period", "crea_period", "coal_gw", "gas_gw", "nuclear_gw", "hydro_gw", "wind_gw", "solar_gw", "total_gw"]
 GACC_COLS = [
     "period",
     "coal_mt",      "coal_mt_yoy_pct",       "coal_usd_bn",      "coal_usd_bn_yoy_pct",      "coal_usd_per_mt",
@@ -92,6 +95,23 @@ def to_gacc_row(data: dict) -> dict:
     }
 
 
+def to_capacity_row(data: dict) -> dict | None:
+    cap = data.get("capacity_additions")
+    if not cap:
+        return None
+    return {
+        "period":      str(data["period"]),
+        "crea_period": str(cap.get("crea_period", "")),
+        "coal_gw":     cap.get("coal_gw"),
+        "gas_gw":      cap.get("gas_gw"),
+        "nuclear_gw":  cap.get("nuclear_gw"),
+        "hydro_gw":    cap.get("hydro_gw"),
+        "wind_gw":     cap.get("wind_gw"),
+        "solar_gw":    cap.get("solar_gw"),
+        "total_gw":    cap.get("total_gw"),
+    }
+
+
 def upsert(path: Path, new_row: dict, cols: list[str]) -> pd.DataFrame:
     period = new_row["period"]
     if path.exists():
@@ -140,18 +160,25 @@ def main():
         print(f"File not found: {rech_path}")
         sys.exit(1)
 
-    data    = extract_yaml(rech_path.read_text(encoding="utf-8"))
-    period  = str(data["period"])
-    nbs_row = to_nbs_row(data)
-    gacc_row = to_gacc_row(data)
+    data         = extract_yaml(rech_path.read_text(encoding="utf-8"))
+    period       = str(data["period"])
+    nbs_row      = to_nbs_row(data)
+    gacc_row     = to_gacc_row(data)
+    capacity_row = to_capacity_row(data)
     print(f"Period: {period}")
+    if capacity_row is None:
+        print("  [INFO] No capacity_additions block — CREA data skipped.")
 
     ensure_repo()
 
-    for path, row, cols in [
+    targets = [
         (NBS_FILE,  nbs_row,  NBS_COLS),
         (GACC_FILE, gacc_row, GACC_COLS),
-    ]:
+    ]
+    if capacity_row is not None:
+        targets.append((CAPACITY_FILE, capacity_row, CAPACITY_COLS))
+
+    for path, row, cols in targets:
         path.parent.mkdir(parents=True, exist_ok=True)
         df = upsert(path, row, cols)
         df.to_csv(path, index=False)
@@ -160,7 +187,7 @@ def main():
     token = get_token()
     run_git(["remote", "set-url", "origin",
              REPO_URL.replace("https://", f"https://DoiEnnoson:{token}@")])
-    run_git(["add", "data/production/", "data/fuel-imports/"])
+    run_git(["add", "data/production/", "data/fuel-imports/", "data/power/capacity_additions.csv"])
 
     no_change = subprocess.run(
         ["git", "diff", "--staged", "--quiet"], cwd=REPO_DIR

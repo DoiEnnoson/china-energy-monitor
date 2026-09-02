@@ -1,6 +1,6 @@
 # china-energy-monitor
 
-Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung. Drei Datenquellen, neun Tabellen, drei automatisierte Update-Zyklen.
+Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung. Vier Datenquellen, zehn Tabellen, drei automatisierte Update-Zyklen.
 
 ---
 
@@ -11,10 +11,13 @@ Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeug
 | UN ComTrade API | Fossile Brennstoffimporte nach Lieferland | 2020–laufend | monatlich automatisch (15.) |
 | GACC / NBS via Vault | Importmengen + -werte (GACC), Inlandsproduktion (NBS) | Mai 2026–laufend | manuell nach jedem Energiebilanz-RECH |
 | Ember API | Stromerzeugung nach Quelle, Nachfrage, CO₂-Intensität, installierte Wind-/Solarleistung | 2015–laufend | monatlich automatisch (17.–31.) |
+| CREA Monthly Energy & Air Quality Snapshot | Kapazitätszubau nach Energieträger (Kohle, Gas, Kernkraft, Wasserkraft, Wind, Solar) | Mai 2026–laufend | manuell via machine_data-Block; N-2-Verzögerung |
 
 **ComTrade** liefert granulare Herkunftsland-Daten für Kohle, Rohöl, LNG und Pipelinegas — historisch ab 2020, laufend für 2025 automatisiert per GitHub Actions.
 
 **GACC/NBS** liefert die offiziellen chinesischen Monatszahlen (Generalzollverwaltung für Importe, Nationales Statistikamt für Inlandsproduktion). Diese Daten kommen nicht über eine API, sondern werden aus den monatlichen Energiebilanz-Rechercheberichten (RECH-Dateien im lokalen Vault) extrahiert.
+
+**CREA** (Centre for Research on Energy and Clean Air) veröffentlicht monatliche Snapshots zu Chinas Energiesystem und Luftqualität. Der Kapazitätszubau-Abschnitt liefert Daten zu neu installierter Leistung nach Energieträger (in GW) mit einer Verzögerung von zwei Monaten: Für den Berichtsmonat N enthält der Snapshot Daten für N-2. Die Zahlen werden manuell aus dem PDF extrahiert und über den machine_data-Block im RECH-Dokument in `data/power/capacity_additions.csv` gespeichert.
 
 **Ember** liefert monatliche Stromdaten für China ab 2015: Erzeugung nach Energieträger (TWh und Anteil), Gesamtnachfrage, CO₂-Intensität sowie installierte Leistung für Wind (onshore/offshore) und Solar. Neue Monatsdaten erscheinen typischerweise mit ca. 7 Wochen Verzögerung (Augustdaten ca. 20. September). Der Update-Workflow prüft ab dem 17. jeden Monats täglich auf neue Daten und deaktiviert sich nach dem ersten erfolgreichen Update automatisch.
 
@@ -35,6 +38,7 @@ data/
   power/
     ember_power.csv             — Stromerzeugung, -nachfrage, CO₂-Intensität (Ember, 2015–)
     ember_capacity.csv          — Installierte Wind-/Solarleistung (Ember, 2015–)
+    capacity_additions.csv      — Kapazitätszubau nach Träger in GW (CREA, N-2; Mai 2026–)
   combined/
     fossil_supply.csv           — Import + Inlandsproduktion fossil (Mai 2026–); auto-rebuild
     energy_balance.csv          — Gesamtenergiesystem in TWh: fossil + sauber, YoY, YTD (Mai 2026–)
@@ -274,6 +278,26 @@ Kohle- und Gasstromerzeugung (Ember) werden **nicht** addiert, um Doppelzählung
 
 ---
 
+### `data/power/capacity_additions.csv`
+
+Monatlicher Kapazitätszubau nach Energieträger in Gigawatt (GW). Quelle: CREA Monthly Energy & Air Quality Snapshot. Die Daten erscheinen mit zwei Monaten Verzögerung: Für den Berichtsmonat N liefert CREA Daten für N-2 (der Wert in `crea_period` weicht daher vom RECH-Berichtsmonat in `period` ab). Die Werte werden manuell aus dem CREA-PDF extrahiert und über den machine_data-Block in die CSV geschrieben.
+
+| Spalte | Einheit | Inhalt |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat des RECH-Dokuments (NBS/GACC-Periode) |
+| crea_period | YYYYMM | Monat, für den CREA Zubaudaten liefert (= period − 2 Monate) |
+| coal_gw | GW | Neu installierte Kohlekraftwerksleistung |
+| gas_gw | GW | Neu installierte Gaskraftwerksleistung |
+| nuclear_gw | GW | Neu installierte Kernkraftleistung |
+| hydro_gw | GW | Neu installierte Wasserkraftleistung |
+| wind_gw | GW | Neu installierte Windkraftleistung (onshore + offshore) |
+| solar_gw | GW | Neu installierte Solarleistung |
+| total_gw | GW | Gesamter Kapazitätszubau über alle Träger |
+
+**Quelle:** Centre for Research on Energy and Clean Air (CREA), Monthly Energy & Air Quality Snapshot, energyandcleanair.org
+
+---
+
 ## Automatisierung: ComTrade
 
 **GitHub Actions** läuft am 15. jeden Monats (06:00 UTC) und ruft `fetch_comtrade.py` auf. Das Script holt alle verfügbaren 2025-Monate per ComTrade API und pflegt sie per Upsert in die vier Commodity-CSVs ein. Bereits vorhandene 2025-Zeilen werden vollständig ersetzt (idempotent). Ältere Jahre (2020–2024) bleiben unberührt.
@@ -410,4 +434,3 @@ Lokal: `pip install -r requirements.txt` in einem venv. Auf macOS mit extern ver
 ## Offene Erweiterungen
 
 - **2026 ComTrade**: Sobald UN ComTrade 2026-Daten verfügbar macht, `YEAR` in `fetch_comtrade.py` aktualisieren und den Workflow manuell antriggern.
-- **CREA Kapazitätsdaten**: Monatliche installierte Leistung nach Energieträger (Kohle, Gas, Kernkraft, Wasserkraft, Wind, Solar) — derzeit noch nicht integriert.
