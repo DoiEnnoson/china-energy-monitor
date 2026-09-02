@@ -165,7 +165,15 @@ Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
 
 Automatisch generiert aus `gacc_imports.csv` + `nbs_production.csv`. Eine Zeile pro Monat. Pro Energieträger: Import, Inlandsproduktion, Gesamtangebot, YoY für jede Komponente und das Gesamtaggregat, sowie kumulatives Jahresangebot (YTD) mit YTD-YoY.
 
-**Gas-Einheit:** Alle Gasangaben in BCM. GACC-Importe (Mt) werden mit dem Faktor 1 Mt = 1,36 BCM konvertiert (GIIGNL-Standard für LNG; einheitlich auf LNG + Pipeline angewendet, da GACC beide in Masseneinheiten ausweist). Die Ursprungsspalte `gas_import_mt` ist zur Nachvollziehbarkeit enthalten.
+**Gas-Einheit:** Alle Gasangaben in BCM. GACC-Importe (Mt) werden mit dem folgenden Faktor konvertiert:
+
+```
+gas_import_bcm = gas_import_mt × 1.36
+```
+
+**Quelle des Umrechnungsfaktors:** BP Statistical Review of World Energy, Annex: Conversion Factors (jährlich aktualisiert); übereinstimmend mit dem GIIGNL Annual LNG Report (Groupe International des Importateurs de Gaz Naturel Liquéfié).
+
+**Hinweis:** Der Faktor 1 Mt = 1,36 BCM gilt streng genommen für LNG (Flüssigerdgas). Für Pipelinegas in Masseneinheiten läge der Faktor je nach Gaszusammensetzung und Normierungsdruck bei ca. 1,1–1,3 BCM/Mt. Da GACC LNG und Pipelinegas nicht getrennt in Masseneinheiten ausweist und LNG den Großteil der chinesischen Gasimporte ausmacht, wird 1,36 einheitlich angewendet. Die Ursprungsspalte `gas_import_mt` ist zur Nachvollziehbarkeit enthalten.
 
 | Spalte | Einheit | Beschreibung |
 |---|---|---|
