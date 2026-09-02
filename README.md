@@ -90,7 +90,7 @@ Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
 | gas_bcm | Mrd. m³ | Erdgasproduktion |
 | gas_bcm_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
 
-**Hinweis Januar/Februar:** Die NBS veröffentlicht Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert — Einzelmonatszahlen existieren nicht. Die Absolutwerte für 202601 und 202602 werden aus der von NBS publizierten durchschnittlichen Tagesproduktion × Kalendertage des jeweiligen Monats abgeleitet. Die YoY-Spalten bleiben für diese beiden Monate leer, da die NBS keine monatsindividuelle Vorjahresrate ausweist. Dieses Berichtsformat ist konsistent mit der GACC-Praxis.
+**Hinweis Januar/Februar:** NBS und GACC veröffentlichen Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert — Einzelmonatsdaten existieren nicht. Beide CSVs (`nbs_production.csv` und `gacc_imports.csv`) beginnen daher erst ab März mit Einzelmonatsdaten. Dieses Berichtsformat ist von der NBS und GACC so vorgegeben und wird hier konsistent abgebildet.
 
 ---
 
