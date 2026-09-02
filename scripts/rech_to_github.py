@@ -32,7 +32,21 @@ GACC_FILE     = REPO_DIR / "data/fuel-imports/gacc_imports.csv"
 CAPACITY_FILE = REPO_DIR / "data/power/capacity_additions.csv"
 
 NBS_COLS  = ["period", "coal_mt", "coal_mt_yoy_pct", "crude_oil_mt", "crude_oil_mt_yoy_pct", "gas_bcm", "gas_bcm_yoy_pct"]
-CAPACITY_COLS = ["period", "crea_period", "thermal_gw", "nuclear_gw", "hydro_gw", "wind_gw", "solar_gw", "total_gw"]
+CAPACITY_COLS = [
+    "period", "crea_period",
+    "thermal_gw",   "thermal_yoy_pct",
+    "nuclear_gw",   "nuclear_yoy_pct",
+    "hydro_gw",     "hydro_yoy_pct",
+    "wind_gw",      "wind_yoy_pct",
+    "solar_gw",     "solar_yoy_pct",
+    "total_gw",     "total_yoy_pct",
+    "thermal_ytd_gw",   "thermal_ytd_yoy_pct",
+    "nuclear_ytd_gw",   "nuclear_ytd_yoy_pct",
+    "hydro_ytd_gw",     "hydro_ytd_yoy_pct",
+    "wind_ytd_gw",      "wind_ytd_yoy_pct",
+    "solar_ytd_gw",     "solar_ytd_yoy_pct",
+    "total_ytd_gw",     "total_ytd_yoy_pct",
+]
 GACC_COLS = [
     "period",
     "coal_mt",      "coal_mt_yoy_pct",       "coal_usd_bn",      "coal_usd_bn_yoy_pct",      "coal_usd_per_mt",
@@ -100,14 +114,32 @@ def to_capacity_row(data: dict) -> dict | None:
     if not cap:
         return None
     return {
-        "period":      str(data["period"]),
-        "crea_period": str(cap.get("crea_period", "")),
-        "thermal_gw":  cap.get("thermal_gw"),
-        "nuclear_gw":  cap.get("nuclear_gw"),
-        "hydro_gw":    cap.get("hydro_gw"),
-        "wind_gw":     cap.get("wind_gw"),
-        "solar_gw":    cap.get("solar_gw"),
-        "total_gw":    cap.get("total_gw"),
+        "period":               str(data["period"]),
+        "crea_period":          str(cap.get("crea_period", "")),
+        "thermal_gw":           cap.get("thermal_gw"),
+        "thermal_yoy_pct":      cap.get("thermal_yoy_pct"),
+        "nuclear_gw":           cap.get("nuclear_gw"),
+        "nuclear_yoy_pct":      cap.get("nuclear_yoy_pct"),
+        "hydro_gw":             cap.get("hydro_gw"),
+        "hydro_yoy_pct":        cap.get("hydro_yoy_pct"),
+        "wind_gw":              cap.get("wind_gw"),
+        "wind_yoy_pct":         cap.get("wind_yoy_pct"),
+        "solar_gw":             cap.get("solar_gw"),
+        "solar_yoy_pct":        cap.get("solar_yoy_pct"),
+        "total_gw":             cap.get("total_gw"),
+        "total_yoy_pct":        cap.get("total_yoy_pct"),
+        "thermal_ytd_gw":       cap.get("thermal_ytd_gw"),
+        "thermal_ytd_yoy_pct":  cap.get("thermal_ytd_yoy_pct"),
+        "nuclear_ytd_gw":       cap.get("nuclear_ytd_gw"),
+        "nuclear_ytd_yoy_pct":  cap.get("nuclear_ytd_yoy_pct"),
+        "hydro_ytd_gw":         cap.get("hydro_ytd_gw"),
+        "hydro_ytd_yoy_pct":    cap.get("hydro_ytd_yoy_pct"),
+        "wind_ytd_gw":          cap.get("wind_ytd_gw"),
+        "wind_ytd_yoy_pct":     cap.get("wind_ytd_yoy_pct"),
+        "solar_ytd_gw":         cap.get("solar_ytd_gw"),
+        "solar_ytd_yoy_pct":    cap.get("solar_ytd_yoy_pct"),
+        "total_ytd_gw":         cap.get("total_ytd_gw"),
+        "total_ytd_yoy_pct":    cap.get("total_ytd_yoy_pct"),
     }
 
 

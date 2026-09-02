@@ -286,12 +286,30 @@ Monatlicher Kapazitätszubau nach Energieträger in Gigawatt (GW). Quelle: CREA 
 |---|---|---|
 | period | YYYYMM | Berichtsmonat des RECH-Dokuments (NBS/GACC-Periode) |
 | crea_period | YYYYMM | Monat, für den CREA Zubaudaten liefert (bei Echtzeit-Workflow = period − 2 Monate) |
-| thermal_gw | GW | Neu installierte thermische Kraftwerksleistung (Kohle + Gas kombiniert; CREA weist keine Aufschlüsselung aus) |
-| nuclear_gw | GW | Neu installierte Kernkraftleistung |
-| hydro_gw | GW | Neu installierte Wasserkraftleistung |
-| wind_gw | GW | Neu installierte Windkraftleistung (onshore + offshore) |
-| solar_gw | GW | Neu installierte Solarleistung |
-| total_gw | GW | Gesamter Kapazitätszubau über alle Träger |
+| thermal_gw | GW | Neu installierte thermische Leistung im Monat (Kohle + Gas kombiniert; CREA weist keine Aufschlüsselung aus) |
+| thermal_yoy_pct | Prozent | YoY thermisch, Monat |
+| nuclear_gw | GW | Neu installierte Kernkraftleistung im Monat |
+| nuclear_yoy_pct | Prozent | YoY Nuklear, Monat (null wenn Vorjahr = 0 GW) |
+| hydro_gw | GW | Neu installierte Wasserkraftleistung im Monat |
+| hydro_yoy_pct | Prozent | YoY Wasser, Monat |
+| wind_gw | GW | Neu installierte Windleistung im Monat (onshore + offshore) |
+| wind_yoy_pct | Prozent | YoY Wind, Monat |
+| solar_gw | GW | Neu installierte Solarleistung im Monat |
+| solar_yoy_pct | Prozent | YoY Solar, Monat |
+| total_gw | GW | Gesamter Zubau im Monat |
+| total_yoy_pct | Prozent | YoY Gesamt, Monat (abgeleitet; null wenn Komponente fehlt) |
+| thermal_ytd_gw | GW | Kumulierter thermischer Zubau Jan–crea_period |
+| thermal_ytd_yoy_pct | Prozent | YoY thermisch, kumuliert |
+| nuclear_ytd_gw | GW | Kumulierter Nuklear-Zubau |
+| nuclear_ytd_yoy_pct | Prozent | YoY Nuklear, kumuliert (null wenn Vorjahr = 0 GW) |
+| hydro_ytd_gw | GW | Kumulierter Wasser-Zubau |
+| hydro_ytd_yoy_pct | Prozent | YoY Wasser, kumuliert |
+| wind_ytd_gw | GW | Kumulierter Wind-Zubau |
+| wind_ytd_yoy_pct | Prozent | YoY Wind, kumuliert |
+| solar_ytd_gw | GW | Kumulierter Solar-Zubau |
+| solar_ytd_yoy_pct | Prozent | YoY Solar, kumuliert |
+| total_ytd_gw | GW | Gesamter kumulierter Zubau |
+| total_ytd_yoy_pct | Prozent | YoY Gesamt, kumuliert (abgeleitet; null wenn Komponente fehlt) |
 
 **Quelle:** Centre for Research on Energy and Clean Air (CREA), Monthly Energy & Air Quality Snapshot, energyandcleanair.org
 
