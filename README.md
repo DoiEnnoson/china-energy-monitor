@@ -84,8 +84,13 @@ Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
 |---|---|---|
 | period | YYYYMM | Berichtsmonat |
 | coal_mt | Mio. t | Rohkohleproduktion |
+| coal_mt_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
 | crude_oil_mt | Mio. t | Rohölproduktion |
+| crude_oil_mt_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
 | gas_bcm | Mrd. m³ | Erdgasproduktion |
+| gas_bcm_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
+
+**Hinweis Januar/Februar:** Die NBS veröffentlicht Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert — Einzelmonatszahlen existieren nicht. Die Absolutwerte für 202601 und 202602 werden aus der von NBS publizierten durchschnittlichen Tagesproduktion × Kalendertage des jeweiligen Monats abgeleitet. Die YoY-Spalten bleiben für diese beiden Monate leer, da die NBS keine monatsindividuelle Vorjahresrate ausweist. Dieses Berichtsformat ist konsistent mit der GACC-Praxis.
 
 ---
 
