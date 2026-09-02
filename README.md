@@ -90,7 +90,7 @@ Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
 | gas_bcm | Mrd. m³ | Erdgasproduktion |
 | gas_bcm_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
 
-**Hinweis Januar/Februar:** NBS und GACC veröffentlichen Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert — Einzelmonatsdaten existieren nicht. Beide CSVs (`nbs_production.csv` und `gacc_imports.csv`) beginnen daher erst ab März mit Einzelmonatsdaten. Dieses Berichtsformat ist von der NBS und GACC so vorgegeben und wird hier konsistent abgebildet.
+**Hinweis Januar/Februar:** NBS und GACC veröffentlichen Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert. Die Zeile mit `period=202601` enthält daher den kumulierten Jan-Feb-Wert (z. B. 760 Mio. t Kohle für zwei Monate). Die YoY-Angaben beziehen sich ebenfalls auf den kombinierten Zweimonatszeitraum. Ab März sind Einzelmonatswerte ausgewiesen. Diese Struktur ist konsistent mit der GACC-Berichtspraxis.
 
 ---
 
