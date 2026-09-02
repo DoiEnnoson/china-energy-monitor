@@ -1,4 +1,4 @@
-name: Build Fossil Supply
+name: Build Total Energy System
 
 on:
   push:
@@ -26,12 +26,15 @@ jobs:
       - name: Build fossil_supply.csv
         run: python scripts/build_supply.py
 
+      - name: Build energy_balance.csv
+        run: python scripts/build_energy_balance.py
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/combined/fossil_supply.csv
+          git add data/combined/fossil_supply.csv data/combined/energy_balance.csv
           git diff --staged --quiet || (
-            git commit -m "data: fossil_supply.csv rebuilt ($(date +%Y-%m-%d))" &&
+            git commit -m "data: fossil_supply + energy_balance rebuilt ($(date +%Y-%m-%d))" &&
             git push
           )

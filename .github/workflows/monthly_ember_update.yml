@@ -45,3 +45,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow disable monthly_ember_update.yml
+
+      - name: Trigger Total Energy System rebuild
+        if: steps.ember.outputs.new_data == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run build_supply.yml

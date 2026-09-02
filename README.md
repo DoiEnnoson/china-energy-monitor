@@ -37,6 +37,7 @@ data/
     ember_capacity.csv          — Installierte Wind-/Solarleistung (Ember, 2015–)
   combined/
     fossil_supply.csv           — Import + Inlandsproduktion fossil (Mai 2026–); auto-rebuild
+    energy_balance.csv          — Gesamtenergiesystem in TWh: fossil + sauber, YoY, YTD (Mai 2026–)
 
 scripts/
   fetch_history.py        — Einmalig: lädt ComTrade-Historie 2020–2024
@@ -46,6 +47,7 @@ scripts/
   fetch_ember_history.py  — Einmalig: lädt Ember-Stromhistorie ab 2015
   fetch_ember_monthly.py  — Monatlich: prüft auf neue Ember-Daten und aktualisiert CSVs
   build_supply.py         — Auto: kombiniert GACC-Importe + NBS-Produktion zu fossil_supply.csv
+  build_energy_balance.py — Auto: konvertiert alles nach TWh, addiert saubere Stromerzeugung
 
 .github/workflows/
   monthly_update.yml          — Cron: 15. jeden Monats, 06:00 UTC (ComTrade)
@@ -53,7 +55,7 @@ scripts/
   fetch_ember_history.yml     — workflow_dispatch, einmalig (Ember)
   monthly_ember_update.yml    — Cron: 17.–31. jeden Monats, 06:00 UTC; deaktiviert sich nach Update
   monthly_ember_reenable.yml  — Cron: 1. jeden Monats, 05:00 UTC; reaktiviert Update-Workflow
-  build_supply.yml            — Push-Trigger: rebuild fossil_supply.csv wenn GACC/NBS sich ändern
+  build_supply.yml            — Push-Trigger: rebuild fossil_supply.csv + energy_balance.csv wenn GACC/NBS sich ändern; auch von monthly_ember_update.yml dispatcht
 ```
 
 ---
