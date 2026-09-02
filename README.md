@@ -423,6 +423,69 @@ Ist einer der beiden Eingangswerte `null`, bleibt `value_per_mt_usd` ebenfalls l
 
 ---
 
+## Manueller Workflow: CREA-Kapazitätszubau
+
+CREA veröffentlicht den monatlichen Snapshot als PDF auf energyandcleanair.org. Die Kapazitätszubau-Daten werden im Rahmen des `/energiebilanz`-Skills (Schritt 9b) aus dem PDF extrahiert und über den machine_data-Block in `capacity_additions.csv` übertragen.
+
+### Datenverzögerung
+
+CREA liefert Daten mit ca. zwei Monaten Verzögerung. Für den Energiebilanz-Bericht zu Berichtsmonat N enthält der aktuelle CREA-Snapshot die Zubaudaten für Monat N-2. Die Spalte `crea_period` im CSV dokumentiert, für welchen Monat die Zubaudaten tatsächlich gelten.
+
+### Schritt 1: CREA-Snapshot beschaffen
+
+Der aktuelle Snapshot wird per Gmail-Suche oder direkt von energyandcleanair.org bezogen. Das PDF wird als Quelle in ein NotebookLM-Notebook geladen und per Chat-Abfrage ausgewertet (automatisiert über `/energiebilanz` Schritt 1, 3 und 9b).
+
+### Schritt 2: machine_data-Block befüllen
+
+Die aus dem Notebook extrahierten Werte werden in den `capacity_additions`-Block am Ende der RECH-Datei eingetragen:
+
+```
+<!--machine_data
+...
+capacity_additions:
+  crea_period: "202605"
+  thermal_gw: 8.7
+  thermal_yoy_pct: -4.0
+  nuclear_gw: 0.0
+  nuclear_yoy_pct: null
+  hydro_gw: 1.6
+  hydro_yoy_pct: null
+  wind_gw: 3.8
+  wind_yoy_pct: -85.0
+  solar_gw: 8.7
+  solar_yoy_pct: -91.0
+  total_gw: 18.5
+  total_yoy_pct: null
+  thermal_ytd_gw: 32.4
+  thermal_ytd_yoy_pct: 84.0
+  nuclear_ytd_gw: 3.6
+  nuclear_ytd_yoy_pct: null
+  hydro_ytd_gw: 4.1
+  hydro_ytd_yoy_pct: 24.0
+  wind_ytd_gw: 25.0
+  wind_ytd_yoy_pct: -46.0
+  solar_ytd_gw: 59.6
+  solar_ytd_yoy_pct: -70.0
+  total_ytd_gw: 124.7
+  total_ytd_yoy_pct: null
+-->
+```
+
+`null` bei `nuclear_yoy_pct` und `nuclear_ytd_yoy_pct` wenn der Vorjahreswert 0 GW betrug (Division durch null). `total_yoy_pct` und `total_ytd_yoy_pct` werden manuell aus den Komponenten rückgerechnet und eingetragen, wenn alle Komponenten bekannt sind.
+
+### Schritt 3: Extraktion und Push
+
+Identisch zum GACC/NBS-Workflow:
+
+```bash
+python scripts/rech_to_github.py \
+    --file "11_Recherche/Berichte/260902_RECH_China_Energiebilanz_August2026.md"
+```
+
+Das Script liest den `capacity_additions`-Block und schreibt die Zeile per Upsert in `data/power/capacity_additions.csv`.
+
+---
+
 ## Einmaliger Historien-Import (2020–2024)
 
 `fetch_history.py` lädt die komplette ComTrade-Historie 2020–2024 und schreibt die vier Commodity-CSVs neu. Dieses Script wurde einmalig über den `fetch_history`-Workflow ausgeführt und muss nicht wiederholt werden, es sei denn, die historischen Daten werden in ComTrade nachträglich revidiert.
