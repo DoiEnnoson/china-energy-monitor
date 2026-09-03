@@ -187,6 +187,8 @@
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 1rem 1.1rem 0.8rem;
+      display: flex;
+      flex-direction: column;
     }
     .chart-box.full { width: 100%; }
     .chart-title {
@@ -194,19 +196,26 @@
       font-weight: 600;
       color: var(--text);
       margin-bottom: 0.3rem;
+      flex-shrink: 0;
     }
     .chart-subtitle {
       font-size: 0.72rem;
       color: var(--text2);
       margin-bottom: 0.75rem;
+      flex-shrink: 0;
     }
     .chart-source {
       font-size: 0.67rem;
       color: var(--text2);
       margin-top: 0.5rem;
       text-align: right;
+      flex-shrink: 0;
     }
-    canvas { display: block; }
+    .chart-box canvas {
+      display: block;
+      flex: 1;
+      min-height: 0;
+    }
 
     /* ── Footer ── */
     footer {
@@ -322,13 +331,13 @@
       <div class="chart-box">
         <div class="chart-title">Production vs. Imports by Energy Carrier</div>
         <div class="chart-subtitle">July 2026 · TWh · ← Production &nbsp;|&nbsp; Imports →</div>
-        <canvas id="butterfly" height="160"></canvas>
+        <canvas id="butterfly"></canvas>
         <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
       </div>
       <div class="chart-box">
         <div class="chart-title">Import Change Year-on-Year</div>
         <div class="chart-subtitle">July 2026 YoY · percent</div>
-        <canvas id="yoy" height="160"></canvas>
+        <canvas id="yoy"></canvas>
         <p class="chart-source">Source: GACC</p>
       </div>
     </div>
