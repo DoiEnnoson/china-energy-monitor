@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>China Energy Monitor — Monthly Data Dashboard</title>
+  <meta name="description" content="Monthly snapshot of China's energy system: electricity demand, power generation mix, fossil fuel imports and domestic production. Data from Ember, NBS, GACC, CREA.">
+  <meta property="og:title" content="China Energy Monitor — Monthly Data Dashboard">
+  <meta property="og:description" content="Monthly snapshot of China's electricity demand, generation mix, fossil fuel imports and capacity additions. Data updated monthly.">
+  <meta property="og:type" content="website">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://doiennoson.github.io/china-energy-monitor/">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ── Variables ── */
+    :root {
+      --bg:      #080614;
+      --card:    #0e0b22;
+      --card2:   #110e25;
+      --border:  #1e1a3a;
+      --text:    #dbcfbf;
+      --text2:   #9d8a80;
+      --teal:    #0E9A84;
+      --orange:  #DE8212;
+      --gold:    #B8860B;
+      --red:     #7A0404;
+      --red-mid: #9E2222;
+      --pos:     #0E9A84;
+      --neg:     #7A0404;
+      --gap:     1rem;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Header ── */
+    .site-header {
+      border-bottom: 2px solid var(--teal);
+      padding: 1.4rem 0 1rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .site-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .site-header .tagline {
+      font-size: 0.82rem;
+      color: var(--text2);
+      margin-top: 0.25rem;
+    }
+    .header-meta {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .header-meta .period {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--teal);
+    }
+    .header-meta .updated {
+      font-size: 0.78rem;
+      color: var(--text2);
+    }
+
+    /* ── Section titles ── */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin: 1.8rem 0 0.75rem;
+    }
+
+    /* ── KPI Grid ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+      margin-top: 1.2rem;
+    }
+    .kpi-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--teal);
+      border-radius: 4px;
+      padding: 1rem 1.1rem 0.9rem;
+    }
+    .kpi-box.orange { border-top-color: var(--orange); }
+    .kpi-box.gold   { border-top-color: var(--gold); }
+    .kpi-box.red    { border-top-color: var(--red-mid); }
+    .kpi-label {
+      font-size: 0.75rem;
+      color: var(--text2);
+      margin-bottom: 0.35rem;
+    }
+    .kpi-value {
+      font-size: 1.95rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .kpi-delta {
+      font-size: 0.8rem;
+      margin-top: 0.45rem;
+    }
+    .kpi-delta.pos { color: var(--pos); }
+    .kpi-delta.neg { color: var(--neg); }
+    .kpi-note {
+      font-size: 0.7rem;
+      color: var(--text2);
+      margin-top: 0.2rem;
+    }
+
+    /* ── Summary ── */
+    .summary-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--teal);
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    /* ── Article Cards ── */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+    .article-card {
+      display: block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .article-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+    .article-card img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+    }
+    .article-card .card-title {
+      font-size: 0.78rem;
+      color: var(--text);
+      padding: 0.6rem 0.7rem 0.7rem;
+      line-height: 1.4;
+    }
+
+    /* ── Chart Layout ── */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 58fr 38fr;
+      gap: var(--gap);
+    }
+    .chart-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 1.1rem 0.8rem;
+    }
+    .chart-box.full { width: 100%; }
+    .chart-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .chart-subtitle {
+      font-size: 0.72rem;
+      color: var(--text2);
+      margin-bottom: 0.75rem;
+    }
+    .chart-source {
+      font-size: 0.67rem;
+      color: var(--text2);
+      margin-top: 0.5rem;
+      text-align: right;
+    }
+    canvas { display: block; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 2.5rem;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .footer-nav {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text2);
+    }
+    .footer-nav a { color: var(--text2); }
+    .footer-nav a:hover { color: var(--teal); }
+    .footer-credit {
+      font-size: 0.75rem;
+      color: var(--text2);
+    }
+    .footer-credit a { color: var(--teal); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: repeat(2, 1fr); }
+      .chart-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .article-grid { grid-template-columns: 1fr; }
+      .site-header { flex-direction: column; align-items: flex-start; }
+      .header-meta { text-align: left; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div>
+      <h1>China Energy Monitor</h1>
+      <p class="tagline">Power generation · Fossil supply · Capacity additions · Data from Ember, NBS, GACC, CREA</p>
+    </div>
+    <div class="header-meta">
+      <div class="period">July 2026</div>
+      <div class="updated">Latest data available</div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── KPIs ── -->
+    <p class="section-label">This Month at a Glance</p>
+    <div class="kpi-grid">
+      <div class="kpi-box">
+        <div class="kpi-label">Total Electricity Demand</div>
+        <div class="kpi-value">1,038 TWh</div>
+        <div class="kpi-delta pos">▲ +2.9% vs. July 2025</div>
+      </div>
+      <div class="kpi-box orange">
+        <div class="kpi-label">Clean Energy Share</div>
+        <div class="kpi-value">44.8%</div>
+        <div class="kpi-delta pos">▲ +3.5 pp vs. July 2025</div>
+      </div>
+      <div class="kpi-box red">
+        <div class="kpi-label">Crude Oil Imports</div>
+        <div class="kpi-value">35.7 Mt</div>
+        <div class="kpi-delta neg">▼ −24.1% vs. July 2025</div>
+      </div>
+      <div class="kpi-box gold">
+        <div class="kpi-label">Capacity Added YTD</div>
+        <div class="kpi-value">158.7 GW</div>
+        <div class="kpi-delta pos">▲ incl. 72.1 GW solar</div>
+        <div class="kpi-note">Through June 2026 (CREA, N−2)</div>
+      </div>
+    </div>
+
+    <!-- ── Summary ── -->
+    <p class="section-label">Monthly Summary</p>
+    <div class="summary-box">
+      China's total electricity demand reached 1,038.5 TWh in July 2026, up 2.9 percent year-on-year, driven by extended heat waves and sustained industrial output. Clean energy sources — nuclear, hydro, wind, solar, and bioenergy — covered 44.8 percent of generation, 3.5 percentage points above July 2025 and the highest clean-energy share for a summer month on record. Crude oil imports fell sharply to 35.7 Mt (−24.1 percent YoY) as refinery maintenance reduced throughput and global shipping disruptions limited supply. Coal imports rose 20.6 percent YoY to 42.7 Mt ahead of winter stockpiling by utilities. Capacity additions reached 158.7 GW installed year-to-date through June 2026, led by solar at 72.1 GW.
+    </div>
+
+    <!-- ── Articles ── -->
+    <p class="section-label">From China Business Spotlight</p>
+    <div class="article-grid">
+      <a class="article-card" href="https://chinabusinessspotlight.substack.com/p/chinas-3-layer-grid-replaces-baseload?r=25gtpf" target="_blank" rel="noopener">
+        <img src="https://substackcdn.com/image/fetch/w_1200,h_675,c_fill,f_jpg,q_auto:good/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa27ab872-6cc9-4bc2-9ad1-bf887b15daea_1536x1024.png" alt="China's 3-Layer Grid Replaces Baseload" loading="lazy">
+        <div class="card-title">China's 3-Layer Grid Replaces Baseload</div>
+      </a>
+      <a class="article-card" href="https://chinabusinessspotlight.substack.com/p/coal-vs-ai-chinas-strategy-against?r=25gtpf" target="_blank" rel="noopener">
+        <img src="https://substackcdn.com/image/fetch/w_1200,h_675,c_fill,f_jpg,q_auto:good/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F324a1bc8-56fd-40d3-84a9-2b8c6f358882_1536x1024.png" alt="Coal vs. AI: China's Strategy Against the Dunkelflaute" loading="lazy">
+        <div class="card-title">Coal vs. AI: China's Strategy Against the Dunkelflaute</div>
+      </a>
+      <a class="article-card" href="https://chinabusinessspotlight.substack.com/p/china-grid-bottleneck-slows-solar?r=25gtpf" target="_blank" rel="noopener">
+        <img src="https://substackcdn.com/image/fetch/w_1200,h_675,c_fill,f_jpg,q_auto:good/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3a6f8314-1e37-4bb9-a452-813e49c555c8_1535x1024.png" alt="China Grid Bottleneck Slows Solar and Wind Expansion" loading="lazy">
+        <div class="card-title">China Grid Bottleneck Slows Solar and Wind Expansion</div>
+      </a>
+      <a class="article-card" href="https://chinabusinessspotlight.substack.com/p/china-out-of-gas-the-hormuz-shock?r=25gtpf" target="_blank" rel="noopener">
+        <img src="https://substackcdn.com/image/fetch/w_1200,h_675,c_fill,f_jpg,q_auto:good/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F92603cf9-02dc-40b4-b9f1-861e57e2e742_1535x1024.png" alt="China Out of Gas: The Hormuz Shock in Traffic Data" loading="lazy">
+        <div class="card-title">China Out of Gas: The Hormuz Shock in Traffic Data</div>
+      </a>
+    </div>
+
+    <!-- ── Charts Row 1: Butterfly + YoY ── -->
+    <p class="section-label">Fossil Supply — July 2026</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Production vs. Imports by Energy Carrier</div>
+        <div class="chart-subtitle">July 2026 · TWh · ← Production &nbsp;|&nbsp; Imports →</div>
+        <canvas id="butterfly" height="160"></canvas>
+        <p class="chart-source">Sources: NBS (production), GACC (imports), IEA conversion factors</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Import Change Year-on-Year</div>
+        <div class="chart-subtitle">July 2026 vs. July 2025 · percent</div>
+        <canvas id="yoy" height="160"></canvas>
+        <p class="chart-source">Source: GACC</p>
+      </div>
+    </div>
+
+    <!-- ── Chart: Stacked Area ── -->
+    <p class="section-label">Power Generation Mix 2016 – 2026</p>
+    <div class="chart-box full">
+      <div class="chart-title">Monthly Generation by Source</div>
+      <div class="chart-subtitle">TWh · Thermal = Coal + Gas + Other Fossil · Nuclear · Renewable = Hydro + Wind + Solar + Bioenergy</div>
+      <canvas id="stacked" height="90"></canvas>
+      <p class="chart-source">Source: Ember Global Electricity Review</p>
+    </div>
+
+    <!-- ── Chart: Demand vs Generation ── -->
+    <p class="section-label">Electricity Demand vs. Generation 2016 – 2026</p>
+    <div class="chart-box full">
+      <div class="chart-title">Monthly Demand and Domestic Generation</div>
+      <div class="chart-subtitle">TWh · Gap reflects net cross-border trade (China is a marginal net exporter)</div>
+      <canvas id="demandgen" height="90"></canvas>
+      <p class="chart-source">Source: Ember Global Electricity Review</p>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <nav class="footer-nav">
+      <a href="#" title="Coming soon">Power</a>
+      <a href="#" title="Coming soon">Fuels</a>
+      <a href="#" title="Coming soon">Capacity</a>
+      <a href="#" title="Coming soon">Partners</a>
+      <a href="#" title="Coming soon">Methodology</a>
+      <a href="https://github.com/DoiEnnoson/china-energy-monitor" target="_blank" rel="noopener">Data (GitHub)</a>
+    </nav>
+    <div class="footer-credit">
+      By <a href="https://chinabusinessspotlight.substack.com" target="_blank" rel="noopener">China Business Spotlight</a>
+      · Data: Ember, NBS, GACC, CREA
+    </div>
+  </footer>
+
+  <script>
+    /* ─── Chart defaults ─── */
+    Chart.defaults.color = '#9d8a80';
+    Chart.defaults.borderColor = '#1e1a3a';
+    Chart.defaults.font.family = "'Segoe UI', system-ui, -apple-system, sans-serif";
+
+    /* ─── Palette ─── */
+    const TEAL   = '#0E9A84';
+    const ORANGE = '#DE8212';
+    const GOLD   = '#B8860B';
+    const RED    = '#7A0404';
+    const REDMID = '#9E2222';
+
+    /* ─── Monthly series (Ember, 2016-01 → 2026-07) ─── */
+    const LABELS  = ["2016-01","2016-02","2016-03","2016-04","2016-05","2016-06","2016-07","2016-08","2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08","2017-09","2017-10","2017-11","2017-12","2018-01","2018-02","2018-03","2018-04","2018-05","2018-06","2018-07","2018-08","2018-09","2018-10","2018-11","2018-12","2019-01","2019-02","2019-03","2019-04","2019-05","2019-06","2019-07","2019-08","2019-09","2019-10","2019-11","2019-12","2020-01","2020-02","2020-03","2020-04","2020-05","2020-06","2020-07","2020-08","2020-09","2020-10","2020-11","2020-12","2021-01","2021-02","2021-03","2021-04","2021-05","2021-06","2021-07","2021-08","2021-09","2021-10","2021-11","2021-12","2022-01","2022-02","2022-03","2022-04","2022-05","2022-06","2022-07","2022-08","2022-09","2022-10","2022-11","2022-12","2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12","2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07"];
+    const THERMAL = [380.1,292.9,364.0,329.4,329.8,345.2,388.5,412.6,360.1,353.3,377.2,421.9,411.1,316.7,391.8,348.1,350.8,366.0,430.2,429.4,360.3,347.1,384.5,449.7,462.6,356.4,406.9,383.9,397.0,399.0,458.3,468.0,386.0,369.0,408.3,482.7,478.9,366.9,415.1,386.7,381.8,403.5,456.8,473.0,414.9,398.1,433.8,510.0,484.8,295.4,387.4,394.2,419.1,429.4,457.4,507.6,420.0,397.0,467.9,563.5,565.7,364.0,489.1,446.2,445.6,475.7,519.1,512.7,447.0,422.5,459.8,538.7,592.2,388.0,462.9,394.9,398.7,449.8,550.9,593.3,476.6,437.4,467.3,548.7,519.4,445.7,507.8,442.2,464.3,516.1,594.8,583.2,490.7,458.6,500.2,603.2,548.0,515.7,511.6,449.5,445.8,478.5,567.2,606.9,536.8,468.3,507.9,589.3,549.2,448.4,499.8,438.5,451.6,484.3,594.4,618.5,507.9,503.8,486.6,570.9,533.0,496.8,522.5,453.8,462.8,488.3,574.8];
+    const NUCLEAR = [14.7,15.0,17.4,15.0,16.4,18.0,19.8,20.2,18.0,17.5,19.5,21.4,16.7,16.7,21.4,20.3,20.5,19.9,23.1,23.0,22.0,20.1,22.3,22.2,19.7,19.6,21.8,21.6,23.6,23.7,26.5,27.1,25.2,27.3,28.3,29.1,24.3,24.1,28.7,27.8,27.2,28.0,31.3,32.9,29.7,28.8,32.6,33.2,24.0,23.3,30.6,30.8,31.1,31.8,33.4,33.2,31.9,28.7,32.3,35.3,29.3,29.1,34.2,32.4,34.2,35.9,38.2,36.5,33.3,33.5,33.6,37.3,32.3,31.7,35.0,32.7,34.7,32.7,37.0,36.3,32.4,36.0,37.4,39.7,33.9,32.9,36.6,34.5,36.9,37.1,38.0,38.3,34.5,35.9,36.5,38.1,35.1,34.1,34.8,36.6,36.0,35.7,39.7,40.3,35.6,37.1,38.0,43.3,37.3,37.2,42.8,41.1,38.4,39.4,43.0,42.6,36.2,38.7,39.8,44.6,38.6,36.5,37.7,37.5,40.3,42.7,45.8];
+    const RENEW   = [86.7,90.3,103.2,111.2,128.3,134.9,151.9,137.6,121.0,125.0,115.3,97.9,92.3,95.5,108.3,114.9,130.8,140.2,158.0,150.0,148.8,148.7,136.1,118.1,108.6,108.6,118.1,128.6,148.3,155.9,178.9,171.7,162.9,163.3,138.5,129.2,117.0,121.6,145.3,149.0,172.0,171.6,191.0,183.5,166.4,167.6,145.5,133.8,112.3,117.2,152.8,147.5,161.8,188.8,213.5,209.5,204.6,207.4,163.7,152.4,150.2,153.2,160.8,172.4,199.8,202.4,229.1,216.9,220.0,211.3,187.7,173.4,155.5,162.5,198.9,212.7,240.3,258.3,249.3,226.2,203.4,216.9,187.7,198.1,186.7,188.2,203.6,216.0,226.2,225.7,255.2,264.2,258.6,251.9,238.8,227.9,209.6,214.5,245.7,251.4,292.2,309.0,333.6,319.3,280.5,275.5,247.7,260.6,248.0,256.8,289.5,295.2,318.2,347.8,373.8,352.2,347.8,313.7,312.0,299.2,279.0,279.0,300.6,319.0,356.6,377.4,420.0];
+    const DEMAND  = [480.5,397.2,483.7,453.8,473.5,497.0,558.8,569.6,497.6,494.7,511.2,540.7,519.0,427.6,520.3,482.2,500.9,524.5,609.9,601.8,529.6,514.9,542.2,589.5,590.0,483.4,545.5,533.4,567.3,577.3,662.3,665.4,572.7,558.3,573.9,639.7,619.8,510.3,587.6,562.9,579.1,601.3,677.5,687.8,609.5,593.0,610.7,675.9,619.6,434.7,568.8,571.2,610.2,648.3,702.6,748.7,655.1,631.7,662.9,750.1,744.0,545.3,683.2,649.7,679.1,712.1,785.0,764.9,699.0,665.8,680.3,748.5,779.1,581.1,695.8,639.2,673.0,739.4,835.9,855.1,710.6,689.0,691.4,785.6,738.8,665.2,746.6,691.3,726.0,777.5,886.6,883.9,782.2,744.6,774.4,868.1,791.9,763.0,790.5,736.1,773.1,821.8,938.8,964.5,851.0,779.2,792.1,891.9,833.1,740.8,830.7,773.1,806.5,870.0,1009.0,1011.5,889.9,854.4,836.8,913.2,849.0,810.5,859.1,808.3,857.9,905.8,1038.5];
+    const GEN     = [481.5,398.2,484.6,455.6,474.5,498.0,560.2,570.4,499.1,495.7,512.0,541.2,520.1,428.9,521.5,483.3,502.1,526.1,611.2,602.4,531.0,515.9,542.9,589.9,590.9,484.6,546.8,534.1,568.9,578.7,663.6,666.8,574.0,559.6,575.2,641.0,620.2,512.6,589.0,563.5,581.0,603.1,679.1,689.4,611.0,594.4,611.9,677.1,621.0,435.9,570.7,572.4,612.0,649.9,704.3,750.2,656.4,633.1,663.9,751.2,745.2,546.3,684.1,651.0,679.7,714.0,786.5,766.2,700.2,667.4,681.2,749.4,780.0,582.2,696.7,640.3,673.7,740.8,837.2,855.8,712.3,690.3,692.3,786.4,739.9,666.8,747.9,692.7,727.5,778.9,888.0,885.7,783.9,746.4,775.4,869.2,792.8,764.3,792.1,737.5,774.1,823.1,940.5,966.5,852.9,780.9,793.6,893.2,834.5,742.4,832.1,774.8,808.2,871.5,1011.1,1013.4,891.9,856.2,838.4,914.7,850.7,812.3,860.8,810.3,859.7,908.4,1040.6];
+
+    /* ─── Chart 1: Butterfly ─── */
+    new Chart(document.getElementById('butterfly'), {
+      type: 'bar',
+      data: {
+        labels: ['Oil', 'Gas', 'Coal'],
+        datasets: [
+          {
+            label: 'Production',
+            data: [-212, -226, -2768],
+            backgroundColor: TEAL,
+            borderColor: TEAL,
+            borderWidth: 0,
+            borderRadius: 2
+          },
+          {
+            label: 'Imports',
+            data: [416, 151, 348],
+            backgroundColor: ORANGE,
+            borderColor: ORANGE,
+            borderWidth: 0,
+            borderRadius: 2
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${Math.abs(ctx.raw).toLocaleString()} TWh`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#1e1a3a' },
+            ticks: {
+              callback: v => Math.abs(v).toLocaleString()
+            }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } }
+          }
+        }
+      }
+    });
+
+    /* ─── Chart 2: YoY bars ─── */
+    const yoyVals = [20.6, -0.1, -24.1];
+    new Chart(document.getElementById('yoy'), {
+      type: 'bar',
+      data: {
+        labels: ['Coal', 'Gas', 'Oil'],
+        datasets: [{
+          label: 'YoY change (%)',
+          data: yoyVals,
+          backgroundColor: yoyVals.map(v => v >= 0 ? TEAL : RED),
+          borderWidth: 0,
+          borderRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.raw > 0 ? '+' : ''}${ctx.raw}%`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } }
+          },
+          y: {
+            grid: { color: '#1e1a3a' },
+            ticks: { callback: v => `${v > 0 ? '+' : ''}${v}%` }
+          }
+        }
+      }
+    });
+
+    /* ─── Chart 3: Stacked area ─── */
+    new Chart(document.getElementById('stacked'), {
+      type: 'line',
+      data: {
+        labels: LABELS,
+        datasets: [
+          {
+            label: 'Thermal',
+            data: THERMAL,
+            fill: 'origin',
+            backgroundColor: 'rgba(158,34,34,0.75)',
+            borderColor: 'rgba(158,34,34,0)',
+            borderWidth: 0,
+            pointRadius: 0,
+            tension: 0.3
+          },
+          {
+            label: 'Nuclear',
+            data: NUCLEAR,
+            fill: '-1',
+            backgroundColor: 'rgba(184,134,11,0.80)',
+            borderColor: 'rgba(184,134,11,0)',
+            borderWidth: 0,
+            pointRadius: 0,
+            tension: 0.3
+          },
+          {
+            label: 'Renewable',
+            data: RENEW,
+            fill: '-1',
+            backgroundColor: 'rgba(14,154,132,0.80)',
+            borderColor: 'rgba(14,154,132,0)',
+            borderWidth: 0,
+            pointRadius: 0,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+          tooltip: { mode: 'index', intersect: false }
+        },
+        scales: {
+          x: {
+            grid: { color: '#1e1a3a' },
+            ticks: {
+              maxTicksLimit: 12,
+              callback: (_, i) => LABELS[i] && LABELS[i].endsWith('-01') ? LABELS[i].slice(0,4) : ''
+            }
+          },
+          y: {
+            stacked: true,
+            grid: { color: '#1e1a3a' },
+            ticks: { callback: v => `${v} TWh` }
+          }
+        }
+      }
+    });
+
+    /* ─── Chart 4: Demand vs Generation ─── */
+    new Chart(document.getElementById('demandgen'), {
+      type: 'line',
+      data: {
+        labels: LABELS,
+        datasets: [
+          {
+            label: 'Demand',
+            data: DEMAND,
+            borderColor: ORANGE,
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.3
+          },
+          {
+            label: 'Generation',
+            data: GEN,
+            borderColor: TEAL,
+            backgroundColor: 'transparent',
+            borderWidth: 1.5,
+            borderDash: [4, 3],
+            pointRadius: 0,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+          tooltip: { mode: 'index', intersect: false }
+        },
+        scales: {
+          x: {
+            grid: { color: '#1e1a3a' },
+            ticks: {
+              maxTicksLimit: 12,
+              callback: (_, i) => LABELS[i] && LABELS[i].endsWith('-01') ? LABELS[i].slice(0,4) : ''
+            }
+          },
+          y: {
+            grid: { color: '#1e1a3a' },
+            ticks: { callback: v => `${v} TWh` }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
