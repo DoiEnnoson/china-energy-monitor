@@ -270,17 +270,17 @@
       <div class="kpi-box">
         <div class="kpi-label">Total Electricity Demand</div>
         <div class="kpi-value">1,038 TWh</div>
-        <div class="kpi-delta pos">▲ +2.9% vs. July 2025</div>
+        <div class="kpi-delta pos">▲ +2.9% YoY</div>
       </div>
       <div class="kpi-box orange">
         <div class="kpi-label">Renewable Energy Share</div>
         <div class="kpi-value">40.4%</div>
-        <div class="kpi-delta pos">▲ +3.4 pp vs. July 2025</div>
+        <div class="kpi-delta pos">▲ +3.4 pp YoY</div>
       </div>
       <div class="kpi-box red">
         <div class="kpi-label">Crude Oil Imports</div>
         <div class="kpi-value">35.7 Mt</div>
-        <div class="kpi-delta neg">▼ −24.1% vs. July 2025</div>
+        <div class="kpi-delta neg">▼ −24.1% YoY</div>
       </div>
       <div class="kpi-box gold">
         <div class="kpi-label">Capacity Added YTD</div>
@@ -327,7 +327,7 @@
       </div>
       <div class="chart-box">
         <div class="chart-title">Import Change Year-on-Year</div>
-        <div class="chart-subtitle">July 2026 vs. July 2025 · percent</div>
+        <div class="chart-subtitle">July 2026 YoY · percent</div>
         <canvas id="yoy" height="160"></canvas>
         <p class="chart-source">Source: GACC</p>
       </div>
@@ -400,6 +400,14 @@
     const yTWh = {
       grid: { color: '#1e1a3a' },
       ticks: { stepSize: 500, callback: v => `${v}` }
+    };
+
+    /* ─── zoomed y-axis for Demand vs Generation ─── */
+    const yDemand = {
+      min: 350,
+      max: 1100,
+      grid: { color: '#1e1a3a' },
+      ticks: { stepSize: 200, callback: v => `${v}` }
     };
 
     /* ─── custom plugin: value labels on YoY bars ─── */
@@ -563,7 +571,7 @@
         scales: {
           x: {
             grid: { color: '#1e1a3a' },
-            ticks: { callback: xTick }
+            ticks: { callback: xTick, maxRotation: 0, minRotation: 0 }
           },
           y: { stacked: true, ...yTWh }
         }
@@ -609,9 +617,9 @@
         scales: {
           x: {
             grid: { color: '#1e1a3a' },
-            ticks: { callback: xTick }
+            ticks: { callback: xTick, maxRotation: 0, minRotation: 0 }
           },
-          y: { ...yTWh }
+          y: { ...yDemand }
         }
       }
     });
