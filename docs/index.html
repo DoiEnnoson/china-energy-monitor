@@ -187,8 +187,6 @@
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 1rem 1.1rem 0.8rem;
-      display: flex;
-      flex-direction: column;
     }
     .chart-box.full { width: 100%; }
     .chart-title {
@@ -196,26 +194,28 @@
       font-weight: 600;
       color: var(--text);
       margin-bottom: 0.3rem;
-      flex-shrink: 0;
     }
     .chart-subtitle {
       font-size: 0.72rem;
       color: var(--text2);
       margin-bottom: 0.75rem;
-      flex-shrink: 0;
     }
     .chart-source {
       font-size: 0.67rem;
       color: var(--text2);
       margin-top: 0.5rem;
       text-align: right;
-      flex-shrink: 0;
     }
-    .chart-box canvas {
-      display: block;
-      flex: 1;
-      min-height: 0;
+    canvas { display: block; }
+    /* align side-by-side charts only */
+    .chart-row .chart-box {
+      display: flex;
+      flex-direction: column;
     }
+    .chart-row .chart-box .chart-title,
+    .chart-row .chart-box .chart-subtitle,
+    .chart-row .chart-box .chart-source { flex-shrink: 0; }
+    .chart-row .chart-box canvas { flex: 1; min-height: 0; }
 
     /* ── Footer ── */
     footer {
@@ -347,7 +347,7 @@
     <div class="chart-box full">
       <div class="chart-title">Monthly Power Generation by Source</div>
       <div class="chart-subtitle">TWh · Thermal = Coal + Gas + Other Fossil · Nuclear · Renewable = Hydro + Wind + Solar + Bioenergy</div>
-      <canvas id="stacked" height="90"></canvas>
+      <canvas id="stacked" height="110"></canvas>
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
@@ -356,7 +356,7 @@
     <div class="chart-box full">
       <div class="chart-title">Monthly Demand and Domestic Generation</div>
       <div class="chart-subtitle">TWh · Gap reflects net cross-border trade (China is a marginal net exporter)</div>
-      <canvas id="demandgen" height="90"></canvas>
+      <canvas id="demandgen" height="110"></canvas>
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
