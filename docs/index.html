@@ -523,7 +523,11 @@
       plugins: [yoyLabelPlugin]
     });
 
-    /* ─── Chart 3: Stacked area ─── */
+    /* ─── Chart 3: Stacked area — cumulative data, fill between lines ─── */
+    const THERM_C = THERMAL;
+    const NUC_C   = THERMAL.map((t, i) => t + NUCLEAR[i]);
+    const REN_C   = THERMAL.map((t, i) => t + NUCLEAR[i] + RENEW[i]);
+
     new Chart(document.getElementById('stacked'), {
       type: 'line',
       data: {
@@ -531,9 +535,9 @@
         datasets: [
           {
             label: 'Thermal',
-            data: THERMAL,
-            fill: true,
-            backgroundColor: 'rgba(158,34,34,0.75)',
+            data: THERM_C,
+            fill: 'origin',
+            backgroundColor: 'rgba(158,34,34,0.80)',
             borderColor: 'rgba(158,34,34,0)',
             borderWidth: 0,
             pointRadius: 0,
@@ -541,8 +545,8 @@
           },
           {
             label: 'Nuclear',
-            data: NUCLEAR,
-            fill: true,
+            data: NUC_C,
+            fill: '-1',
             backgroundColor: 'rgba(184,134,11,0.85)',
             borderColor: 'rgba(184,134,11,0)',
             borderWidth: 0,
@@ -551,9 +555,9 @@
           },
           {
             label: 'Renewable',
-            data: RENEW,
-            fill: true,
-            backgroundColor: 'rgba(14,154,132,0.80)',
+            data: REN_C,
+            fill: '-1',
+            backgroundColor: 'rgba(14,154,132,0.82)',
             borderColor: 'rgba(14,154,132,0)',
             borderWidth: 0,
             pointRadius: 0,
@@ -566,14 +570,23 @@
         animation: false,
         plugins: {
           legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
-          tooltip: { mode: 'index', intersect: false }
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: ctx => {
+                const raw = [THERMAL, NUCLEAR, RENEW][ctx.datasetIndex][ctx.dataIndex];
+                return `${ctx.dataset.label}: ${raw.toFixed(1)} TWh`;
+              }
+            }
+          }
         },
         scales: {
           x: {
             grid: { color: '#1e1a3a' },
             ticks: { callback: xTick, maxRotation: 0, minRotation: 0 }
           },
-          y: { stacked: true, ...yTWh }
+          y: { ...yTWh }
         }
       }
     });
