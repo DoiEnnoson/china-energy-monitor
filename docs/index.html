@@ -407,7 +407,7 @@
       min: 350,
       max: 1100,
       grid: { color: '#1e1a3a' },
-      ticks: { stepSize: 200, callback: v => `${v}` }
+      ticks: { stepSize: 200, callback: v => (v === 400 || v === 1100) ? '' : `${v}` }
     };
 
     /* ─── custom plugin: value labels on YoY bars ─── */
