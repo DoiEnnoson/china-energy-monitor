@@ -253,13 +253,13 @@
 
     <div class="chart-row-equal" style="margin-top: var(--gap);">
       <div class="chart-box">
-        <div class="chart-title">Capacity Additions by Source — YTD</div>
+        <div class="chart-title" id="cap-bar-ytd-title">Capacity Additions by Source</div>
         <div class="chart-subtitle" id="cap-ytd-subtitle">GW · Year-to-date</div>
         <canvas id="cap-bar-ytd"></canvas>
         <p class="chart-source">Source: CREA / NBS</p>
       </div>
       <div class="chart-box">
-        <div class="chart-title">Capacity Additions by Source — Month</div>
+        <div class="chart-title" id="cap-bar-month-title">Capacity Additions by Source</div>
         <div class="chart-subtitle" id="cap-month-subtitle">GW · Latest month</div>
         <canvas id="cap-bar-month"></canvas>
         <p class="chart-source">Source: CREA / NBS</p>
@@ -618,7 +618,12 @@
         const cMo   = parseInt(cRow.period.slice(4, 6));
         const ytdLabel = cMo === 1 ? 'January ' + cYear : 'Jan – ' + MONTHS_SHORT[cMo - 1] + ' ' + cYear;
 
-        document.getElementById('cap-ytd-subtitle').textContent    = 'GW · Year-to-date ' + ytdLabel;
+        const ytdTitle = cMo === 1
+          ? 'Capacity Additions by Source — January ' + cYear
+          : 'Capacity Additions by Source — Jan to ' + MONTHS_LONG[cMo - 1] + ' ' + cYear;
+        document.getElementById('cap-bar-ytd-title').textContent    = ytdTitle;
+        document.getElementById('cap-bar-month-title').textContent  = 'Capacity Additions by Source — ' + MONTHS_LONG[cMo - 1] + ' ' + cYear;
+        document.getElementById('cap-ytd-subtitle').textContent     = 'GW · Year-to-date';
         document.getElementById('cap-month-subtitle').textContent   = 'GW · ' + cPer;
         document.getElementById('donut-rfn-ytd-subtitle').textContent   = 'Year-to-date ' + ytdLabel;
         document.getElementById('donut-rfn-month-subtitle').textContent = cPer;
