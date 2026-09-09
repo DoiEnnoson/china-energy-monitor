@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>China Energy Monitor — Monthly Data Dashboard</title>
-  <meta name="description" content="Monthly snapshot of China's energy system: electricity demand, power generation mix, fossil fuel imports and domestic production. Data from Ember, NBS, GACC, CREA.">
+  <meta name="description" content="Monthly snapshot of China's energy system: electricity demand, power generation mix, fossil fuel imports, domestic production and capacity additions. Data from Ember, NBS, GACC, CREA.">
   <meta property="og:title" content="China Energy Monitor — Monthly Data Dashboard">
   <meta property="og:description" content="Monthly snapshot of China's electricity demand, generation mix, fossil fuel imports and capacity additions. Data updated monthly.">
   <meta property="og:type" content="website">
@@ -148,6 +148,7 @@
       color: var(--text);
       line-height: 1.75;
     }
+    .summary-box p + p { margin-top: 0.7rem; }
 
     /* ── Article Cards ── */
     .article-grid {
@@ -187,6 +188,11 @@
       grid-template-columns: 58fr 38fr;
       gap: var(--gap);
     }
+    .chart-row-equal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+    }
     .chart-box {
       background: var(--card);
       border: 1px solid var(--border);
@@ -213,14 +219,19 @@
     }
     canvas { display: block; }
     /* align side-by-side charts only */
-    .chart-row .chart-box {
+    .chart-row .chart-box,
+    .chart-row-equal .chart-box {
       display: flex;
       flex-direction: column;
     }
     .chart-row .chart-box .chart-title,
     .chart-row .chart-box .chart-subtitle,
-    .chart-row .chart-box .chart-source { flex-shrink: 0; }
-    .chart-row .chart-box canvas { flex: 1; min-height: 0; }
+    .chart-row .chart-box .chart-source,
+    .chart-row-equal .chart-box .chart-title,
+    .chart-row-equal .chart-box .chart-subtitle,
+    .chart-row-equal .chart-box .chart-source { flex-shrink: 0; }
+    .chart-row .chart-box canvas,
+    .chart-row-equal .chart-box canvas { flex: 1; min-height: 0; }
 
     /* ── Footer ── */
     footer {
@@ -252,6 +263,7 @@
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .article-grid { grid-template-columns: repeat(2, 1fr); }
       .chart-row { grid-template-columns: 1fr; }
+      .chart-row-equal { grid-template-columns: 1fr; }
     }
     @media (max-width: 560px) {
       .kpi-grid { grid-template-columns: 1fr; }
@@ -365,6 +377,72 @@
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
+    <!-- ── CAPACITY ── -->
+    <p class="section-label" id="capacity">Capacity Added — H1 2026</p>
+    <div class="summary-box">
+      <p>In the first six months of 2026, China added 158.7 GW of new power capacity, equivalent to roughly two-thirds of Germany's entire installed electricity base. Solar remained the dominant contributor at 72.1 GW, though down 66 percent from a record 2025 baseline as developers rushed to complete projects ahead of a policy deadline governing existing price-support arrangements. Wind additions reached 38.6 GW, down 25 percent from the prior year but still higher than any full calendar year before 2025. Thermal capacity surged 49 percent to 38.4 GW, outpacing generation growth and driving plant utilisation rates lower. Hydro added 6 GW, up 53 percent, and nuclear returned with 3.6 GW after contributing nothing in the same period last year.</p>
+      <p>In June alone, wind led all sources with 13.6 GW, up 153 percent year-on-year and a record high for the month. The steep increase reflects a slump in June 2025 caused by the same policy deadline that compressed solar additions earlier in the year. Solar eased to 12.5 GW, down 12 percent. Thermal fell 27 percent to 6 GW. Hydro added 1.9 GW, up 205 percent. No new nuclear capacity was commissioned.</p>
+    </div>
+
+    <!-- ── Capacity: Bar Charts ── -->
+    <div class="chart-row-equal" style="margin-top: var(--gap);">
+      <div class="chart-box">
+        <div class="chart-title">Capacity Additions by Source — H1 2026</div>
+        <div class="chart-subtitle">GW · Year-to-date January – June 2026</div>
+        <canvas id="cap-bar-ytd"></canvas>
+        <p class="chart-source">Source: CREA / NBS</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Capacity Additions by Source — June 2026</div>
+        <div class="chart-subtitle">GW · Month of June 2026</div>
+        <canvas id="cap-bar-month"></canvas>
+        <p class="chart-source">Source: CREA / NBS</p>
+      </div>
+    </div>
+
+    <!-- ── Capacity: Renewable / Nuclear / Fossil Donuts ── -->
+    <p class="section-label">Capacity Mix — Renewable · Nuclear · Fossil</p>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">H1 2026 — Year to Date</div>
+        <div class="chart-subtitle">GW added January – June 2026</div>
+        <canvas id="donut-rfn-ytd"></canvas>
+        <p class="chart-source">Source: CREA / NBS</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">June 2026 — Month</div>
+        <div class="chart-subtitle">GW added in June 2026</div>
+        <canvas id="donut-rfn-month"></canvas>
+        <p class="chart-source">Source: CREA / NBS</p>
+      </div>
+    </div>
+
+    <!-- ── Capacity: Clean / Fossil Donuts ── -->
+    <p class="section-label">Capacity Mix — Clean vs. Fossil</p>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">H1 2026 — Year to Date</div>
+        <div class="chart-subtitle">GW added January – June 2026 · Clean includes Nuclear</div>
+        <canvas id="donut-cf-ytd"></canvas>
+        <p class="chart-source">Source: CREA / NBS</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">June 2026 — Month</div>
+        <div class="chart-subtitle">GW added in June 2026 · Clean includes Nuclear</div>
+        <canvas id="donut-cf-month"></canvas>
+        <p class="chart-source">Source: CREA / NBS</p>
+      </div>
+    </div>
+
+    <!-- ── Capacity: Ember Cumulative Line ── -->
+    <p class="section-label">Installed Capacity Growth 2016 – 2026</p>
+    <div class="chart-box full">
+      <div class="chart-title">Cumulative Installed Capacity — Wind and Solar</div>
+      <div class="chart-subtitle">GW · End-of-month installed base · Wind = onshore + offshore</div>
+      <canvas id="ember-cap" height="110"></canvas>
+      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+    </div>
+
   </main>
 
   <!-- ── Footer ── -->
@@ -372,7 +450,7 @@
     <nav class="footer-nav">
       <a href="#" title="Coming soon">Power</a>
       <a href="#" title="Coming soon">Fuels</a>
-      <a href="#" title="Coming soon">Capacity</a>
+      <a href="#capacity">Capacity</a>
       <a href="#" title="Coming soon">Partners</a>
       <a href="#" title="Coming soon">Methodology</a>
       <a href="https://github.com/DoiEnnoson/china-energy-monitor" target="_blank" rel="noopener">Data (GitHub)</a>
@@ -425,14 +503,14 @@
         renewSign + renewDelta.toFixed(1) + ' pp YoY';
     })();
 
-    /* ─── shared x-axis tick helper: only 2016, 2020, 2025 ─── */
+    /* ─── shared x-axis tick helper ─── */
     const YEAR_TICKS = new Set(['2016-01','2020-01','2025-01']);
     function xTick(_, i) {
       const l = LABELS[i];
       return l && YEAR_TICKS.has(l) ? l.slice(0, 4) : '';
     }
 
-    /* ─── shared y-axis (TWh, stepSize 500) ─── */
+    /* ─── shared y-axis (TWh) ─── */
     const yTWh = {
       grid: { color: '#1e1a3a' },
       ticks: { stepSize: 500, callback: v => `${v}` }
@@ -559,7 +637,7 @@
       plugins: [yoyLabelPlugin]
     });
 
-    /* ─── Chart 3: Stacked area — cumulative data, fill between lines ─── */
+    /* ─── Chart 3: Stacked area ─── */
     const THERM_C = THERMAL;
     const NUC_C   = THERMAL.map((t, i) => t + NUCLEAR[i]);
     const REN_C   = THERMAL.map((t, i) => t + NUCLEAR[i] + RENEW[i]);
@@ -672,6 +750,213 @@
         }
       }
     });
+
+    /* ═══════════════════════════════════════════
+       CAPACITY CHARTS
+    ═══════════════════════════════════════════ */
+
+    const SOLAR_C   = '#F5C518';
+    const WIND_C    = TEAL;
+    const HYDRO_C   = '#2E86C1';
+    const NUCL_C    = ORANGE;
+    const THERM_CAP = '#9E2222';
+
+    const CAP_SOURCES  = ['Solar', 'Wind', 'Hydro', 'Nuclear', 'Thermal'];
+    const CAP_COLORS   = [SOLAR_C, WIND_C, HYDRO_C, NUCL_C, THERM_CAP];
+    const CAP_YTD_GW   = [72.1, 38.6, 6.0, 3.6, 38.4];
+    const CAP_MONTH_GW = [12.5, 13.6, 1.9, 0.0, 6.0];
+    const CAP_YTD_YOY  = ['-66%', '-25%', '+53%', 'n/a (0 → 3.6 GW)', '+49%'];
+    const CAP_MON_YOY  = ['-12%', '+153%', '+205%', '0 GW (same as H1 2025)', '-27%'];
+
+    /* plugin: GW labels above bars */
+    const barValuePlugin = {
+      id: 'barValues',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((ds, i) => {
+          chart.getDatasetMeta(i).data.forEach((bar, j) => {
+            const v = ds.data[j];
+            if (!v || v === 0) return;
+            ctx.save();
+            ctx.fillStyle = '#dbcfbf';
+            ctx.font = 'bold 11px "Segoe UI",system-ui,sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(v.toFixed(1) + ' GW', bar.x, bar.y - 4);
+            ctx.restore();
+          });
+        });
+      }
+    };
+
+    function makeCapBar(id, data, yoyTexts) {
+      new Chart(document.getElementById(id), {
+        type: 'bar',
+        data: {
+          labels: CAP_SOURCES,
+          datasets: [{
+            label: 'GW added',
+            data: data,
+            backgroundColor: CAP_COLORS,
+            borderWidth: 0,
+            borderRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          animation: false,
+          aspectRatio: 1.8,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.raw.toFixed(1)} GW`,
+                afterLabel: ctx => `YoY: ${yoyTexts[ctx.dataIndex]}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#dbcfbf', font: { weight: '600', size: 12 } }
+            },
+            y: {
+              grid: { color: '#1e1a3a' },
+              ticks: { callback: v => v + ' GW' }
+            }
+          }
+        },
+        plugins: [barValuePlugin]
+      });
+    }
+
+    makeCapBar('cap-bar-ytd',   CAP_YTD_GW,   CAP_YTD_YOY);
+    makeCapBar('cap-bar-month', CAP_MONTH_GW, CAP_MON_YOY);
+
+    /* ─── Donut helper ─── */
+    function makeDonut(id, labels, data, colors) {
+      const items = labels
+        .map((l, i) => ({ l, d: data[i], c: colors[i] }))
+        .filter(x => x.d > 0);
+      new Chart(document.getElementById(id), {
+        type: 'doughnut',
+        data: {
+          labels: items.map(x => x.l),
+          datasets: [{
+            data: items.map(x => x.d),
+            backgroundColor: items.map(x => x.c),
+            borderWidth: 0,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          animation: false,
+          aspectRatio: 1.5,
+          cutout: '58%',
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                  const pct   = ((ctx.raw / total) * 100).toFixed(1);
+                  return `${ctx.label}: ${ctx.raw.toFixed(1)} GW (${pct}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    /* Renewable/Nuclear/Fossil donuts
+       YTD: Renewable = 72.1+38.6+6.0 = 116.7 | Nuclear = 3.6 | Fossil = 38.4
+       June: Renewable = 12.5+13.6+1.9 = 28.0 | Nuclear = 0   | Fossil = 6.0  */
+    makeDonut('donut-rfn-ytd',   ['Renewable','Nuclear','Fossil'], [116.7, 3.6, 38.4], [TEAL, ORANGE, RED]);
+    makeDonut('donut-rfn-month', ['Renewable','Nuclear','Fossil'], [28.0,  0.0, 6.0],  [TEAL, ORANGE, RED]);
+
+    /* Clean/Fossil donuts
+       YTD: Clean = 116.7+3.6 = 120.3 | Fossil = 38.4
+       June: Clean = 28.0 | Fossil = 6.0  */
+    makeDonut('donut-cf-ytd',   ['Clean','Fossil'], [120.3, 38.4], [TEAL, RED]);
+    makeDonut('donut-cf-month', ['Clean','Fossil'], [28.0,  6.0],  [TEAL, RED]);
+
+    /* ─── Ember: cumulative installed capacity ─── */
+    const EMBER_LABELS = [];
+    for (let y = 2016; y <= 2026; y++) {
+      const maxM = (y === 2026) ? 6 : 12;
+      for (let m = 1; m <= maxM; m++) {
+        EMBER_LABELS.push(`${y}-${String(m).padStart(2,'0')}`);
+      }
+    }
+
+    const EMBER_WIND  = [131.55,132.35,133.26,134.26,135.23,136.49,137.56,138.17,138.99,140.77,142.76,147.47,148.95,150.43,150.99,151.88,152.69,153.48,154.77,156.06,157.17,158.17,159.99,164.0,166.5,168.99,169.26,169.34,170.3,171.53,173.46,174.26,175.13,178.47,181.2,184.27,184.98,185.68,189.05,189.77,191.15,193.36,194.54,195.36,197.35,198.93,200.73,209.15,209.64,210.14,211.51,212.7,214.05,215.47,217.71,219.19,222.21,227.44,233.77,281.65,283.44,285.22,286.91,288.25,289.44,292.49,294.22,296.28,298.08,300.84,306.35,328.71,331.34,333.98,336.61,338.29,339.53,341.65,343.64,344.85,347.95,349.85,351.23,365.44,368.36,371.28,375.84,379.64,381.8,388.43,392.91,395.37,400.21,404.0,412.83,441.34,445.85,450.35,456.64,458.03,461.04,466.71,470.53,474.03,479.55,486.17,492.18,520.68,525.25,529.82,535.37,541.19,567.49,572.6,574.87,579.01,581.59,590.39,602.64,640.01,645.34,650.66,655.23,660.62,664.27,678.75];
+    const EMBER_SOLAR = [52.7,54.79,55.92,59.88,63.84,67.8,71.76,75.73,79.69,83.65,87.61,91.57,96.3,101.02,105.74,110.47,115.19,119.92,133.48,137.51,142.34,145.33,149.95,156.5,163.02,169.55,170.14,172.03,174.72,187.48,194.03,196.14,197.93,200.32,202.37,209.2,211.28,213.38,215.14,215.8,218.82,223.16,225.35,227.14,228.54,229.76,230.75,245.15,245.78,246.43,249.25,250.62,252.53,257.33,260.86,263.35,266.4,271.4,276.23,304.27,306.23,308.17,310.67,312.77,316.16,319.88,325.8,330.73,334.94,339.44,346.07,367.85,373.13,378.42,383.7,388.1,396.3,404.9,413.12,421.21,430.97,437.74,446.7,471.13,485.52,499.9,515.84,533.42,548.9,569.56,588.97,606.49,625.3,642.91,669.14,731.39,754.42,777.46,792.06,805.76,829.18,856.2,882.68,902.82,927.5,951.73,982.0,1063.99,1087.73,1111.46,1135.58,1190.46,1301.34,1320.04,1331.52,1340.68,1351.81,1368.22,1393.44,1442.08,1461.33,1480.58,1490.42,1502.7,1514.06,1528.93];
+
+    const EMBER_YEAR_TICKS = new Set(['2016-01','2017-01','2018-01','2019-01','2020-01','2021-01','2022-01','2023-01','2024-01','2025-01','2026-01']);
+
+    new Chart(document.getElementById('ember-cap'), {
+      type: 'line',
+      data: {
+        labels: EMBER_LABELS,
+        datasets: [
+          {
+            label: 'Solar',
+            data: EMBER_SOLAR,
+            borderColor: SOLAR_C,
+            backgroundColor: 'rgba(245,197,24,0.10)',
+            fill: true,
+            borderWidth: 2.5,
+            pointRadius: 0,
+            tension: 0.3,
+            order: 2
+          },
+          {
+            label: 'Wind',
+            data: EMBER_WIND,
+            borderColor: TEAL,
+            backgroundColor: 'rgba(14,154,132,0.10)',
+            fill: true,
+            borderWidth: 2.5,
+            pointRadius: 0,
+            tension: 0.3,
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(0)} GW`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#1e1a3a' },
+            ticks: {
+              callback: (_, i) => {
+                const l = EMBER_LABELS[i];
+                return EMBER_YEAR_TICKS.has(l) ? l.slice(0, 4) : '';
+              },
+              maxRotation: 0, minRotation: 0
+            }
+          },
+          y: {
+            grid: { color: '#1e1a3a' },
+            ticks: { stepSize: 300, callback: v => v + ' GW' }
+          }
+        }
+      }
+    });
+
   </script>
 
 </body>
