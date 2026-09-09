@@ -246,9 +246,9 @@
     </div>
 
     <p class="section-label" id="capacity">Capacity Added</p>
-    <div class="summary-box">
-      <p>In the first six months of 2026, China added 158.7 GW of new power capacity, equivalent to roughly two-thirds of Germany's entire installed electricity base. Solar remained the dominant contributor at 72.1 GW, though down 66 percent from a record 2025 baseline as developers rushed to complete projects ahead of a policy deadline governing existing price-support arrangements. Wind additions reached 38.6 GW, down 25 percent from the prior year but still higher than any full calendar year before 2025. Thermal capacity surged 49 percent to 38.4 GW, outpacing generation growth and driving plant utilisation rates lower. Hydro added 6 GW, up 53 percent, and nuclear returned with 3.6 GW after contributing nothing in the same period last year.</p>
-      <p>In June alone, wind led all sources with 13.6 GW, up 153 percent year-on-year and a record high for the month. The steep increase reflects a slump in June 2025 caused by the same policy deadline that compressed solar additions earlier in the year. Solar eased to 12.5 GW, down 12 percent. Thermal fell 27 percent to 6 GW. Hydro added 1.9 GW, up 205 percent. No new nuclear capacity was commissioned.</p>
+    <div class="summary-box" id="capacity-summary">
+      <p id="cap-summary-ytd">Loading…</p>
+      <p id="cap-summary-mon">Loading…</p>
     </div>
 
     <div class="chart-row-equal" style="margin-top: var(--gap);">
@@ -631,6 +631,47 @@
         document.getElementById('donut-rfn-month-title').textContent   = 'Share of New Capacity — ' + periodMon;
         document.getElementById('donut-cf-ytd-title').textContent      = 'Share of New Capacity — ' + periodRange;
         document.getElementById('donut-cf-month-title').textContent    = 'Share of New Capacity — ' + periodMon;
+
+        /* ── Dynamic capacity summary text ── */
+        function gw(v)    { return (+v).toFixed(1); }
+        function absYoY(v){ return Math.abs(+v).toFixed(0); }
+        function dirUp(v) { return +v >= 0 ? 'up' : 'down'; }
+        function dirRose(v){ return +v >= 0 ? 'rose' : 'fell'; }
+
+        const ytdNucGw  = +cRow.nuclear_ytd_gw;
+        const monNucGw  = +cRow.nuclear_gw;
+
+        const nucYtd = ytdNucGw > 0
+          ? `Nuclear added ${gw(ytdNucGw)} GW.`
+          : 'Nuclear contributed no new capacity in the period.';
+        const nucMon = monNucGw > 0
+          ? `Nuclear added ${gw(monNucGw)} GW.`
+          : 'No new nuclear capacity was commissioned.';
+
+        /* Find leading source in month */
+        const monSrc = [
+          { name: 'Solar',   gw: +cRow.solar_gw,   yoy: +cRow.solar_yoy_pct },
+          { name: 'Wind',    gw: +cRow.wind_gw,     yoy: +cRow.wind_yoy_pct },
+          { name: 'Thermal', gw: +cRow.thermal_gw,  yoy: +cRow.thermal_yoy_pct },
+          { name: 'Hydro',   gw: +cRow.hydro_gw,    yoy: +cRow.hydro_yoy_pct },
+        ];
+        const leader = monSrc.reduce((a, b) => a.gw > b.gw ? a : b);
+
+        const p1 = `In ${periodRange}, China added ${gw(cRow.total_ytd_gw)} GW of new power capacity. ` +
+          `Solar was the largest contributor at ${gw(cRow.solar_ytd_gw)} GW, ${dirUp(cRow.solar_ytd_yoy_pct)} ${absYoY(cRow.solar_ytd_yoy_pct)} percent year-on-year. ` +
+          `Wind additions reached ${gw(cRow.wind_ytd_gw)} GW, ${dirUp(cRow.wind_ytd_yoy_pct)} ${absYoY(cRow.wind_ytd_yoy_pct)} percent. ` +
+          `Thermal capacity ${dirRose(cRow.thermal_ytd_yoy_pct)} ${absYoY(cRow.thermal_ytd_yoy_pct)} percent to ${gw(cRow.thermal_ytd_gw)} GW. ` +
+          `Hydro added ${gw(cRow.hydro_ytd_gw)} GW, ${dirUp(cRow.hydro_ytd_yoy_pct)} ${absYoY(cRow.hydro_ytd_yoy_pct)} percent. ` +
+          nucYtd;
+
+        const nonLeaders = monSrc.filter(s => s.name !== leader.name);
+        const p2 = `In ${MONTHS_LONG[cMo - 1]} alone, ${leader.name} led all sources with ${gw(leader.gw)} GW, ${dirUp(leader.yoy)} ${absYoY(leader.yoy)} percent year-on-year. ` +
+          nonLeaders.map(s =>
+            `${s.name} ${dirRose(s.yoy)} ${absYoY(s.yoy)} percent to ${gw(s.gw)} GW.`
+          ).join(' ') + ' ' + nucMon;
+
+        document.getElementById('cap-summary-ytd').textContent = p1;
+        document.getElementById('cap-summary-mon').textContent = p2;
 
         const CAP_SOURCES  = ['Solar', 'Wind', 'Hydro', 'Nuclear', 'Thermal'];
         const CAP_COLORS   = [SOLAR_C, TEAL, HYDRO_C, ORANGE, THERM_C];
