@@ -269,14 +269,14 @@
     <p class="section-label">Capacity Mix — Renewable · Nuclear · Fossil</p>
     <div class="chart-row-equal">
       <div class="chart-box">
-        <div class="chart-title">YTD — Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-rfn-ytd-subtitle">Year-to-date</div>
+        <div class="chart-title" id="donut-rfn-ytd-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-rfn-ytd-subtitle"></div>
         <canvas id="donut-rfn-ytd"></canvas>
         <p class="chart-source">Source: CREA / NBS</p>
       </div>
       <div class="chart-box">
-        <div class="chart-title">Month — Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-rfn-month-subtitle">Latest month</div>
+        <div class="chart-title" id="donut-rfn-month-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-rfn-month-subtitle"></div>
         <canvas id="donut-rfn-month"></canvas>
         <p class="chart-source">Source: CREA / NBS</p>
       </div>
@@ -285,14 +285,14 @@
     <p class="section-label">Capacity Mix — Clean vs. Fossil</p>
     <div class="chart-row-equal">
       <div class="chart-box">
-        <div class="chart-title">YTD — Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-cf-ytd-subtitle">Year-to-date · Clean includes Nuclear</div>
+        <div class="chart-title" id="donut-cf-ytd-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-cf-ytd-subtitle">Clean includes Nuclear</div>
         <canvas id="donut-cf-ytd"></canvas>
         <p class="chart-source">Source: CREA / NBS</p>
       </div>
       <div class="chart-box">
-        <div class="chart-title">Month — Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-cf-month-subtitle">Latest month · Clean includes Nuclear</div>
+        <div class="chart-title" id="donut-cf-month-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-cf-month-subtitle">Clean includes Nuclear</div>
         <canvas id="donut-cf-month"></canvas>
         <p class="chart-source">Source: CREA / NBS</p>
       </div>
@@ -618,17 +618,19 @@
         const cMo   = parseInt(cRow.period.slice(4, 6));
         const ytdLabel = cMo === 1 ? 'January ' + cYear : 'Jan – ' + MONTHS_SHORT[cMo - 1] + ' ' + cYear;
 
-        const ytdTitle = cMo === 1
-          ? 'Capacity Additions by Source — January ' + cYear
-          : 'Capacity Additions by Source — Jan to ' + MONTHS_LONG[cMo - 1] + ' ' + cYear;
-        document.getElementById('cap-bar-ytd-title').textContent    = ytdTitle;
-        document.getElementById('cap-bar-month-title').textContent  = 'Capacity Additions by Source — ' + MONTHS_LONG[cMo - 1] + ' ' + cYear;
-        document.getElementById('cap-ytd-subtitle').textContent     = 'GW · Year-to-date';
-        document.getElementById('cap-month-subtitle').textContent   = 'GW · ' + cPer;
-        document.getElementById('donut-rfn-ytd-subtitle').textContent   = 'Year-to-date ' + ytdLabel;
-        document.getElementById('donut-rfn-month-subtitle').textContent = cPer;
-        document.getElementById('donut-cf-ytd-subtitle').textContent    = 'Year-to-date ' + ytdLabel + ' · Clean includes Nuclear';
-        document.getElementById('donut-cf-month-subtitle').textContent  = cPer + ' · Clean includes Nuclear';
+        const periodRange = cMo === 1
+          ? 'January ' + cYear
+          : 'Jan – ' + MONTHS_LONG[cMo - 1] + ' ' + cYear;
+        const periodMon = MONTHS_LONG[cMo - 1] + ' ' + cYear;
+
+        document.getElementById('cap-bar-ytd-title').textContent       = 'Capacity Additions by Source — ' + periodRange;
+        document.getElementById('cap-bar-month-title').textContent     = 'Capacity Additions by Source — ' + periodMon;
+        document.getElementById('cap-ytd-subtitle').textContent        = 'GW';
+        document.getElementById('cap-month-subtitle').textContent      = 'GW';
+        document.getElementById('donut-rfn-ytd-title').textContent     = 'Share of New Capacity — ' + periodRange;
+        document.getElementById('donut-rfn-month-title').textContent   = 'Share of New Capacity — ' + periodMon;
+        document.getElementById('donut-cf-ytd-title').textContent      = 'Share of New Capacity — ' + periodRange;
+        document.getElementById('donut-cf-month-title').textContent    = 'Share of New Capacity — ' + periodMon;
 
         const CAP_SOURCES  = ['Solar', 'Wind', 'Hydro', 'Nuclear', 'Thermal'];
         const CAP_COLORS   = [SOLAR_C, TEAL, HYDRO_C, ORANGE, THERM_C];
