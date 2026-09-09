@@ -480,7 +480,7 @@
 
       /* ── KPI: Demand ── */
       const demandYoY = ((+latest.demand_twh / +prev12.demand_twh) - 1) * 100;
-      document.getElementById('kpi-demand').textContent = Math.round(+latest.demand_twh).toLocaleString() + ' TWh';
+      document.getElementById('kpi-demand').textContent = Math.round(+latest.demand_twh).toLocaleString('en-US') + ' TWh';
       const dEl = document.getElementById('kpi-demand-delta');
       dEl.textContent = (demandYoY >= 0 ? '▲ +' : '▼ ') + demandYoY.toFixed(1) + '% YoY';
       dEl.className = 'kpi-delta ' + (demandYoY >= 0 ? 'pos' : 'neg');
@@ -522,7 +522,7 @@
         const fRow = fs.length ? fs[fs.length - 1] : null;
 
         function fmt1(v)   { return (+v).toFixed(1); }
-        function fmt0(v)   { return Math.round(+v).toLocaleString(); }
+        function fmt0(v)   { return Math.round(+v).toLocaleString('en-US'); }
         function dirUp(v)  { return +v >= 0 ? 'up' : 'down'; }
         function absV(v)   { return Math.abs(+v).toFixed(1); }
 
@@ -543,8 +543,7 @@
         const p1 = `In ${mon}, electricity demand reached ${fmt0(demandTwh)} TWh, ` +
           `${dirUp(demYoY)} ${absV(demYoY)} percent year-on-year. ` +
           `Domestic generation covered ${fmt0(genTwh)} TWh, with ${netLabel}. ` +
-          `Renewable sources supplied ${fmt1(renewPct)} percent of total output — ` +
-          `solar at ${fmt0(solarTwh)} TWh, wind at ${fmt0(windTwh)} TWh. ` +
+          `Renewable sources supplied ${fmt1(renewPct)} percent of total output, with solar at ${fmt0(solarTwh)} TWh and wind at ${fmt0(windTwh)} TWh. ` +
           `Coal accounted for ${fmt1(coalPct)} percent of generation.`;
 
         let p2 = '';
