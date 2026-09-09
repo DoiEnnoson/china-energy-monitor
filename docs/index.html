@@ -342,22 +342,51 @@
             const value = dataset.data[j];
             if (!value || value === 0) return;
             const span = Math.abs(arc.endAngle - arc.startAngle);
-            if (span < 0.3) return;
+            if (span < 0.04) return;
             const midAngle = (arc.startAngle + arc.endAngle) / 2;
-            const r = (arc.innerRadius + arc.outerRadius) / 2;
-            const x = arc.x + r * Math.cos(midAngle);
-            const y = arc.y + r * Math.sin(midAngle);
+            const cos = Math.cos(midAngle);
+            const sin = Math.sin(midAngle);
             const pct = ((value / total) * 100).toFixed(0);
-            ctx.save();
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'bold 11px "Segoe UI",system-ui,sans-serif';
-            ctx.fillStyle = '#dbcfbf';
-            ctx.fillText(value.toFixed(1) + ' GW', x, y - 6);
-            ctx.font = '10px "Segoe UI",system-ui,sans-serif';
-            ctx.fillStyle = '#9d8a80';
-            ctx.fillText(pct + '%', x, y + 7);
-            ctx.restore();
+            const label = chart.data.labels[j];
+
+            if (span >= 0.3) {
+              /* ── large segment: label inside arc ── */
+              const r = (arc.innerRadius + arc.outerRadius) / 2;
+              const x = arc.x + r * cos;
+              const y = arc.y + r * sin;
+              ctx.save();
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.font = 'bold 11px "Segoe UI",system-ui,sans-serif';
+              ctx.fillStyle = '#dbcfbf';
+              ctx.fillText(value.toFixed(1) + ' GW', x, y - 6);
+              ctx.font = '10px "Segoe UI",system-ui,sans-serif';
+              ctx.fillStyle = '#9d8a80';
+              ctx.fillText(pct + '%', x, y + 7);
+              ctx.restore();
+            } else {
+              /* ── small segment: callout line + outside label ── */
+              const x0 = arc.x + arc.outerRadius * cos;
+              const y0 = arc.y + arc.outerRadius * sin;
+              const x1 = arc.x + (arc.outerRadius + 12) * cos;
+              const y1 = arc.y + (arc.outerRadius + 12) * sin;
+              const x2 = x1 + (cos >= 0 ? 18 : -18);
+              const y2 = y1;
+              ctx.save();
+              ctx.strokeStyle = '#9d8a80';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(x0, y0);
+              ctx.lineTo(x1, y1);
+              ctx.lineTo(x2, y2);
+              ctx.stroke();
+              ctx.font = 'bold 10px "Segoe UI",system-ui,sans-serif';
+              ctx.fillStyle = '#dbcfbf';
+              ctx.textAlign = cos >= 0 ? 'left' : 'right';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(`${label}: ${value.toFixed(1)} GW (${pct}%)`, x2 + (cos >= 0 ? 4 : -4), y2);
+              ctx.restore();
+            }
           });
         });
       }
