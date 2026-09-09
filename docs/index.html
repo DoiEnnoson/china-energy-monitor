@@ -633,6 +633,16 @@
         document.getElementById('donut-cf-month-title').textContent    = 'Share of New Capacity — ' + periodMon;
 
         /* ── Dynamic capacity summary text ── */
+        const MO_WORDS = ['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
+        function periodPhrase(mo, yr) {
+          if (mo === 1)  return `In January ${yr}`;
+          if (mo === 3)  return `In the first quarter of ${yr}`;
+          if (mo === 6)  return `In the first half of ${yr}`;
+          if (mo === 9)  return `In the first nine months of ${yr}`;
+          if (mo === 12) return `In ${yr}`;
+          return `In the first ${MO_WORDS[mo]} months of ${yr}`;
+        }
+
         function gw(v)    { return (+v).toFixed(1); }
         function absYoY(v){ return Math.abs(+v).toFixed(0); }
         function dirUp(v) { return +v >= 0 ? 'up' : 'down'; }
@@ -657,7 +667,7 @@
         ];
         const leader = monSrc.reduce((a, b) => a.gw > b.gw ? a : b);
 
-        const p1 = `In ${periodRange}, China added ${gw(cRow.total_ytd_gw)} GW of new power capacity. ` +
+        const p1 = `${periodPhrase(cMo, cYear)}, China added ${gw(cRow.total_ytd_gw)} GW of new power capacity. ` +
           `Solar was the largest contributor at ${gw(cRow.solar_ytd_gw)} GW, ${dirUp(cRow.solar_ytd_yoy_pct)} ${absYoY(cRow.solar_ytd_yoy_pct)} percent year-on-year. ` +
           `Wind additions reached ${gw(cRow.wind_ytd_gw)} GW, ${dirUp(cRow.wind_ytd_yoy_pct)} ${absYoY(cRow.wind_ytd_yoy_pct)} percent. ` +
           `Thermal capacity ${dirRose(cRow.thermal_ytd_yoy_pct)} ${absYoY(cRow.thermal_ytd_yoy_pct)} percent to ${gw(cRow.thermal_ytd_gw)} GW. ` +
