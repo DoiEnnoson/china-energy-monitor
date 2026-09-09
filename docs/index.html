@@ -329,6 +329,41 @@
     Chart.defaults.borderColor = '#1e1a3a';
     Chart.defaults.font.family = "'Segoe UI', system-ui, -apple-system, sans-serif";
 
+    /* ── Donut segment labels plugin ── */
+    const doughnutSegmentLabels = {
+      id: 'doughnutSegmentLabels',
+      afterDatasetsDraw(chart) {
+        if (chart.config.type !== 'doughnut') return;
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, i) => {
+          const meta = chart.getDatasetMeta(i);
+          const total = dataset.data.reduce((a, b) => a + b, 0);
+          meta.data.forEach((arc, j) => {
+            const value = dataset.data[j];
+            if (!value || value === 0) return;
+            const span = Math.abs(arc.endAngle - arc.startAngle);
+            if (span < 0.3) return;
+            const midAngle = (arc.startAngle + arc.endAngle) / 2;
+            const r = (arc.innerRadius + arc.outerRadius) / 2;
+            const x = arc.x + r * Math.cos(midAngle);
+            const y = arc.y + r * Math.sin(midAngle);
+            const pct = ((value / total) * 100).toFixed(0);
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = 'bold 11px "Segoe UI",system-ui,sans-serif';
+            ctx.fillStyle = '#dbcfbf';
+            ctx.fillText(value.toFixed(1) + ' GW', x, y - 6);
+            ctx.font = '10px "Segoe UI",system-ui,sans-serif';
+            ctx.fillStyle = '#9d8a80';
+            ctx.fillText(pct + '%', x, y + 7);
+            ctx.restore();
+          });
+        });
+      }
+    };
+    Chart.register(doughnutSegmentLabels);
+
     /* ── Palette ── */
     const TEAL      = '#0E9A84';
     const ORANGE    = '#DE8212';
