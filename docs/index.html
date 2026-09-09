@@ -189,8 +189,9 @@
     </div>
 
     <p class="section-label">Monthly Summary</p>
-    <div class="summary-box">
-      At 1,038 TWh, July 2026 demand rose 2.9 percent year-on-year, covered almost entirely by domestic generation with a supply gap of barely 2 TWh. Solar reached 158 TWh for the first time, drawing level with hydro, while coal's monthly share edged back up to 51 percent after falling below 50 percent in the first half. The driving disruption remains the Hormuz crisis: since the Iran war erupted in late February, crude oil imports fell 13.2 percent in cumulative terms through July. The month itself showed a partial recovery to 35.7 million tonnes, still roughly 41 percent below the prior year. Coal imports rose 4.3 percent year-to-date as domestic production dropped 10.1 percent in July alone.
+    <div class="summary-box" id="month-summary">
+      <p id="month-summary-power">Loading…</p>
+      <p id="month-summary-fuels">Loading…</p>
     </div>
 
     <p class="section-label">From China Business Spotlight</p>
@@ -512,6 +513,55 @@
         cEl.textContent = '▲ incl. ' + (+c.solar_ytd_gw).toFixed(1) + ' GW solar';
         cEl.className = 'kpi-delta pos';
       }
+
+      /* ── Monthly summary text ── */
+      (function() {
+        const l  = latest;
+        const p12 = prev12;
+        const gRow = gc.length ? gc[gc.length - 1] : null;
+        const fRow = fs.length ? fs[fs.length - 1] : null;
+
+        function fmt1(v)   { return (+v).toFixed(1); }
+        function fmt0(v)   { return Math.round(+v).toLocaleString(); }
+        function dirUp(v)  { return +v >= 0 ? 'up' : 'down'; }
+        function absV(v)   { return Math.abs(+v).toFixed(1); }
+
+        const mon       = periodToMonth(l.period);
+        const demandTwh = +l.demand_twh;
+        const genTwh    = demandTwh - +l.net_imports_twh;
+        const netImp    = +l.net_imports_twh;
+        const demYoY    = ((demandTwh / +p12.demand_twh) - 1) * 100;
+        const solarTwh  = +l.solar_twh;
+        const windTwh   = +l.wind_twh;
+        const renewPct  = +l.renewables_share_pct;
+        const coalPct   = +l.coal_share_pct;
+
+        const netLabel = netImp >= 0
+          ? `net imports of ${fmt1(netImp)} TWh`
+          : `net exports of ${fmt1(Math.abs(netImp))} TWh`;
+
+        const p1 = `In ${mon}, electricity demand reached ${fmt0(demandTwh)} TWh, ` +
+          `${dirUp(demYoY)} ${absV(demYoY)} percent year-on-year. ` +
+          `Domestic generation covered ${fmt0(genTwh)} TWh, with ${netLabel}. ` +
+          `Renewable sources supplied ${fmt1(renewPct)} percent of total output — ` +
+          `solar at ${fmt0(solarTwh)} TWh, wind at ${fmt0(windTwh)} TWh. ` +
+          `Coal accounted for ${fmt1(coalPct)} percent of generation.`;
+
+        let p2 = '';
+        if (gRow && fRow) {
+          const oilMt    = fmt1(+gRow.crude_oil_mt);
+          const oilYoY   = +gRow.crude_oil_mt_yoy_pct;
+          const coalYoY  = +gRow.coal_mt_yoy_pct;
+          const cprodYoY = +fRow.coal_prod_yoy_pct;
+
+          p2 = `Crude oil imports totalled ${oilMt} million tonnes, ${dirUp(oilYoY)} ${Math.abs(oilYoY).toFixed(1)} percent year-on-year. ` +
+            `Coal imports ${dirUp(coalYoY)} ${Math.abs(coalYoY).toFixed(1)} percent, ` +
+            `while domestic coal production ${dirUp(cprodYoY)} ${Math.abs(cprodYoY).toFixed(1)} percent.`;
+        }
+
+        document.getElementById('month-summary-power').textContent = p1;
+        if (p2) document.getElementById('month-summary-fuels').textContent = p2;
+      })();
 
       /* ── Shared chart helpers ── */
       const YEAR_TICKS = new Set(LABELS.filter(l => l.endsWith('-01')));
