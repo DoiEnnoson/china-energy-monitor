@@ -1,6 +1,51 @@
 # china-energy-monitor
 
-Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung. Vier Datenquellen, zehn Tabellen, drei automatisierte Update-Zyklen.
+Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung — und das öffentliche Dashboard, das darauf aufbaut. Vier Datenquellen, zehn Tabellen, drei automatisierte Update-Zyklen.
+
+Live: **[china-energy-monitor.com](https://china-energy-monitor.com)**
+
+---
+
+## Frontend / Dashboard
+
+Das Dashboard läuft als statische GitHub-Pages-Site aus dem Ordner `docs/`. Es gibt keine Build-Pipeline und keinen Server: Der Browser lädt `docs/index.html` und holt alle Chart-Daten zur Laufzeit per JavaScript `fetch()` direkt aus den CSVs dieses Repos.
+
+### Technischer Aufbau
+
+| Komponente | Details |
+|---|---|
+| Rendering | Statisches HTML, kein Framework |
+| Charts | Chart.js 4.4.4 (CDN) |
+| Datenzugriff | `fetch()` gegen `raw.githubusercontent.com` — kein Backend nötig |
+| Deployment | GitHub Pages aus `docs/`; Domain via `docs/CNAME` |
+
+Beim Seitenaufruf werden fünf CSVs parallel geladen:
+
+```
+data/power/ember_power.csv
+data/power/capacity_additions.csv
+data/power/ember_capacity.csv
+data/combined/fossil_supply.csv
+data/fuel-imports/gacc_imports.csv
+```
+
+Alle Texte, KPI-Werte, Chart-Titel und Summary-Absätze werden aus den geholten Daten generiert — keine hardcodierten Zahlen oder Datumsangaben im HTML.
+
+### Aktuelle Sektionen
+
+| Sektion | Datenquelle | Charts |
+|---|---|---|
+| This Month At A Glance | ember_power, gacc_imports, capacity_additions | 4 KPI-Karten |
+| Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamischer Fließtext |
+| Fossil Supply | fossil_supply, gacc_imports | Butterfly-Balken, YoY-Balken |
+| Power Generation Mix | ember_power | Gestapeltes Flächendiagramm |
+| Electricity Demand vs. Generation | ember_power | Liniendiagramm |
+| Capacity Added | capacity_additions | 2 Balken + 4 Donuts + Fließtext |
+| Installed Capacity Growth | ember_capacity | Liniendiagramm Wind + Solar |
+
+### Daten aktualisieren
+
+Sobald ein neuer Monat in einen der fünf CSVs gepusht wird, zeigt das Dashboard beim nächsten Seitenaufruf automatisch die aktuellen Zahlen. Kein Deployment, kein HTML-Edit nötig.
 
 ---
 
