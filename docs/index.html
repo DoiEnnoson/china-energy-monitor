@@ -68,6 +68,10 @@
       font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--text2); margin: 1.8rem 0 0.75rem;
     }
+    .section-label-h1 {
+      font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em;
+      text-transform: none; color: var(--text); margin: 2.2rem 0 0.75rem;
+    }
 
     .kpi-grid {
       display: grid; grid-template-columns: repeat(4, 1fr);
@@ -164,7 +168,7 @@
 
   <main>
 
-    <p class="section-label">This Month at a Glance</p>
+    <p class="section-label-h1">This Month at a Glance</p>
     <div class="kpi-grid">
       <div class="kpi-box">
         <div class="kpi-label">Total Electricity Demand</div>
@@ -188,7 +192,7 @@
       </div>
     </div>
 
-    <p class="section-label">Monthly Summary</p>
+    <p class="section-label-h1">Monthly Summary</p>
     <div class="summary-box" id="month-summary">
       <p id="month-summary-power">Loading…</p>
       <p id="month-summary-fuels">Loading…</p>
@@ -246,7 +250,7 @@
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
-    <p class="section-label" id="capacity">Capacity Added</p>
+    <p class="section-label-h1" id="capacity">Capacity Added</p>
     <div class="summary-box" id="capacity-summary">
       <p id="cap-summary-ytd">Loading…</p>
       <p id="cap-summary-mon">Loading…</p>
