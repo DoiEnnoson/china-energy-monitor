@@ -347,7 +347,6 @@
             const cos = Math.cos(midAngle);
             const sin = Math.sin(midAngle);
             const pct = ((value / total) * 100).toFixed(0);
-            const label = chart.data.labels[j];
 
             if (span >= 0.3) {
               /* ── large segment: label inside arc ── */
@@ -357,20 +356,20 @@
               ctx.save();
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.font = 'bold 11px "Segoe UI",system-ui,sans-serif';
-              ctx.fillStyle = '#dbcfbf';
-              ctx.fillText(value.toFixed(1) + ' GW', x, y - 6);
-              ctx.font = '10px "Segoe UI",system-ui,sans-serif';
-              ctx.fillStyle = '#9d8a80';
-              ctx.fillText(pct + '%', x, y + 7);
+              ctx.font = 'bold 12px "Segoe UI",system-ui,sans-serif';
+              ctx.fillStyle = '#ffffff';
+              ctx.fillText(value.toFixed(1) + ' GW', x, y - 7);
+              ctx.font = '11px "Segoe UI",system-ui,sans-serif';
+              ctx.fillStyle = 'rgba(255,255,255,0.75)';
+              ctx.fillText(pct + '%', x, y + 8);
               ctx.restore();
             } else {
-              /* ── small segment: callout line + outside label ── */
+              /* ── small segment: callout line + outside label (numbers only) ── */
               const x0 = arc.x + arc.outerRadius * cos;
               const y0 = arc.y + arc.outerRadius * sin;
               const x1 = arc.x + (arc.outerRadius + 12) * cos;
               const y1 = arc.y + (arc.outerRadius + 12) * sin;
-              const x2 = x1 + (cos >= 0 ? 18 : -18);
+              const x2 = x1 + (cos >= 0 ? 20 : -20);
               const y2 = y1;
               ctx.save();
               ctx.strokeStyle = '#9d8a80';
@@ -384,7 +383,7 @@
               ctx.fillStyle = '#dbcfbf';
               ctx.textAlign = cos >= 0 ? 'left' : 'right';
               ctx.textBaseline = 'middle';
-              ctx.fillText(`${label}: ${value.toFixed(1)} GW (${pct}%)`, x2 + (cos >= 0 ? 4 : -4), y2);
+              ctx.fillText(`${value.toFixed(1)} GW (${pct}%)`, x2 + (cos >= 0 ? 4 : -4), y2);
               ctx.restore();
             }
           });
@@ -791,6 +790,7 @@
             },
             options: {
               responsive: true, animation: false, aspectRatio: 1.5, cutout: '58%',
+              layout: { padding: { top: 10, right: 50, bottom: 0, left: 50 } },
               plugins: {
                 legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, font: { size: 11 } } },
                 tooltip: {
