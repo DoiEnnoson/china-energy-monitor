@@ -234,46 +234,6 @@
       </div>
     </div>
 
-    <p class="section-label" id="supply-ytd-label">Year-to-date Supply</p>
-    <div class="chart-row">
-      <div class="chart-box">
-        <div class="chart-title">Production vs. Imports Year-to-Date</div>
-        <div class="chart-subtitle" id="supply-ytd-butterfly-subtitle">TWh</div>
-        <canvas id="supply-ytd-butterfly"></canvas>
-        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">Total Supply Change Year-to-Date</div>
-        <div class="chart-subtitle" id="supply-ytd-yoy-subtitle">YoY · percent</div>
-        <canvas id="supply-ytd-yoy"></canvas>
-        <p class="chart-source">Sources: NBS, GACC</p>
-      </div>
-    </div>
-
-    <p class="section-label-h1">Total Energy System</p>
-
-    <div class="chart-row-equal">
-      <div class="chart-box">
-        <div class="chart-title">Energy by Carrier — Latest Month</div>
-        <div class="chart-subtitle" id="sys-month-subtitle">TWh · Domestic vs. Imports · Fossil + Clean</div>
-        <canvas id="sys-twh-month"></canvas>
-        <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">Energy by Carrier — Year-to-Date</div>
-        <div class="chart-subtitle" id="sys-ytd-subtitle">TWh · Domestic vs. Imports · Fossil + Clean</div>
-        <canvas id="sys-twh-ytd"></canvas>
-        <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
-      </div>
-    </div>
-
-    <div class="chart-box full">
-      <div class="chart-title">Import Dependency by Fuel</div>
-      <div class="chart-subtitle">Imports as % of total domestic supply (production + imports) · Coal · Crude Oil · Gas</div>
-      <canvas id="import-dependency" height="110"></canvas>
-      <p class="chart-source">Sources: NBS (production), GACC (imports)</p>
-    </div>
-
     <p class="section-label">Power Generation Mix 2016 – present</p>
     <div class="chart-box full">
       <div class="chart-title">Monthly Power Generation by Source</div>
@@ -349,6 +309,46 @@
       <div class="chart-subtitle">GW · End-of-month installed base · Wind = onshore + offshore</div>
       <canvas id="ember-cap" height="110"></canvas>
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+    </div>
+
+    <p class="section-label" id="supply-ytd-label">Year-to-date Supply</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Production vs. Imports Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-butterfly-subtitle">TWh</div>
+        <canvas id="supply-ytd-butterfly"></canvas>
+        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Total Supply Change Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-yoy-subtitle">YoY · percent</div>
+        <canvas id="supply-ytd-yoy"></canvas>
+        <p class="chart-source">Sources: NBS, GACC</p>
+      </div>
+    </div>
+
+    <p class="section-label-h1">Total Energy System</p>
+
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">Energy by Carrier — Latest Month</div>
+        <div class="chart-subtitle" id="sys-month-subtitle">TWh · Domestic vs. Imports · Fossil + Clean</div>
+        <canvas id="sys-twh-month"></canvas>
+        <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Energy by Carrier — Year-to-Date</div>
+        <div class="chart-subtitle" id="sys-ytd-subtitle">TWh · Domestic vs. Imports · Fossil + Clean</div>
+        <canvas id="sys-twh-ytd"></canvas>
+        <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+    </div>
+
+    <div class="chart-box full">
+      <div class="chart-title">Import Dependency by Fuel</div>
+      <div class="chart-subtitle">Imports as % of total domestic supply (production + imports) · Coal · Crude Oil · Gas</div>
+      <canvas id="import-dependency" height="110"></canvas>
+      <p class="chart-source">Sources: NBS (production), GACC (imports)</p>
     </div>
 
     <p class="section-label-h1">Power Generation — Source Breakdown</p>
