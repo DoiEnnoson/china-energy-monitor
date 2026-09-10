@@ -19,7 +19,7 @@ Das Dashboard läuft als statische GitHub-Pages-Site aus dem Ordner `docs/`. Es 
 | Datenzugriff | `fetch()` gegen `raw.githubusercontent.com` — kein Backend nötig |
 | Deployment | GitHub Pages aus `docs/`; Domain via `docs/CNAME` |
 
-Beim Seitenaufruf werden fünf CSVs parallel geladen:
+Beim Seitenaufruf werden neun CSVs parallel geladen:
 
 ```
 data/power/ember_power.csv
@@ -27,6 +27,10 @@ data/power/capacity_additions.csv
 data/power/ember_capacity.csv
 data/combined/fossil_supply.csv
 data/fuel-imports/gacc_imports.csv
+data/combined/combined_coal.csv
+data/combined/combined_crude_oil.csv
+data/combined/combined_lng.csv
+data/combined/combined_pipeline_gas.csv
 ```
 
 Alle Texte, KPI-Werte, Chart-Titel und Summary-Absätze werden aus den geholten Daten generiert — keine hardcodierten Zahlen oder Datumsangaben im HTML.
@@ -42,10 +46,11 @@ Alle Texte, KPI-Werte, Chart-Titel und Summary-Absätze werden aus den geholten 
 | Electricity Demand vs. Generation | ember_power | Liniendiagramm |
 | Capacity Added | capacity_additions | 2 Balken + 4 Donuts + Fließtext |
 | Installed Capacity Growth | ember_capacity | Liniendiagramm Wind + Solar |
+| Fossil Fuel Imports | combined_*.csv (ComTrade + GACC) | 2 Übersichts-Charts + 4 × 2 Länder-Charts (10 Charts) |
 
 ### Daten aktualisieren
 
-Sobald ein neuer Monat in einen der fünf CSVs gepusht wird, zeigt das Dashboard beim nächsten Seitenaufruf automatisch die aktuellen Zahlen. Kein Deployment, kein HTML-Edit nötig.
+Sobald ein neuer Monat in einen der neun CSVs gepusht wird, zeigt das Dashboard beim nächsten Seitenaufruf automatisch die aktuellen Zahlen. Kein Deployment, kein HTML-Edit nötig.
 
 ---
 
@@ -78,6 +83,10 @@ data/
     comtrade_lng.csv            — LNG-Importe nach Lieferland (ComTrade, 2020–)
     comtrade_pipeline_gas.csv   — Pipelinegas-Importe nach Lieferland (ComTrade, 2020–)
     gacc_imports.csv            — Gesamtimporte Kohle/Rohöl/Gas (GACC, Mai 2026–)
+    gacc_coal.csv               — Kohleimporte nach Lieferland (GACC, Jan 2025–)
+    gacc_crude_oil.csv          — Rohölimporte nach Lieferland (GACC, Jan 2025–)
+    gacc_lng.csv                — LNG-Importe nach Lieferland (GACC, Jan 2025–)
+    gacc_pipeline_gas.csv       — Pipelinegas-Importe nach Lieferland (GACC, Jan 2025–)
   production/
     nbs_production.csv          — Inlandsproduktion Kohle/Rohöl/Gas (NBS, Mai 2026–)
   power/
@@ -87,6 +96,10 @@ data/
   combined/
     fossil_supply.csv           — Import + Inlandsproduktion fossil (Mai 2026–); auto-rebuild
     energy_balance.csv          — Gesamtenergiesystem in TWh: fossil + sauber, YoY, YTD (Mai 2026–)
+    combined_coal.csv           — Kohleimporte nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
+    combined_crude_oil.csv      — Rohölimporte nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
+    combined_lng.csv            — LNG-Importe nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
+    combined_pipeline_gas.csv   — Pipelinegas-Importe nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
 
 scripts/
   fetch_history.py        — Einmalig: lädt ComTrade-Historie 2020–2024
@@ -97,6 +110,7 @@ scripts/
   fetch_ember_monthly.py  — Monatlich: prüft auf neue Ember-Daten und aktualisiert CSVs
   build_supply.py         — Auto: kombiniert GACC-Importe + NBS-Produktion zu fossil_supply.csv
   build_energy_balance.py — Auto: konvertiert alles nach TWh, addiert saubere Stromerzeugung
+  build_combined.py       — Auto: merged ComTrade + GACC Lieferland-CSVs zu combined_*.csv
 
 .github/workflows/
   monthly_update.yml          — Cron: 15. jeden Monats, 06:00 UTC (ComTrade)
@@ -105,6 +119,7 @@ scripts/
   monthly_ember_update.yml    — Cron: 17.–31. jeden Monats, 06:00 UTC; deaktiviert sich nach Update
   monthly_ember_reenable.yml  — Cron: 1. jeden Monats, 05:00 UTC; reaktiviert Update-Workflow
   build_supply.yml            — Push-Trigger: rebuild fossil_supply.csv + energy_balance.csv wenn GACC/NBS sich ändern; auch von monthly_ember_update.yml dispatcht
+  build_combined.yml          — Push-Trigger: rebuild combined_*.csv wenn comtrade_*.csv oder gacc_*.csv sich ändern
 ```
 
 ---
@@ -556,6 +571,61 @@ Lokal: `pip install -r requirements.txt` in einem venv. Auf macOS mit extern ver
 
 ---
 
+## GACC Lieferland-Daten (gacc_*.csv)
+
+GACC veröffentlicht monatlich granulare Importdaten nach Lieferland. Die vier Lieferland-CSVs (`gacc_coal.csv`, `gacc_crude_oil.csv`, `gacc_lng.csv`, `gacc_pipeline_gas.csv`) füllen die ComTrade-Lücke ab Januar 2025: ComTrade liefert Monatsdaten mit 18–20 Monaten Verzögerung und hat die 2025er Daten noch nicht. GACC liefert aktuell bis ca. 6 Wochen nach Berichtsmonat.
+
+**Schema** (identisch für alle vier Dateien):
+
+| Spalte | Einheit | Beschreibung |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat |
+| partner | Text | Lieferland (ComTrade-Namenskonvention) |
+| value_usd_bn | Mrd. USD | Importwert |
+
+**Abweichungen zu ComTrade:** GACC weist keine Mengendaten (`qty_mt`) in den öffentlichen CSV-Downloads aus. Spalten `qty_mt` und `value_per_mt_usd` fehlen daher in den GACC-Lieferland-CSVs. Im Dashboard werden Mengendiagramme nur für den ComTrade-Zeitraum (2020–2024) gerendert.
+
+**HS-Codes und Kategorisierung:**
+
+| Kategorie | GACC-HS-Codes | ComTrade-HS-Code |
+|---|---|---|
+| coal | 270111 + 270112 + 270119 | 2701 |
+| crude_oil | 270900 | 2709 |
+| lng | 271111 | 271111 |
+| pipeline_gas | 271121 | 271121 |
+
+**Manuelle Aktualisierung:** GACC stellt keine maschinenlesbare API bereit. Neue CSVs werden von GACC heruntergeladen (GBK-Encoding), transformiert und ins Repo gepusht. Bei Push triggert `build_combined.yml` automatisch den Rebuild der `combined_*.csv`.
+
+---
+
+## Automatisierung: combined_*.csv
+
+`build_combined.yml` triggert bei jedem Push, der `data/fuel-imports/comtrade_*.csv` oder `data/fuel-imports/gacc_*.csv` verändert. Das Script `scripts/build_combined.py` mergt beide Quellen mit ComTrade-Priorität:
+
+- Für jeden `(period, partner)`-Eintrag, der in ComTrade vorliegt, werden die ComTrade-Werte verwendet.
+- GACC füllt alle Perioden, für die ComTrade noch keine Daten hat (aktuell ab Januar 2025).
+- Wenn ComTrade 2025-Daten nachliefert, überschreibt der nächste Rebuild automatisch die GACC-Zeilen für diese Perioden.
+
+Lokal ausführen:
+
+```bash
+python scripts/build_combined.py
+```
+
+**Output-Schema** (`data/combined/combined_*.csv`):
+
+| Spalte | Einheit | Beschreibung |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat |
+| partner | Text | Lieferland |
+| value_usd_bn | Mrd. USD | Importwert |
+| qty_mt | Mio. t | Importmenge (nur ComTrade-Zeilen; GACC: leer) |
+| value_per_mt_usd | USD/t | Preis je Tonne (nur ComTrade-Zeilen) |
+| source | comtrade / gacc | Herkunft der Zeile |
+
+---
+
 ## Offene Erweiterungen
 
 - **2026 ComTrade**: Sobald UN ComTrade 2026-Daten verfügbar macht, `YEAR` in `fetch_comtrade.py` aktualisieren und den Workflow manuell antriggern.
+- **Pipeline-Gas Begleittext**: Dashboard-Abschnitt "Pipeline Gas Imports" braucht einen erklärenden Textblock. Thema: warum die Pipelinegas-Importe bis 2021 nominal höher erscheinen als danach (Central Asia Line D-Stall, Turkmenistan-Lieferprobleme, beschleunigtes chinesisches Shale-Gas-Wachstum, Power of Siberia-Hochlauf ab 2019). Auch SEO-relevant.
