@@ -7,7 +7,7 @@ period,partner,value_usd_bn
 202501,USA,0.1785
 202501,Mozambique,0.0142
 202501,Kazakhstan,0.0101
-202501,Lao People's Dem. Rep.,0.0016
+202501,Laos,0.0016
 202501,Kyrgyzstan,0.0004
 202501,Peru,0.0
 202501,Brazil,0.0
@@ -19,7 +19,7 @@ period,partner,value_usd_bn
 202502,USA,0.1728
 202502,Colombia,0.0083
 202502,Tanzania,0.0053
-202502,Lao People's Dem. Rep.,0.0001
+202502,Laos,0.0001
 202502,Kazakhstan,0.0001
 202502,India,0.0
 202502,Kyrgyzstan,0.0
@@ -34,7 +34,7 @@ period,partner,value_usd_bn
 202503,Canada,0.1402
 202503,USA,0.0308
 202503,New Zealand,0.0109
-202503,Lao People's Dem. Rep.,0.0012
+202503,Laos,0.0012
 202503,Kyrgyzstan,0.0002
 202503,Kazakhstan,0.0002
 202503,Tanzania,0.0
@@ -47,7 +47,7 @@ period,partner,value_usd_bn
 202504,USA,0.009
 202504,New Zealand,0.0089
 202504,South Africa,0.0086
-202504,Lao People's Dem. Rep.,0.0005
+202504,Laos,0.0005
 202504,Kazakhstan,0.0002
 202504,Kyrgyzstan,0.0
 202504,India,0.0
@@ -60,7 +60,7 @@ period,partner,value_usd_bn
 202505,Colombia,0.0126
 202505,Kazakhstan,0.008
 202505,New Zealand,0.0062
-202505,Lao People's Dem. Rep.,0.0006
+202505,Laos,0.0006
 202505,Kyrgyzstan,0.0001
 202505,South Africa,0.0
 202505,Tanzania,0.0
@@ -71,7 +71,7 @@ period,partner,value_usd_bn
 202506,Indonesia,0.2319
 202506,Canada,0.1598
 202506,New Zealand,0.006
-202506,Lao People's Dem. Rep.,0.0004
+202506,Laos,0.0004
 202506,Kazakhstan,0.0001
 202506,Kyrgyzstan,0.0001
 202506,Türkiye,0.0
@@ -85,7 +85,7 @@ period,partner,value_usd_bn
 202507,Canada,0.1157
 202507,South Africa,0.0155
 202507,Kyrgyzstan,0.0003
-202507,Lao People's Dem. Rep.,0.0001
+202507,Laos,0.0001
 202507,Malaysia,0.0
 202507,Mozambique,0.0
 202507,USA,0.0
@@ -120,7 +120,7 @@ period,partner,value_usd_bn
 202510,Canada,0.1748
 202510,South Africa,0.008
 202510,Kyrgyzstan,0.0007
-202510,Lao People's Dem. Rep.,0.0001
+202510,Laos,0.0001
 202510,Kazakhstan,0.0001
 202510,Ireland,0.0
 202510,USA,0.0
@@ -131,7 +131,7 @@ period,partner,value_usd_bn
 202511,Indonesia,0.3603
 202511,Canada,0.1093
 202511,Kyrgyzstan,0.0006
-202511,Lao People's Dem. Rep.,0.0001
+202511,Laos,0.0001
 202511,Malaysia,0.0
 202511,Ethiopia,0.0
 202511,Colombia,0.0
@@ -146,7 +146,7 @@ period,partner,value_usd_bn
 202512,South Africa,0.0245
 202512,New Zealand,0.0143
 202512,Kyrgyzstan,0.0007
-202512,Lao People's Dem. Rep.,0.0005
+202512,Laos,0.0005
 202512,Malaysia,0.0
 202512,Colombia,0.0
 202512,Areas NES,0.0
@@ -159,7 +159,7 @@ period,partner,value_usd_bn
 202601,Colombia,0.0209
 202601,South Africa,0.0046
 202601,Venezuela,0.0025
-202601,Lao People's Dem. Rep.,0.0009
+202601,Laos,0.0009
 202601,Kyrgyzstan,0.0002
 202601,Mozambique,0.0
 202601,USA,0.0
@@ -169,7 +169,7 @@ period,partner,value_usd_bn
 202602,Indonesia,0.1928
 202602,Canada,0.0502
 202602,South Africa,0.0036
-202602,Lao People's Dem. Rep.,0.0002
+202602,Laos,0.0002
 202602,Kazakhstan,0.0002
 202602,Kyrgyzstan,0.0002
 202602,Zambia,0.0
@@ -183,7 +183,7 @@ period,partner,value_usd_bn
 202603,Canada,0.1744
 202603,Colombia,0.009
 202603,Venezuela,0.0045
-202603,Lao People's Dem. Rep.,0.0007
+202603,Laos,0.0007
 202603,Kyrgyzstan,0.0004
 202603,Japan,0.0
 202603,USA,0.0
@@ -194,7 +194,7 @@ period,partner,value_usd_bn
 202604,Indonesia,0.1539
 202604,Canada,0.084
 202604,Venezuela,0.0071
-202604,Lao People's Dem. Rep.,0.001
+202604,Laos,0.001
 202604,Kazakhstan,0.0006
 202604,Kyrgyzstan,0.0005
 202604,Malaysia,0.0
@@ -214,7 +214,7 @@ period,partner,value_usd_bn
 202605,New Zealand,0.0109
 202605,USA,0.004
 202605,Venezuela,0.0039
-202605,Lao People's Dem. Rep.,0.001
+202605,Laos,0.001
 202605,Kyrgyzstan,0.0005
 202606,Australia,0.9435
 202606,Russian Federation,0.7548
@@ -224,7 +224,7 @@ period,partner,value_usd_bn
 202606,South Africa,0.0304
 202606,Kazakhstan,0.0113
 202606,Malaysia,0.0017
-202606,Lao People's Dem. Rep.,0.0006
+202606,Laos,0.0006
 202606,Kyrgyzstan,0.0004
 202606,Pakistan,0.0
 202606,USA,0.0
@@ -236,7 +236,7 @@ period,partner,value_usd_bn
 202607,Canada,0.11
 202607,Colombia,0.0196
 202607,Kazakhstan,0.0045
-202607,Lao People's Dem. Rep.,0.0006
+202607,Laos,0.0006
 202607,Kyrgyzstan,0.0005
 202607,China,0.0
 202607,Peru,0.0
