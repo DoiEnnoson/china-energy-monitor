@@ -311,23 +311,20 @@
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
-    <p class="section-label" id="supply-ytd-label">Year-to-date Supply</p>
-    <div class="chart-row">
-      <div class="chart-box">
-        <div class="chart-title">Production vs. Imports Year-to-Date</div>
-        <div class="chart-subtitle" id="supply-ytd-butterfly-subtitle">TWh</div>
-        <canvas id="supply-ytd-butterfly"></canvas>
-        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
+    <p class="section-label-h1">Total Energy System</p>
+
+    <div class="kpi-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="kpi-box">
+        <div class="kpi-label" id="sys-total-label">Total Primary Energy YTD</div>
+        <div class="kpi-value" id="sys-total-twh">—</div>
+        <div class="kpi-delta" id="sys-total-delta">—</div>
       </div>
-      <div class="chart-box">
-        <div class="chart-title">Total Supply Change Year-to-Date</div>
-        <div class="chart-subtitle" id="supply-ytd-yoy-subtitle">YoY · percent</div>
-        <canvas id="supply-ytd-yoy"></canvas>
-        <p class="chart-source">Sources: NBS, GACC</p>
+      <div class="kpi-box gold">
+        <div class="kpi-label" id="sys-clean-label">Clean Energy YTD</div>
+        <div class="kpi-value" id="sys-clean-twh">—</div>
+        <div class="kpi-delta" id="sys-clean-delta">—</div>
       </div>
     </div>
-
-    <p class="section-label-h1">Total Energy System</p>
 
     <div class="chart-row-equal">
       <div class="chart-box">
@@ -341,6 +338,22 @@
         <div class="chart-subtitle" id="sys-ytd-subtitle">TWh · Domestic vs. Imports · Fossil + Clean</div>
         <canvas id="sys-twh-ytd"></canvas>
         <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+    </div>
+
+    <p class="section-label" id="supply-ytd-label">Year-to-date Supply</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Production vs. Imports Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-butterfly-subtitle">TWh</div>
+        <canvas id="supply-ytd-butterfly"></canvas>
+        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Total Supply Change Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-yoy-subtitle">YoY · percent</div>
+        <canvas id="supply-ytd-yoy"></canvas>
+        <p class="chart-source">Sources: NBS, GACC</p>
       </div>
     </div>
 
@@ -1093,10 +1106,13 @@
         return rows.reduce((s, r) => s + (+r[field] || 0), 0);
       }
 
-      /* Period range label */
+      /* Period range label — first date uses short year if same year as last */
       const firstLbl = periodToShort(fsYear[0].period);
       const lastLbl  = periodToShort(latestFs.period);
-      const ytdRange = firstLbl === lastLbl ? firstLbl : `${firstLbl} – ${lastLbl}`;
+      function abbrevFirst(f, l) {
+        return f.slice(-4) === l.slice(-4) ? f.slice(0, -4) + '’' + f.slice(-2) : f;
+      }
+      const ytdRange = firstLbl === lastLbl ? firstLbl : `${abbrevFirst(firstLbl, lastLbl)} – ${lastLbl}`;
 
       document.getElementById('supply-ytd-label').textContent = 'Year-to-date Supply — ' + ytdRange;
 
@@ -1195,6 +1211,25 @@
       function ebSumYr(field) {
         return ebYear.reduce((s, r) => s + (+r[field] || 0), 0);
       }
+
+      /* ── KPI boxes: Total + Clean Energy YTD ── */
+      const totalYtd    = +latestEb.total_ytd_twh      || 0;
+      const totalYoY    = +latestEb.total_ytd_yoy_pct;
+      const cleanYtd    = +latestEb.clean_power_ytd_twh || 0;
+      const cleanYoY    = +latestEb.clean_power_ytd_yoy_pct;
+      const cleanShare  = totalYtd > 0 ? (cleanYtd / totalYtd * 100) : 0;
+
+      document.getElementById('sys-total-label').textContent = 'Total Primary Energy — ' + ytdRange;
+      document.getElementById('sys-total-twh').textContent   = Math.round(totalYtd).toLocaleString('de-DE') + ' TWh';
+      const totalDeltaEl = document.getElementById('sys-total-delta');
+      totalDeltaEl.textContent  = (totalYoY >= 0 ? '+' : '') + totalYoY.toFixed(1) + '% vs. prior year';
+      totalDeltaEl.className    = 'kpi-delta ' + (totalYoY >= 0 ? 'pos' : 'neg');
+
+      document.getElementById('sys-clean-label').textContent = 'Clean Energy — ' + ytdRange;
+      document.getElementById('sys-clean-twh').textContent   = Math.round(cleanYtd).toLocaleString('de-DE') + ' TWh  (' + cleanShare.toFixed(1) + '% of total)';
+      const cleanDeltaEl = document.getElementById('sys-clean-delta');
+      cleanDeltaEl.textContent  = (cleanYoY >= 0 ? '+' : '') + cleanYoY.toFixed(1) + '% vs. prior year';
+      cleanDeltaEl.className    = 'kpi-delta ' + (cleanYoY >= 0 ? 'pos' : 'neg');
 
       document.getElementById('sys-month-subtitle').textContent =
         periodToShort(latestEb.period) + ' · TWh · Domestic vs. Imports · Fossil + Clean';
