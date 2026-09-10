@@ -311,6 +311,52 @@
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
+    <p class="section-label-h1">Power Generation — Source Breakdown</p>
+
+    <div class="chart-box full">
+      <div class="chart-title">Monthly Generation by Source</div>
+      <div class="chart-subtitle">TWh · Coal · Gas · Nuclear · Hydro · Wind · Solar · Bioenergy · 2016 – present</div>
+      <canvas id="gen-twh-stacked" height="110"></canvas>
+      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+    </div>
+
+    <div class="chart-box full">
+      <div class="chart-title">Generation Mix — Source Shares</div>
+      <div class="chart-subtitle">Percent of total · 2016 – present</div>
+      <canvas id="gen-share-stacked" height="110"></canvas>
+      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+    </div>
+
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">Coal: Generation and Share</div>
+        <div class="chart-subtitle">Bars: TWh (left axis) · Line: share of total % (right axis)</div>
+        <canvas id="gen-coal-dual"></canvas>
+        <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Wind and Solar Capacity Factor</div>
+        <div class="chart-subtitle">Actual generation ÷ theoretical maximum · percent · 2016 – present</div>
+        <canvas id="gen-capacity-factor"></canvas>
+        <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+    </div>
+
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">Grid Carbon Intensity</div>
+        <div class="chart-subtitle">gCO₂ per kWh · 2016 – present</div>
+        <canvas id="gen-co2-intensity"></canvas>
+        <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Hydro Generation — Seasonal Pattern</div>
+        <div class="chart-subtitle">TWh by month · each line = one calendar year</div>
+        <canvas id="gen-hydro-seasonal"></canvas>
+        <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+    </div>
+
     <p class="section-label-h1">Fossil Fuel Imports</p>
 
     <div class="chart-box full">
@@ -542,6 +588,7 @@
       fetchCSV('data/combined/combined_pipeline_gas.csv'),
     ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe]) => {
       buildDashboard(ep, cap, ec, fs, gc);
+      buildGenerationDetail(ep, ec);
       buildImportsSection(coal, crudeoil, lng, pipe);
     }).catch(err => {
       console.error('Data load failed:', err);
@@ -989,6 +1036,242 @@
       });
 
     } /* end buildDashboard */
+
+    /* ══════════════════════════════════════════
+       POWER GENERATION DETAIL SECTION
+    ══════════════════════════════════════════ */
+    function buildGenerationDetail(ep, ec) {
+
+      const LABELS     = ep.map(r => periodToLabel(r.period));
+      const YEAR_TICKS = new Set(LABELS.filter(l => l.endsWith('-01')));
+      const xAxis = {
+        grid: { color: '#1e1a3a' },
+        ticks: { callback: (_, i) => YEAR_TICKS.has(LABELS[i]) ? LABELS[i].slice(0, 4) : '', maxRotation: 0, minRotation: 0 }
+      };
+
+      /* ── Series — TWh ── */
+      const COAL_TWH  = ep.map(r => +(+r.coal_twh).toFixed(1));
+      const GAS_TWH   = ep.map(r => +(+r.gas_twh).toFixed(1));
+      const NUC_TWH   = ep.map(r => +(+r.nuclear_twh).toFixed(1));
+      const HYDRO_TWH = ep.map(r => +(+r.hydro_twh).toFixed(1));
+      const WIND_TWH  = ep.map(r => +(+r.wind_twh).toFixed(1));
+      const SOLAR_TWH = ep.map(r => +(+r.solar_twh).toFixed(1));
+      const BIO_TWH   = ep.map(r => +(+r.bioenergy_twh).toFixed(1));
+
+      /* ── Series — share % ── */
+      const COAL_SH   = ep.map(r => +(+r.coal_share_pct).toFixed(1));
+      const GAS_SH    = ep.map(r => +(+r.gas_share_pct).toFixed(1));
+      const NUC_SH    = ep.map(r => +(+r.nuclear_share_pct).toFixed(1));
+      const HYDRO_SH  = ep.map(r => +(+r.hydro_share_pct).toFixed(1));
+      const WIND_SH   = ep.map(r => +(+r.wind_share_pct).toFixed(1));
+      const SOLAR_SH  = ep.map(r => +(+r.solar_share_pct).toFixed(1));
+      const BIO_SH    = ep.map(r => +(+r.bioenergy_share_pct).toFixed(1));
+
+      /* ── Colors ── */
+      const C_COAL  = '#7A0404';
+      const C_GAS   = '#DE8212';
+      const C_NUC   = '#B8860B';
+      const C_HYDRO = '#2E86C1';
+      const C_WIND  = '#0E9A84';
+      const C_SOLAR = '#F5C518';
+      const C_BIO   = '#27AE60';
+
+      function sourceDatasets(arrays) {
+        const [d0, d1, d2, d3, d4, d5, d6] = arrays;
+        return [
+          { label: 'Coal',      data: d0, backgroundColor: C_COAL,  borderWidth: 0 },
+          { label: 'Gas',       data: d1, backgroundColor: C_GAS,   borderWidth: 0 },
+          { label: 'Nuclear',   data: d2, backgroundColor: C_NUC,   borderWidth: 0 },
+          { label: 'Hydro',     data: d3, backgroundColor: C_HYDRO, borderWidth: 0 },
+          { label: 'Wind',      data: d4, backgroundColor: C_WIND,  borderWidth: 0 },
+          { label: 'Solar',     data: d5, backgroundColor: C_SOLAR, borderWidth: 0 },
+          { label: 'Bioenergy', data: d6, backgroundColor: C_BIO,   borderWidth: 0 },
+        ];
+      }
+
+      function stackedBarOpts(suffix, yMax) {
+        return {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } },
+            tooltip: { mode: 'index', intersect: false,
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}${suffix}` }
+            }
+          },
+          scales: {
+            x: { ...xAxis, stacked: true },
+            y: { stacked: true, grid: { color: '#1e1a3a' },
+                 ticks: { callback: v => v + suffix },
+                 ...(yMax !== undefined ? { max: yMax } : {}) }
+          }
+        };
+      }
+
+      /* ── Chart 1: Monthly generation by source (TWh, stacked bar) ── */
+      new Chart(document.getElementById('gen-twh-stacked'), {
+        type: 'bar',
+        data: { labels: LABELS, datasets: sourceDatasets([COAL_TWH, GAS_TWH, NUC_TWH, HYDRO_TWH, WIND_TWH, SOLAR_TWH, BIO_TWH]) },
+        options: stackedBarOpts(' TWh')
+      });
+
+      /* ── Chart 2: Generation mix — shares (100% stacked bar) ── */
+      new Chart(document.getElementById('gen-share-stacked'), {
+        type: 'bar',
+        data: { labels: LABELS, datasets: sourceDatasets([COAL_SH, GAS_SH, NUC_SH, HYDRO_SH, WIND_SH, SOLAR_SH, BIO_SH]) },
+        options: stackedBarOpts('%', 102)
+      });
+
+      /* ── Chart 3: Coal dual-axis (bar = TWh, line = share %) ── */
+      new Chart(document.getElementById('gen-coal-dual'), {
+        type: 'bar',
+        data: {
+          labels: LABELS,
+          datasets: [
+            { type: 'bar',  label: 'Coal Generation',  data: COAL_TWH, backgroundColor: C_COAL,
+              borderWidth: 0, yAxisID: 'y', order: 2 },
+            { type: 'line', label: 'Share of Total',   data: COAL_SH, borderColor: C_SOLAR,
+              backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 0, tension: 0.3,
+              yAxisID: 'y1', order: 1 }
+          ]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+            tooltip: { mode: 'index', intersect: false,
+              callbacks: { label: ctx => ctx.datasetIndex === 0
+                ? `Generation: ${ctx.raw} TWh`
+                : `Share: ${ctx.raw}%` }
+            }
+          },
+          scales: {
+            x: xAxis,
+            y:  { position: 'left',  grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' TWh' } },
+            y1: { position: 'right', grid: { drawOnChartArea: false }, min: 35, max: 80,
+                  ticks: { callback: v => v + '%' } }
+          }
+        }
+      });
+
+      /* ── Chart 4: Wind & Solar Capacity Factor ── */
+      const ecMap = {};
+      ec.forEach(r => { ecMap[r.period] = r; });
+
+      const cfRows     = ep.filter(r => ecMap[r.period] && +ecMap[r.period].wind_gw > 1);
+      const CF_LABELS  = cfRows.map(r => periodToLabel(r.period));
+      const CF_YR_SET  = new Set(CF_LABELS.filter(l => l.endsWith('-01')));
+
+      function daysInPeriod(p) {
+        return new Date(+p.slice(0, 4), +p.slice(4, 6), 0).getDate();
+      }
+
+      const WIND_CF = cfRows.map(r => {
+        const cap = +ecMap[r.period].wind_gw;
+        return +((+r.wind_twh * 1000 / (cap * daysInPeriod(r.period) * 24)) * 100).toFixed(1);
+      });
+      const SOLAR_CF = cfRows.map(r => {
+        const cap = +ecMap[r.period].solar_gw;
+        if (!cap || cap < 1) return null;
+        return +((+r.solar_twh * 1000 / (cap * daysInPeriod(r.period) * 24)) * 100).toFixed(1);
+      });
+
+      new Chart(document.getElementById('gen-capacity-factor'), {
+        type: 'line',
+        data: {
+          labels: CF_LABELS,
+          datasets: [
+            { label: 'Wind',  data: WIND_CF,  borderColor: C_WIND,  backgroundColor: 'transparent',
+              borderWidth: 2, pointRadius: 0, tension: 0.3, spanGaps: false },
+            { label: 'Solar', data: SOLAR_CF, borderColor: C_SOLAR, backgroundColor: 'transparent',
+              borderWidth: 2, pointRadius: 0, tension: 0.3, spanGaps: false }
+          ]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+            tooltip: { mode: 'index', intersect: false,
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw !== null ? ctx.raw + '%' : 'n/a'}` }
+            }
+          },
+          scales: {
+            x: { grid: { color: '#1e1a3a' },
+                 ticks: { callback: (_, i) => CF_YR_SET.has(CF_LABELS[i]) ? CF_LABELS[i].slice(0, 4) : '', maxRotation: 0, minRotation: 0 } },
+            y: { grid: { color: '#1e1a3a' }, min: 0, ticks: { callback: v => v + '%' } }
+          }
+        }
+      });
+
+      /* ── Chart 5: Grid CO₂ Intensity ── */
+      const CO2 = ep.map(r => +(+r.carbon_intensity_gco2_kwh).toFixed(0));
+
+      new Chart(document.getElementById('gen-co2-intensity'), {
+        type: 'line',
+        data: {
+          labels: LABELS,
+          datasets: [{
+            label: 'CO₂ intensity',
+            data: CO2, borderColor: C_COAL, backgroundColor: 'rgba(122,4,4,0.12)',
+            fill: true, borderWidth: 2.5, pointRadius: 0, tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { mode: 'index', intersect: false,
+              callbacks: { label: ctx => `${ctx.raw} gCO₂/kWh` }
+            }
+          },
+          scales: {
+            x: xAxis,
+            y: { grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' g' } }
+          }
+        }
+      });
+
+      /* ── Chart 6: Hydro Seasonal Pattern ── */
+      const hydroByYear = {};
+      ep.forEach(r => {
+        const yr = r.period.slice(0, 4);
+        const mo = parseInt(r.period.slice(4, 6)) - 1;
+        if (!hydroByYear[yr]) hydroByYear[yr] = new Array(12).fill(null);
+        hydroByYear[yr][mo] = +(+r.hydro_twh).toFixed(1);
+      });
+
+      const allYrs  = Object.keys(hydroByYear).sort();
+      const showYrs = allYrs.slice(-6);
+      const ALPHAS  = [0.28, 0.40, 0.53, 0.66, 0.82, 1.0].slice(-showYrs.length);
+
+      new Chart(document.getElementById('gen-hydro-seasonal'), {
+        type: 'line',
+        data: {
+          labels: MONTHS_SHORT,
+          datasets: showYrs.map((yr, i) => ({
+            label: yr,
+            data: hydroByYear[yr],
+            borderColor: `rgba(46,134,193,${ALPHAS[i]})`,
+            backgroundColor: 'transparent',
+            borderWidth: i === showYrs.length - 1 ? 2.5 : 1.5,
+            pointRadius: 0, tension: 0.4, spanGaps: true
+          }))
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10, font: { size: 11 } } },
+            tooltip: { mode: 'index', intersect: false,
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw !== null ? ctx.raw + ' TWh' : 'n/a'}` }
+            }
+          },
+          scales: {
+            x: { grid: { color: '#1e1a3a' } },
+            y: { grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' TWh' } }
+          }
+        }
+      });
+
+    } /* end buildGenerationDetail */
 
     /* ══════════════════════════════════════════
        FOSSIL FUEL IMPORTS SECTION
