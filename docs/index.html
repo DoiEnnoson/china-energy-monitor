@@ -315,14 +315,14 @@
 
     <div class="kpi-grid" style="grid-template-columns: repeat(2, 1fr);">
       <div class="kpi-box">
-        <div class="kpi-label" id="sys-total-label">Total Primary Energy YTD</div>
-        <div class="kpi-value" id="sys-total-twh">—</div>
-        <div class="kpi-delta" id="sys-total-delta">—</div>
+        <div class="kpi-label" id="sys-month-kpi-label">Total Primary Energy</div>
+        <div class="kpi-value" id="sys-month-kpi-twh">—</div>
+        <div class="kpi-delta" id="sys-month-kpi-delta">—</div>
       </div>
-      <div class="kpi-box gold">
-        <div class="kpi-label" id="sys-clean-label">Clean Energy YTD</div>
-        <div class="kpi-value" id="sys-clean-twh">—</div>
-        <div class="kpi-delta" id="sys-clean-delta">—</div>
+      <div class="kpi-box">
+        <div class="kpi-label" id="sys-ytd-kpi-label">Total Primary Energy YTD</div>
+        <div class="kpi-value" id="sys-ytd-kpi-twh">—</div>
+        <div class="kpi-delta" id="sys-ytd-kpi-delta">—</div>
       </div>
     </div>
 
@@ -1106,13 +1106,14 @@
         return rows.reduce((s, r) => s + (+r[field] || 0), 0);
       }
 
-      /* Period range label — first date uses short year if same year as last */
+      /* Period range label — same-year ranges: "Jan – Jul 2026"; cross-year: "Dec 2025 – Jan 2026" */
       const firstLbl = periodToShort(fsYear[0].period);
       const lastLbl  = periodToShort(latestFs.period);
-      function abbrevFirst(f, l) {
-        return f.slice(-4) === l.slice(-4) ? f.slice(0, -4) + '’' + f.slice(-2) : f;
+      function rangeLabel(f, l) {
+        if (f === l) return l;
+        return f.slice(-4) === l.slice(-4) ? f.slice(0, -5) + ‘ – ‘ + l : f + ‘ – ‘ + l;
       }
-      const ytdRange = firstLbl === lastLbl ? firstLbl : `${abbrevFirst(firstLbl, lastLbl)} – ${lastLbl}`;
+      const ytdRange = rangeLabel(firstLbl, lastLbl);
 
       document.getElementById('supply-ytd-label').textContent = 'Year-to-date Supply — ' + ytdRange;
 
@@ -1212,24 +1213,24 @@
         return ebYear.reduce((s, r) => s + (+r[field] || 0), 0);
       }
 
-      /* ── KPI boxes: Total + Clean Energy YTD ── */
-      const totalYtd    = +latestEb.total_ytd_twh      || 0;
-      const totalYoY    = +latestEb.total_ytd_yoy_pct;
-      const cleanYtd    = +latestEb.clean_power_ytd_twh || 0;
-      const cleanYoY    = +latestEb.clean_power_ytd_yoy_pct;
-      const cleanShare  = totalYtd > 0 ? (cleanYtd / totalYtd * 100) : 0;
+      /* ── KPI boxes: Total Primary Energy — Month + YTD ── */
+      const monthTotal    = +latestEb.total_twh          || 0;
+      const monthYoY      = +latestEb.total_yoy_pct;
+      const totalYtd      = +latestEb.total_ytd_twh      || 0;
+      const totalYtdYoY   = +latestEb.total_ytd_yoy_pct;
+      const monthLabel    = periodToShort(latestEb.period);
 
-      document.getElementById('sys-total-label').textContent = 'Total Primary Energy — ' + ytdRange;
-      document.getElementById('sys-total-twh').textContent   = Math.round(totalYtd).toLocaleString('de-DE') + ' TWh';
-      const totalDeltaEl = document.getElementById('sys-total-delta');
-      totalDeltaEl.textContent  = (totalYoY >= 0 ? '+' : '') + totalYoY.toFixed(1) + '% vs. prior year';
-      totalDeltaEl.className    = 'kpi-delta ' + (totalYoY >= 0 ? 'pos' : 'neg');
+      document.getElementById('sys-month-kpi-label').textContent = 'Total Primary Energy — ' + monthLabel;
+      document.getElementById('sys-month-kpi-twh').textContent   = Math.round(monthTotal).toLocaleString('de-DE') + ' TWh';
+      const mDeltaEl = document.getElementById('sys-month-kpi-delta');
+      mDeltaEl.textContent = (monthYoY >= 0 ? '+' : '') + monthYoY.toFixed(1) + '% vs. prior year';
+      mDeltaEl.className   = 'kpi-delta ' + (monthYoY >= 0 ? 'pos' : 'neg');
 
-      document.getElementById('sys-clean-label').textContent = 'Clean Energy — ' + ytdRange;
-      document.getElementById('sys-clean-twh').textContent   = Math.round(cleanYtd).toLocaleString('de-DE') + ' TWh  (' + cleanShare.toFixed(1) + '% of total)';
-      const cleanDeltaEl = document.getElementById('sys-clean-delta');
-      cleanDeltaEl.textContent  = (cleanYoY >= 0 ? '+' : '') + cleanYoY.toFixed(1) + '% vs. prior year';
-      cleanDeltaEl.className    = 'kpi-delta ' + (cleanYoY >= 0 ? 'pos' : 'neg');
+      document.getElementById('sys-ytd-kpi-label').textContent = 'Total Primary Energy — ' + ytdRange;
+      document.getElementById('sys-ytd-kpi-twh').textContent   = Math.round(totalYtd).toLocaleString('de-DE') + ' TWh';
+      const yDeltaEl = document.getElementById('sys-ytd-kpi-delta');
+      yDeltaEl.textContent = (totalYtdYoY >= 0 ? '+' : '') + totalYtdYoY.toFixed(1) + '% vs. prior year';
+      yDeltaEl.className   = 'kpi-delta ' + (totalYtdYoY >= 0 ? 'pos' : 'neg');
 
       document.getElementById('sys-month-subtitle').textContent =
         periodToShort(latestEb.period) + ' · TWh · Domestic vs. Imports · Fossil + Clean';
