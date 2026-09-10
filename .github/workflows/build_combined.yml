@@ -1,0 +1,38 @@
+name: Build Combined Fuel Import CSVs
+
+on:
+  push:
+    paths:
+      - 'data/fuel-imports/comtrade_*.csv'
+      - 'data/fuel-imports/gacc_*.csv'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Build combined CSVs
+        run: python scripts/build_combined.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/combined/combined_coal.csv data/combined/combined_crude_oil.csv \
+                  data/combined/combined_lng.csv data/combined/combined_pipeline_gas.csv
+          git diff --staged --quiet || (
+            git commit -m "data: rebuild combined fuel import CSVs ($(date +%Y-%m-%d))" &&
+            git push
+          )

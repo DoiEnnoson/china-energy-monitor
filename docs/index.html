@@ -234,6 +234,86 @@
       </div>
     </div>
 
+    <p class="section-label-h1">Fossil Fuel Imports</p>
+
+    <div class="chart-box full">
+      <div class="chart-title">Total Imports by Value — Coal · Crude Oil · Gas</div>
+      <div class="chart-subtitle">Bn USD · Monthly · ComTrade 2020–2024, GACC 2025–present</div>
+      <canvas id="imports-value-overview" height="110"></canvas>
+      <p class="chart-source">Sources: UN ComTrade, GACC</p>
+    </div>
+
+    <div class="chart-box full">
+      <div class="chart-title">Total Imports by Quantity — Coal · Crude Oil · Gas</div>
+      <div class="chart-subtitle">Million tonnes · Monthly · Quantity data available for ComTrade period (2020–2024) only</div>
+      <canvas id="imports-qty-overview" height="110"></canvas>
+      <p class="chart-source">Source: UN ComTrade</p>
+    </div>
+
+    <p class="section-label">Coal Imports by Country</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Quantity</div>
+        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <canvas id="coal-qty-country"></canvas>
+        <p class="chart-source">Source: UN ComTrade</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Value</div>
+        <div class="chart-subtitle">Bn USD · 2020–present</div>
+        <canvas id="coal-val-country"></canvas>
+        <p class="chart-source">Sources: UN ComTrade, GACC</p>
+      </div>
+    </div>
+
+    <p class="section-label">Crude Oil Imports by Country</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Quantity</div>
+        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <canvas id="oil-qty-country"></canvas>
+        <p class="chart-source">Source: UN ComTrade</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Value</div>
+        <div class="chart-subtitle">Bn USD · 2020–present</div>
+        <canvas id="oil-val-country"></canvas>
+        <p class="chart-source">Sources: UN ComTrade, GACC</p>
+      </div>
+    </div>
+
+    <p class="section-label">LNG Imports by Country</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Quantity</div>
+        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <canvas id="lng-qty-country"></canvas>
+        <p class="chart-source">Source: UN ComTrade</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Value</div>
+        <div class="chart-subtitle">Bn USD · 2020–present</div>
+        <canvas id="lng-val-country"></canvas>
+        <p class="chart-source">Sources: UN ComTrade, GACC</p>
+      </div>
+    </div>
+
+    <p class="section-label">Pipeline Gas Imports by Country</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Quantity</div>
+        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <canvas id="pipe-qty-country"></canvas>
+        <p class="chart-source">Source: UN ComTrade</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Top 5 Suppliers by Value</div>
+        <div class="chart-subtitle">Bn USD · 2020–present</div>
+        <canvas id="pipe-val-country"></canvas>
+        <p class="chart-source">Sources: UN ComTrade, GACC</p>
+      </div>
+    </div>
+
     <p class="section-label">Power Generation Mix 2016 – present</p>
     <div class="chart-box full">
       <div class="chart-title">Monthly Power Generation by Source</div>
@@ -456,8 +536,13 @@
       fetchCSV('data/power/ember_capacity.csv'),
       fetchCSV('data/combined/fossil_supply.csv'),
       fetchCSV('data/fuel-imports/gacc_imports.csv'),
-    ]).then(([ep, cap, ec, fs, gc]) => {
+      fetchCSV('data/combined/combined_coal.csv'),
+      fetchCSV('data/combined/combined_crude_oil.csv'),
+      fetchCSV('data/combined/combined_lng.csv'),
+      fetchCSV('data/combined/combined_pipeline_gas.csv'),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe]) => {
       buildDashboard(ep, cap, ec, fs, gc);
+      buildImportsSection(coal, crudeoil, lng, pipe);
     }).catch(err => {
       console.error('Data load failed:', err);
       document.getElementById('header-period').textContent = 'data error';
@@ -904,7 +989,154 @@
       });
 
     } /* end buildDashboard */
+
+    /* ══════════════════════════════════════════
+       FOSSIL FUEL IMPORTS SECTION
+    ══════════════════════════════════════════ */
+    function buildImportsSection(coal, crudeoil, lng, pipe) {
+
+      const COAL_C     = '#8B7355';
+      const OIL_C      = '#DE8212';
+      const GAS_C      = '#0E9A84';
+      const P5_COLORS  = ['#0E9A84', '#DE8212', '#B8860B', '#7A0404', '#2E86C1'];
+
+      function uniqSortedPeriods(rows) {
+        return [...new Set(rows.map(r => r.period))].sort();
+      }
+
+      function totalByPeriod(rows, field) {
+        const agg = {};
+        rows.forEach(r => { agg[r.period] = (agg[r.period] || 0) + (parseFloat(r[field]) || 0); });
+        return agg;
+      }
+
+      /* Top 5 partners by total value_usd_bn across ComTrade rows */
+      function top5(rows) {
+        const totals = {};
+        rows.filter(r => r.source === 'comtrade').forEach(r => {
+          totals[r.partner] = (totals[r.partner] || 0) + (parseFloat(r.value_usd_bn) || 0);
+        });
+        return Object.entries(totals).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([p]) => p);
+      }
+
+      function seriesByPartner(rows, partner, field, allPeriods) {
+        const byPeriod = {};
+        rows.filter(r => r.partner === partner)
+            .forEach(r => { byPeriod[r.period] = parseFloat(r[field]) || 0; });
+        return allPeriods.map(p => +(byPeriod[p] || 0).toFixed(4));
+      }
+
+      const xTicks = (periods) => ({
+        callback: (_, i) => periods[i] && periods[i].endsWith('01') ? periods[i].slice(0, 4) : ''
+      });
+      const stackedOpts = (periods, unit) => ({
+        responsive: true, animation: false,
+        scales: {
+          x: { stacked: true, grid: { color: '#1e1a3a' }, ticks: xTicks(periods) },
+          y: { stacked: true, grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' ' + unit } }
+        },
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } },
+          tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(2)} ${unit}` } }
+        }
+      });
+
+      /* ── Overview 1: Total by Value ── */
+      const allPeriods = [...new Set([
+        ...uniqSortedPeriods(coal), ...uniqSortedPeriods(crudeoil),
+        ...uniqSortedPeriods(lng),  ...uniqSortedPeriods(pipe)
+      ])].sort();
+
+      const coalVal = totalByPeriod(coal,     'value_usd_bn');
+      const oilVal  = totalByPeriod(crudeoil, 'value_usd_bn');
+      const lngVal  = totalByPeriod(lng,      'value_usd_bn');
+      const pipeVal = totalByPeriod(pipe,     'value_usd_bn');
+
+      new Chart(document.getElementById('imports-value-overview'), {
+        type: 'bar',
+        data: {
+          labels: allPeriods.map(periodToShort),
+          datasets: [
+            { label: 'Coal',      data: allPeriods.map(p => +((coalVal[p]  || 0)).toFixed(2)), backgroundColor: COAL_C, borderWidth: 0 },
+            { label: 'Crude Oil', data: allPeriods.map(p => +((oilVal[p]   || 0)).toFixed(2)), backgroundColor: OIL_C,  borderWidth: 0 },
+            { label: 'Gas',       data: allPeriods.map(p => +((lngVal[p] || 0) + (pipeVal[p] || 0)).toFixed(2)), backgroundColor: GAS_C, borderWidth: 0 },
+          ]
+        },
+        options: stackedOpts(allPeriods, 'bn')
+      });
+
+      /* ── Overview 2: Total by Quantity (ComTrade only) ── */
+      const ctCoal = coal.filter(r     => r.source === 'comtrade');
+      const ctOil  = crudeoil.filter(r => r.source === 'comtrade');
+      const ctLng  = lng.filter(r      => r.source === 'comtrade');
+      const ctPipe = pipe.filter(r     => r.source === 'comtrade');
+
+      const ctPeriods = [...new Set([
+        ...uniqSortedPeriods(ctCoal), ...uniqSortedPeriods(ctOil),
+        ...uniqSortedPeriods(ctLng),  ...uniqSortedPeriods(ctPipe)
+      ])].sort();
+
+      const coalQty = totalByPeriod(ctCoal, 'qty_mt');
+      const oilQty  = totalByPeriod(ctOil,  'qty_mt');
+      const lngQty  = totalByPeriod(ctLng,  'qty_mt');
+      const pipeQty = totalByPeriod(ctPipe, 'qty_mt');
+
+      new Chart(document.getElementById('imports-qty-overview'), {
+        type: 'bar',
+        data: {
+          labels: ctPeriods.map(periodToShort),
+          datasets: [
+            { label: 'Coal',      data: ctPeriods.map(p => +((coalQty[p]  || 0)).toFixed(2)), backgroundColor: COAL_C, borderWidth: 0 },
+            { label: 'Crude Oil', data: ctPeriods.map(p => +((oilQty[p]   || 0)).toFixed(2)), backgroundColor: OIL_C,  borderWidth: 0 },
+            { label: 'Gas',       data: ctPeriods.map(p => +((lngQty[p] || 0) + (pipeQty[p] || 0)).toFixed(2)), backgroundColor: GAS_C, borderWidth: 0 },
+          ]
+        },
+        options: stackedOpts(ctPeriods, 'Mt')
+      });
+
+      /* ── Country pairs ── */
+      function buildCountryPair(rows, qtyId, valId) {
+        const top    = top5(rows);
+        const ctRows = rows.filter(r => r.source === 'comtrade');
+        const vPer   = uniqSortedPeriods(rows);
+        const qPer   = uniqSortedPeriods(ctRows);
+
+        new Chart(document.getElementById(valId), {
+          type: 'bar',
+          data: {
+            labels: vPer.map(periodToShort),
+            datasets: top.map((p, i) => ({
+              label: p,
+              data: seriesByPartner(rows, p, 'value_usd_bn', vPer),
+              backgroundColor: P5_COLORS[i], borderWidth: 0,
+            }))
+          },
+          options: stackedOpts(vPer, 'bn')
+        });
+
+        new Chart(document.getElementById(qtyId), {
+          type: 'bar',
+          data: {
+            labels: qPer.map(periodToShort),
+            datasets: top.map((p, i) => ({
+              label: p,
+              data: seriesByPartner(ctRows, p, 'qty_mt', qPer),
+              backgroundColor: P5_COLORS[i], borderWidth: 0,
+            }))
+          },
+          options: stackedOpts(qPer, 'Mt')
+        });
+      }
+
+      buildCountryPair(coal,     'coal-qty-country', 'coal-val-country');
+      buildCountryPair(crudeoil, 'oil-qty-country',  'oil-val-country');
+      buildCountryPair(lng,      'lng-qty-country',  'lng-val-country');
+      buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country');
+
+    } /* end buildImportsSection */
+
   </script>
 
 </body>
 </html>
+
