@@ -234,6 +234,83 @@
       </div>
     </div>
 
+    <p class="section-label">Power Generation Mix 2016 – present</p>
+    <div class="chart-box full">
+      <div class="chart-title">Monthly Power Generation by Source</div>
+      <div class="chart-subtitle">TWh · Thermal = Coal + Gas + Other Fossil · Nuclear · Renewable = Hydro + Wind + Solar + Bioenergy</div>
+      <canvas id="stacked" height="110"></canvas>
+      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+    </div>
+
+    <p class="section-label">Electricity Demand vs. Generation 2016 – present</p>
+    <div class="chart-box full">
+      <div class="chart-title">Monthly Demand and Domestic Generation</div>
+      <div class="chart-subtitle">TWh · Gap reflects net cross-border trade (China is a marginal net exporter)</div>
+      <canvas id="demandgen" height="110"></canvas>
+      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+    </div>
+
+    <p class="section-label-h1" id="capacity">Capacity Added</p>
+    <div class="summary-box" id="capacity-summary">
+      <p id="cap-summary-ytd">Loading…</p>
+      <p id="cap-summary-mon">Loading…</p>
+    </div>
+
+    <div class="chart-row-equal" style="margin-top: var(--gap);">
+      <div class="chart-box">
+        <div class="chart-title" id="cap-bar-ytd-title">Capacity Additions by Source</div>
+        <div class="chart-subtitle" id="cap-ytd-subtitle">GW · Year-to-date</div>
+        <canvas id="cap-bar-ytd"></canvas>
+        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title" id="cap-bar-month-title">Capacity Additions by Source</div>
+        <div class="chart-subtitle" id="cap-month-subtitle">GW · Latest month</div>
+        <canvas id="cap-bar-month"></canvas>
+        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
+      </div>
+    </div>
+
+    <p class="section-label">Capacity Mix — Renewable · Nuclear · Fossil</p>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title" id="donut-rfn-ytd-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-rfn-ytd-subtitle"></div>
+        <canvas id="donut-rfn-ytd"></canvas>
+        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title" id="donut-rfn-month-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-rfn-month-subtitle"></div>
+        <canvas id="donut-rfn-month"></canvas>
+        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
+      </div>
+    </div>
+
+    <p class="section-label">Capacity Mix — Clean vs. Fossil</p>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title" id="donut-cf-ytd-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-cf-ytd-subtitle"></div>
+        <canvas id="donut-cf-ytd"></canvas>
+        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title" id="donut-cf-month-title">Share of New Capacity</div>
+        <div class="chart-subtitle" id="donut-cf-month-subtitle"></div>
+        <canvas id="donut-cf-month"></canvas>
+        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
+      </div>
+    </div>
+
+    <p class="section-label">Installed Capacity Growth 2016 – present</p>
+    <div class="chart-box full">
+      <div class="chart-title">Cumulative Installed Capacity — Wind and Solar</div>
+      <div class="chart-subtitle">GW · End-of-month installed base · Wind = onshore + offshore</div>
+      <canvas id="ember-cap" height="110"></canvas>
+      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+    </div>
+
     <p class="section-label-h1">Fossil Fuel Imports</p>
 
     <div class="chart-box full">
@@ -312,83 +389,6 @@
         <canvas id="pipe-val-country"></canvas>
         <p class="chart-source">Sources: UN ComTrade, GACC</p>
       </div>
-    </div>
-
-    <p class="section-label">Power Generation Mix 2016 – present</p>
-    <div class="chart-box full">
-      <div class="chart-title">Monthly Power Generation by Source</div>
-      <div class="chart-subtitle">TWh · Thermal = Coal + Gas + Other Fossil · Nuclear · Renewable = Hydro + Wind + Solar + Bioenergy</div>
-      <canvas id="stacked" height="110"></canvas>
-      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
-    </div>
-
-    <p class="section-label">Electricity Demand vs. Generation 2016 – present</p>
-    <div class="chart-box full">
-      <div class="chart-title">Monthly Demand and Domestic Generation</div>
-      <div class="chart-subtitle">TWh · Gap reflects net cross-border trade (China is a marginal net exporter)</div>
-      <canvas id="demandgen" height="110"></canvas>
-      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
-    </div>
-
-    <p class="section-label-h1" id="capacity">Capacity Added</p>
-    <div class="summary-box" id="capacity-summary">
-      <p id="cap-summary-ytd">Loading…</p>
-      <p id="cap-summary-mon">Loading…</p>
-    </div>
-
-    <div class="chart-row-equal" style="margin-top: var(--gap);">
-      <div class="chart-box">
-        <div class="chart-title" id="cap-bar-ytd-title">Capacity Additions by Source</div>
-        <div class="chart-subtitle" id="cap-ytd-subtitle">GW · Year-to-date</div>
-        <canvas id="cap-bar-ytd"></canvas>
-        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title" id="cap-bar-month-title">Capacity Additions by Source</div>
-        <div class="chart-subtitle" id="cap-month-subtitle">GW · Latest month</div>
-        <canvas id="cap-bar-month"></canvas>
-        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
-      </div>
-    </div>
-
-    <p class="section-label">Capacity Mix — Renewable · Nuclear · Fossil</p>
-    <div class="chart-row-equal">
-      <div class="chart-box">
-        <div class="chart-title" id="donut-rfn-ytd-title">Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-rfn-ytd-subtitle"></div>
-        <canvas id="donut-rfn-ytd"></canvas>
-        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title" id="donut-rfn-month-title">Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-rfn-month-subtitle"></div>
-        <canvas id="donut-rfn-month"></canvas>
-        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
-      </div>
-    </div>
-
-    <p class="section-label">Capacity Mix — Clean vs. Fossil</p>
-    <div class="chart-row-equal">
-      <div class="chart-box">
-        <div class="chart-title" id="donut-cf-ytd-title">Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-cf-ytd-subtitle"></div>
-        <canvas id="donut-cf-ytd"></canvas>
-        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title" id="donut-cf-month-title">Share of New Capacity</div>
-        <div class="chart-subtitle" id="donut-cf-month-subtitle"></div>
-        <canvas id="donut-cf-month"></canvas>
-        <p class="chart-source">Source: <a href="https://energyandcleanair.org/category/monthly-snapshot-china/" target="_blank" rel="noopener">CREA</a> / NBS</p>
-      </div>
-    </div>
-
-    <p class="section-label">Installed Capacity Growth 2016 – present</p>
-    <div class="chart-box full">
-      <div class="chart-title">Cumulative Installed Capacity — Wind and Solar</div>
-      <div class="chart-subtitle">GW · End-of-month installed base · Wind = onshore + offshore</div>
-      <canvas id="ember-cap" height="110"></canvas>
-      <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
   </main>
