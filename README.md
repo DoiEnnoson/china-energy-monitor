@@ -46,6 +46,8 @@ Alle Texte, KPI-Werte, Chart-Titel und Summary-Absätze werden aus den geholten 
 | Electricity Demand vs. Generation | ember_power | Liniendiagramm |
 | Capacity Added | capacity_additions | 2 Balken + 4 Donuts + Fließtext |
 | Installed Capacity Growth | ember_capacity | Liniendiagramm Wind + Solar |
+| Total Energy System | energy_balance, fossil_supply | 2 KPI-Karten (Monat + YTD), 2 Träger-Balken (Monat + YTD), YTD-Butterfly + YoY-Balken, Import-Dependency Liniendiagramm |
+| Power Generation — Source Breakdown | ember_power, ember_capacity | TWh gestapelt, Share gestapelt, Kohle Dual-Achse, Kapazitätsfaktor Wind + Solar, CO₂-Intensität, Hydro Saisonal (6 Jahrgänge) |
 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC) | 2 Übersichts-Charts + 4 × 2 Länder-Charts (10 Charts) |
 
 ### Daten aktualisieren
