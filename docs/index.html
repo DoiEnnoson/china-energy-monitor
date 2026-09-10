@@ -234,6 +234,46 @@
       </div>
     </div>
 
+    <p class="section-label" id="supply-ytd-label">Year-to-date Supply</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Production vs. Imports Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-butterfly-subtitle">TWh</div>
+        <canvas id="supply-ytd-butterfly"></canvas>
+        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Total Supply Change Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-yoy-subtitle">YoY · percent</div>
+        <canvas id="supply-ytd-yoy"></canvas>
+        <p class="chart-source">Sources: NBS, GACC</p>
+      </div>
+    </div>
+
+    <p class="section-label-h1">Total Energy System</p>
+
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">Energy by Carrier — Latest Month</div>
+        <div class="chart-subtitle" id="sys-month-subtitle">TWh · Domestic vs. Imports · Fossil + Clean</div>
+        <canvas id="sys-twh-month"></canvas>
+        <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Energy by Carrier — Year-to-Date</div>
+        <div class="chart-subtitle" id="sys-ytd-subtitle">TWh · Domestic vs. Imports · Fossil + Clean</div>
+        <canvas id="sys-twh-ytd"></canvas>
+        <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
+      </div>
+    </div>
+
+    <div class="chart-box full">
+      <div class="chart-title">Import Dependency by Fuel</div>
+      <div class="chart-subtitle">Imports as % of total domestic supply (production + imports) · Coal · Crude Oil · Gas</div>
+      <canvas id="import-dependency" height="110"></canvas>
+      <p class="chart-source">Sources: NBS (production), GACC (imports)</p>
+    </div>
+
     <p class="section-label">Power Generation Mix 2016 – present</p>
     <div class="chart-box full">
       <div class="chart-title">Monthly Power Generation by Source</div>
@@ -586,8 +626,10 @@
       fetchCSV('data/combined/combined_crude_oil.csv'),
       fetchCSV('data/combined/combined_lng.csv'),
       fetchCSV('data/combined/combined_pipeline_gas.csv'),
-    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe]) => {
+      fetchCSV('data/combined/energy_balance.csv'),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb]) => {
       buildDashboard(ep, cap, ec, fs, gc);
+      buildSupplySection(fs, gc, eb);
       buildGenerationDetail(ep, ec);
       buildImportsSection(coal, crudeoil, lng, pipe);
     }).catch(err => {
@@ -1036,6 +1078,217 @@
       });
 
     } /* end buildDashboard */
+
+    /* ══════════════════════════════════════════
+       SUPPLY SECTION — YTD + TOTAL ENERGY SYSTEM
+    ══════════════════════════════════════════ */
+    function buildSupplySection(fs, gc, eb) {
+      if (!fs.length) return;
+
+      const latestFs = fs[fs.length - 1];
+      const curYr    = latestFs.period.slice(0, 4);
+      const fsYear   = fs.filter(r => r.period.startsWith(curYr));
+
+      function sumYr(rows, field) {
+        return rows.reduce((s, r) => s + (+r[field] || 0), 0);
+      }
+
+      /* Period range label */
+      const firstLbl = periodToShort(fsYear[0].period);
+      const lastLbl  = periodToShort(latestFs.period);
+      const ytdRange = firstLbl === lastLbl ? firstLbl : `${firstLbl} – ${lastLbl}`;
+
+      document.getElementById('supply-ytd-label').textContent = 'Year-to-date Supply — ' + ytdRange;
+
+      /* ── YTD butterfly ── */
+      const ytdCoalImp  = sumYr(fsYear, 'coal_import_mt')      * COAL_F;
+      const ytdCoalProd = sumYr(fsYear, 'coal_prod_mt')         * COAL_F;
+      const ytdOilImp   = sumYr(fsYear, 'crude_oil_import_mt')  * OIL_F;
+      const ytdOilProd  = sumYr(fsYear, 'crude_oil_prod_mt')    * OIL_F;
+      const ytdGasImp   = sumYr(fsYear, 'gas_import_bcm')       * GAS_F;
+      const ytdGasProd  = sumYr(fsYear, 'gas_prod_bcm')         * GAS_F;
+
+      document.getElementById('supply-ytd-butterfly-subtitle').innerHTML =
+        ytdRange + ' · TWh · ← Production &nbsp;|&nbsp; Imports →';
+
+      new Chart(document.getElementById('supply-ytd-butterfly'), {
+        type: 'bar',
+        data: {
+          labels: ['Oil', 'Gas', 'Coal'],
+          datasets: [
+            { label: 'Production', data: [-ytdOilProd, -ytdGasProd, -ytdCoalProd], backgroundColor: TEAL,   borderWidth: 0, borderRadius: 2 },
+            { label: 'Imports',    data: [ ytdOilImp,   ytdGasImp,   ytdCoalImp],  backgroundColor: ORANGE, borderWidth: 0, borderRadius: 2 }
+          ]
+        },
+        options: {
+          indexAxis: 'y', responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+            tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${Math.abs(+ctx.raw).toFixed(0)} TWh` } }
+          },
+          scales: {
+            x: { stacked: true, grid: { color: '#1e1a3a' }, ticks: { callback: v => Math.abs(+v).toFixed(0) } },
+            y: { stacked: true, grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } }
+          }
+        }
+      });
+
+      /* ── YTD YoY ── */
+      document.getElementById('supply-ytd-yoy-subtitle').textContent = ytdRange + ' YoY · percent';
+
+      function safeNum(v) { const n = +v; return isNaN(n) ? null : n; }
+      const ytdYoY = [
+        safeNum(latestFs.coal_ytd_yoy_pct),
+        safeNum(latestFs.gas_ytd_yoy_pct),
+        safeNum(latestFs.crude_oil_ytd_yoy_pct)
+      ];
+
+      const yoyLabelsYtd = {
+        id: 'yoyLabelsYtd',
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          chart.data.datasets.forEach((ds, i) => {
+            chart.getDatasetMeta(i).data.forEach((bar, j) => {
+              const v = ds.data[j];
+              if (v == null || isNaN(v)) return;
+              ctx.save();
+              ctx.fillStyle = '#dbcfbf';
+              ctx.font = 'bold 12px "Segoe UI",system-ui,sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = v >= 0 ? 'bottom' : 'top';
+              ctx.fillText((v > 0 ? '+' : '') + v + '%', bar.x, bar.y + (v >= 0 ? -5 : 5));
+              ctx.restore();
+            });
+          });
+        }
+      };
+
+      new Chart(document.getElementById('supply-ytd-yoy'), {
+        type: 'bar',
+        data: {
+          labels: ['Coal', 'Gas', 'Oil'],
+          datasets: [{ label: 'YoY change (%)', data: ytdYoY,
+            backgroundColor: ytdYoY.map(v => v === null ? '#444' : v >= 0 ? TEAL : RED),
+            borderWidth: 0, borderRadius: 2 }]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ctx.raw !== null ? (ctx.raw > 0 ? '+' : '') + ctx.raw + '%' : 'n/a' } },
+            yoyLabelsYtd: {}
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } },
+            y: { grid: { color: '#1e1a3a' }, ticks: { stepSize: 10, callback: v => (v > 0 ? '+' : '') + v + '%' } }
+          }
+        },
+        plugins: [yoyLabelsYtd]
+      });
+
+      /* ── Total Energy System in TWh ── */
+      if (!eb || !eb.length) return;
+
+      const latestEb = eb[eb.length - 1];
+      const ebYear   = eb.filter(r => r.period.startsWith(curYr));
+
+      function ebSumYr(field) {
+        return ebYear.reduce((s, r) => s + (+r[field] || 0), 0);
+      }
+
+      document.getElementById('sys-month-subtitle').textContent =
+        periodToShort(latestEb.period) + ' · TWh · Domestic vs. Imports · Fossil + Clean';
+      document.getElementById('sys-ytd-subtitle').textContent =
+        ytdRange + ' · TWh · Domestic vs. Imports · Fossil + Clean';
+
+      /* Monthly snapshot */
+      const mCoalImp  = +latestEb.coal_import_twh;
+      const mCoalProd = +latestEb.coal_prod_twh;
+      const mOilImp   = +latestEb.crude_oil_import_twh;
+      const mOilProd  = +latestEb.crude_oil_prod_twh;
+      const mGasImp   = +latestEb.gas_import_twh;
+      const mGasProd  = +latestEb.gas_prod_twh;
+      const mNuclear  = +latestEb.nuclear_twh;
+      const mRenew    = Math.max(0, +latestEb.clean_power_twh - mNuclear);
+
+      /* YTD sum */
+      const yCoalImp  = ebSumYr('coal_import_twh');
+      const yCoalProd = ebSumYr('coal_prod_twh');
+      const yOilImp   = ebSumYr('crude_oil_import_twh');
+      const yOilProd  = ebSumYr('crude_oil_prod_twh');
+      const yGasImp   = ebSumYr('gas_import_twh');
+      const yGasProd  = ebSumYr('gas_prod_twh');
+      const yNuclear  = ebSumYr('nuclear_twh');
+      const yRenew    = Math.max(0, ebSumYr('clean_power_twh') - yNuclear);
+
+      function makeSysTwh(id, domData, impData) {
+        new Chart(document.getElementById(id), {
+          type: 'bar',
+          data: {
+            labels: ['Coal', 'Oil', 'Gas', 'Nuclear', 'Renewable'],
+            datasets: [
+              { label: 'Domestic', data: domData, backgroundColor: TEAL,   borderWidth: 0, borderRadius: 2 },
+              { label: 'Imports',  data: impData,  backgroundColor: ORANGE, borderWidth: 0, borderRadius: 2 }
+            ]
+          },
+          options: {
+            indexAxis: 'y', responsive: true, animation: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+              tooltip: {
+                mode: 'index', intersect: false,
+                callbacks: { label: ctx => `${ctx.dataset.label}: ${(+ctx.raw).toFixed(0)} TWh` }
+              }
+            },
+            scales: {
+              x: { stacked: true, grid: { color: '#1e1a3a' }, ticks: { callback: v => (+v).toFixed(0) } },
+              y: { stacked: true, grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } }
+            }
+          }
+        });
+      }
+
+      makeSysTwh('sys-twh-month',
+        [mCoalProd, mOilProd, mGasProd, mNuclear, mRenew],
+        [mCoalImp,  mOilImp,  mGasImp,  0,         0]);
+
+      makeSysTwh('sys-twh-ytd',
+        [yCoalProd, yOilProd, yGasProd, yNuclear, yRenew],
+        [yCoalImp,  yOilImp,  yGasImp,  0,         0]);
+
+      /* ── Import Dependency ── */
+      const fsPeriods = fs.map(r => periodToShort(r.period));
+      const depCoal   = fs.map(r => +r.coal_total_mt       > 0 ? +((+r.coal_import_mt       / +r.coal_total_mt)       * 100).toFixed(1) : null);
+      const depOil    = fs.map(r => +r.crude_oil_total_mt  > 0 ? +((+r.crude_oil_import_mt  / +r.crude_oil_total_mt)  * 100).toFixed(1) : null);
+      const depGas    = fs.map(r => +r.gas_total_bcm       > 0 ? +((+r.gas_import_bcm       / +r.gas_total_bcm)       * 100).toFixed(1) : null);
+
+      new Chart(document.getElementById('import-dependency'), {
+        type: 'line',
+        data: {
+          labels: fsPeriods,
+          datasets: [
+            { label: 'Coal',      data: depCoal, borderColor: RED,    backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: RED,    tension: 0.3 },
+            { label: 'Crude Oil', data: depOil,  borderColor: ORANGE, backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: ORANGE, tension: 0.3 },
+            { label: 'Gas',       data: depGas,  borderColor: TEAL,   backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: TEAL,   tension: 0.3 }
+          ]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+            tooltip: {
+              mode: 'index', intersect: false,
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw !== null ? ctx.raw + '%' : 'n/a'}` }
+            }
+          },
+          scales: {
+            x: { grid: { color: '#1e1a3a' } },
+            y: { grid: { color: '#1e1a3a' }, min: 0, max: 100, ticks: { callback: v => v + '%' } }
+          }
+        }
+      });
+
+    } /* end buildSupplySection */
 
     /* ══════════════════════════════════════════
        POWER GENERATION DETAIL SECTION
