@@ -629,3 +629,68 @@ python scripts/build_combined.py
 
 - **2026 ComTrade**: Sobald UN ComTrade 2026-Daten verfügbar macht, `YEAR` in `fetch_comtrade.py` aktualisieren und den Workflow manuell antriggern.
 - **Pipeline-Gas Begleittext**: Dashboard-Abschnitt "Pipeline Gas Imports" braucht einen erklärenden Textblock. Thema: warum die Pipelinegas-Importe bis 2021 nominal höher erscheinen als danach (Central Asia Line D-Stall, Turkmenistan-Lieferprobleme, beschleunigtes chinesisches Shale-Gas-Wachstum, Power of Siberia-Hochlauf ab 2019). Auch SEO-relevant.
+- **Referenzpreise (Marktbenchmarks)**: Geplante Erweiterung um eine neue CSV `data/reference/market_prices.csv` mit monatlichen Marktpreisen zum Vergleich mit den GACC-Importpreisen. Details siehe unten.
+
+## Geplante Erweiterung: Markt-Referenzpreise
+
+### Konzept
+
+`gacc_imports.csv` enthält für Kohle, Rohöl und Gas den impliziten Importpreis (Value per Unit, VpU) aus den GACC-Zolldaten. Dieser Preis ist ein gewichteter Durchschnitt aller tatsächlichen physischen Transaktionen im Monat — also kein Spot- oder Papierpreis, sondern was China tatsächlich bezahlt hat. Ein Vergleich mit Markt-Benchmarks erlaubt näherungsweise Aussagen darüber, ob China über oder unter Marktpreisen kauft.
+
+**Methodischer Vorbehalt:** Alle Benchmark-Preise sind Spot- oder Assessment-Preise, Chinas Importe basieren größtenteils auf Langzeitverträgen (oft ölindexiert) oder politisch ausgehandelten Preisen (Zentralasien, Russland). Der Vergleich ist strukturell ungleich, aber journalistisch aussagekräftig — insbesondere Trendbrüche (z. B. China kauft Öl nach 2022 deutlich unter Brent = Russland-Rabatt-Effekt) sind sichtbar.
+
+**Iran-Hinweis:** Iranisches Öl taucht in GACC-Daten nicht auf (erfasst als Malaysia, UAE, Oman). Strukturelles Datenloch.
+
+### Einheiten
+
+| Träger | GACC-VpU | Markteinheit | Umrechnung |
+|---|---|---|---|
+| Kohle | USD/t | USD/t | direkt vergleichbar |
+| Rohöl | USD/t | USD/bbl | ÷ 7,33 (Standardfaktor Rohöl) |
+| Gas | USD/t | USD/MMBtu | ÷ 52 (LNG-Faustregel; GIIGNL: 43–49 MMBtu/t) |
+
+### Datenquellen (recherchiert 10.09.2026)
+
+| Quelle | Liefert | Zugang | Abdeckung |
+|---|---|---|---|
+| **EIA API** (kostenlos, Key vorhanden) | Brent ($/bbl), WTI ($/bbl), Henry Hub ($/MMBtu) | REST, `petroleum/pri/spt` + `natural-gas/pri/fut` | aktuell bis Aug 2026 |
+| **World Bank Pink Sheet** | Brent, Dubai, WTI, Coal Australian ($/t), LNG Japan ($/MMBtu) | Excel-Download, kein REST-API | aktuell bis Aug 2026, monatlich aktualisiert |
+| **Urals** | russisches Rohöl-Referenzpreis | kein freier Zugang (Platts/Argus proprietär, Yahoo Finance hat es nicht) | entfällt |
+| **Data360 (World Bank)** | nicht geeignet — enthält Entwicklungsindikatoren, keine Rohstoffpreise | — | — |
+| **IMF SDMX** | hätte Dubai, LNG Japan | aus dieser Umgebung geblockt | — |
+
+**Bevorzugte Kombination:**
+- Kohle-Referenz: World Bank Pink Sheet `Coal, Australian` ($/t) — direkt mit GACC vergleichbar, kein Umrechnungsbedarf
+- Öl-Referenz: EIA API `Brent` + World Bank Pink Sheet `Dubai` (beide $/bbl, GACC-VpU mit ÷ 7,33 umrechnen)
+- Gas-Referenz: World Bank Pink Sheet `Liquefied natural gas, Japan` ($/MMBtu) — bester freier JKM-Proxy
+
+**Pink Sheet URL-Logik:** Die URL ändert sich monatlich. Aktueller Link wird von der World Bank Commodity Markets-Seite gescraped:
+```
+https://www.worldbank.org/en/research/commodity-markets
+→ grep 'CMO-Historical-Data-Monthly.xlsx'
+→ Download via thedocs.worldbank.org/...
+```
+
+### Geplante Implementierung
+
+```
+scripts/fetch_reference_prices.py
+  → scrapt Pink Sheet URL von WB Commodity Markets-Seite
+  → downloaded und parsed Excel (Sheet: 'Monthly Prices')
+  → ruft EIA API für Brent/WTI ab (als Redundanz und für aktuelle Monate falls PinkSheet laggt)
+  → schreibt data/reference/market_prices.csv
+
+GitHub Action: fetch_reference_prices.yml
+  → monatlicher Trigger (z. B. 5. jedes Monats)
+  → läuft nach fetch_comtrade.yml
+```
+
+**Ziel-Schema `data/reference/market_prices.csv`:**
+
+| Spalte | Einheit | Quelle |
+|---|---|---|
+| `period` | YYYYMM | — |
+| `brent_usd_bbl` | $/bbl | EIA / Pink Sheet |
+| `dubai_usd_bbl` | $/bbl | Pink Sheet |
+| `coal_au_usd_mt` | $/t | Pink Sheet |
+| `lng_japan_usd_mmbtu` | $/MMBtu | Pink Sheet |
