@@ -1111,7 +1111,7 @@
       const lastLbl  = periodToShort(latestFs.period);
       function rangeLabel(f, l) {
         if (f === l) return l;
-        return f.slice(-4) === l.slice(-4) ? f.slice(0, -5) + ‘ – ‘ + l : f + ‘ – ‘ + l;
+        return f.slice(-4) === l.slice(-4) ? f.slice(0, -5) + ' – ' + l : f + ' – ' + l;
       }
       const ytdRange = rangeLabel(firstLbl, lastLbl);
 
