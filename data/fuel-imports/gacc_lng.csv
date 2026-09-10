@@ -1,0 +1,220 @@
+period,partner,value_usd_bn
+202501,Australia,1.1331
+202501,Qatar,0.9985
+202501,Malaysia,0.3881
+202501,Russian Federation,0.2498
+202501,Indonesia,0.2237
+202501,USA,0.1254
+202501,Papua New Guinea,0.1199
+202501,Mozambique,0.1021
+202501,United Arab Emirates,0.0787
+202501,Trinidad and Tobago,0.0494
+202501,Oman,0.0487
+202501,Peru,0.0428
+202501,Nigeria,0.035
+202501,Canada,0.0007
+202502,Qatar,0.9054
+202502,Australia,0.6387
+202502,Russian Federation,0.3124
+202502,Malaysia,0.263
+202502,Indonesia,0.1921
+202502,Papua New Guinea,0.0902
+202502,USA,0.0314
+202502,Nigeria,0.0032
+202502,Peru,0.002
+202503,Qatar,0.8665
+202503,Australia,0.7543
+202503,Indonesia,0.3286
+202503,Russian Federation,0.2255
+202503,Malaysia,0.2029
+202503,Brunei Darussalam,0.0499
+202503,Papua New Guinea,0.0477
+202503,Oman,0.0363
+202503,Peru,0.0027
+202504,Australia,0.8075
+202504,Qatar,0.8008
+202504,Russian Federation,0.2535
+202504,Malaysia,0.2528
+202504,Indonesia,0.1053
+202504,Papua New Guinea,0.0774
+202504,Peru,0.0364
+202504,Trinidad and Tobago,0.005
+202504,Canada,0.0001
+202505,Australia,0.8053
+202505,Qatar,0.722
+202505,Russian Federation,0.3615
+202505,Malaysia,0.2194
+202505,Indonesia,0.1394
+202505,Papua New Guinea,0.0975
+202505,Oman,0.0385
+202505,United Arab Emirates,0.0291
+202505,Mauritania,0.0216
+202505,Senegal,0.02
+202505,Equatorial Guinea,0.0069
+202505,Peru,0.0044
+202506,Australia,0.8715
+202506,Qatar,0.8457
+202506,Indonesia,0.2922
+202506,Russian Federation,0.2712
+202506,Malaysia,0.164
+202506,Nigeria,0.1079
+202506,Papua New Guinea,0.0962
+202506,Oman,0.0463
+202506,Algeria,0.043
+202506,Mozambique,0.0358
+202506,Senegal,0.0157
+202506,Mauritania,0.0146
+202506,Singapore,0.0102
+202507,Australia,1.0517
+202507,Qatar,0.5645
+202507,Malaysia,0.317
+202507,Russian Federation,0.3103
+202507,Papua New Guinea,0.1788
+202507,Oman,0.1272
+202507,Indonesia,0.1106
+202507,Brunei Darussalam,0.0682
+202507,Nigeria,0.0462
+202507,United Arab Emirates,0.0403
+202507,Trinidad and Tobago,0.0359
+202507,Peru,0.011
+202507,Mozambique,0.0069
+202507,Canada,0.0005
+202508,Australia,1.0118
+202508,Qatar,0.9523
+202508,Russian Federation,0.3741
+202508,Malaysia,0.2974
+202508,Papua New Guinea,0.1808
+202508,Indonesia,0.1791
+202508,Oman,0.1756
+202508,Nigeria,0.0838
+202508,Canada,0.0476
+202508,Brunei Darussalam,0.0407
+202508,Trinidad and Tobago,0.0254
+202509,Australia,0.8336
+202509,Qatar,0.6995
+202509,Russian Federation,0.4759
+202509,Indonesia,0.2906
+202509,Malaysia,0.2802
+202509,Nigeria,0.0754
+202509,Papua New Guinea,0.0697
+202509,Oman,0.0622
+202509,Canada,0.0422
+202509,Brunei Darussalam,0.0218
+202509,Equatorial Guinea,0.0108
+202510,Australia,0.7475
+202510,Qatar,0.7152
+202510,Russian Federation,0.4223
+202510,Malaysia,0.2568
+202510,Papua New Guinea,0.1149
+202510,Equatorial Guinea,0.0843
+202510,Oman,0.0703
+202510,Indonesia,0.0581
+202510,Canada,0.0426
+202510,United Arab Emirates,0.0402
+202510,Trinidad and Tobago,0.0245
+202511,Qatar,0.8717
+202511,Australia,0.6696
+202511,Russian Federation,0.439
+202511,Malaysia,0.3941
+202511,Indonesia,0.2562
+202511,Papua New Guinea,0.1196
+202511,Oman,0.0714
+202511,United Arab Emirates,0.0686
+202511,Nigeria,0.0625
+202511,Mozambique,0.0414
+202511,Peru,0.0046
+202511,Canada,0.0007
+202512,Australia,1.0772
+202512,Qatar,1.0317
+202512,Malaysia,0.418
+202512,Russian Federation,0.4093
+202512,Nigeria,0.2311
+202512,Papua New Guinea,0.1968
+202512,Canada,0.1216
+202512,Oman,0.1175
+202512,Indonesia,0.1094
+202512,Peru,0.0301
+202601,Qatar,0.9539
+202601,Australia,0.9294
+202601,Malaysia,0.3365
+202601,Russian Federation,0.2503
+202601,Indonesia,0.2185
+202601,Oman,0.2063
+202601,Papua New Guinea,0.1322
+202601,Nigeria,0.1034
+202601,United Arab Emirates,0.0506
+202601,Canada,0.0431
+202601,Mozambique,0.0393
+202601,Peru,0.0388
+202601,Brunei Darussalam,0.0296
+202601,Norway,0.0293
+202602,Qatar,0.6652
+202602,Australia,0.5354
+202602,Malaysia,0.1594
+202602,Russian Federation,0.1386
+202602,Indonesia,0.0998
+202602,Canada,0.0839
+202602,Nigeria,0.0763
+202602,Papua New Guinea,0.043
+202603,Australia,0.4663
+202603,Qatar,0.4258
+202603,Russian Federation,0.2623
+202603,Malaysia,0.2582
+202603,Indonesia,0.1975
+202603,Papua New Guinea,0.1252
+202603,Canada,0.0165
+202603,Peru,0.0151
+202604,Australia,0.6695
+202604,Russian Federation,0.3412
+202604,Malaysia,0.289
+202604,Canada,0.186
+202604,Nigeria,0.1565
+202604,Papua New Guinea,0.084
+202604,Brunei Darussalam,0.0561
+202604,Equatorial Guinea,0.0356
+202604,Peru,0.0286
+202604,Trinidad and Tobago,0.0282
+202604,Oman,0.0246
+202604,Qatar,0.0107
+202604,Mozambique,0.0081
+202605,Australia,0.8721
+202605,Malaysia,0.4868
+202605,Russian Federation,0.3857
+202605,Canada,0.2851
+202605,Oman,0.264
+202605,Papua New Guinea,0.2581
+202605,Indonesia,0.1519
+202605,Nigeria,0.0894
+202605,Peru,0.0614
+202605,United Arab Emirates,0.0459
+202605,Brunei Darussalam,0.0324
+202605,Mozambique,0.007
+202606,Australia,1.3343
+202606,Malaysia,0.5506
+202606,Russian Federation,0.4282
+202606,Canada,0.2795
+202606,Indonesia,0.1879
+202606,Nigeria,0.1775
+202606,Oman,0.1587
+202606,Papua New Guinea,0.1237
+202606,Brunei Darussalam,0.1205
+202606,Mozambique,0.0747
+202606,Equatorial Guinea,0.0623
+202606,Qatar,0.062
+202606,Trinidad and Tobago,0.0331
+202606,Senegal,0.0218
+202606,Mauritania,0.0206
+202607,Australia,1.6502
+202607,Malaysia,0.4862
+202607,Russian Federation,0.3423
+202607,Canada,0.3157
+202607,Qatar,0.2335
+202607,Oman,0.1956
+202607,Papua New Guinea,0.1882
+202607,Indonesia,0.1298
+202607,Nigeria,0.1001
+202607,Peru,0.0728
+202607,USA,0.0633
+202607,Equatorial Guinea,0.0605
+202607,Brunei Darussalam,0.051
+202607,Mozambique,0.008

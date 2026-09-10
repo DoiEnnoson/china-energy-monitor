@@ -1,0 +1,247 @@
+period,partner,value_usd_bn
+202501,Australia,0.8365
+202501,Russian Federation,0.6891
+202501,Indonesia,0.485
+202501,Mongolia,0.4085
+202501,Canada,0.1809
+202501,USA,0.1785
+202501,Mozambique,0.0142
+202501,Kazakhstan,0.0101
+202501,Lao People's Dem. Rep.,0.0016
+202501,Kyrgyzstan,0.0004
+202501,Peru,0.0
+202501,Brazil,0.0
+202502,Russian Federation,0.6635
+202502,Australia,0.4169
+202502,Mongolia,0.3676
+202502,Indonesia,0.2416
+202502,Canada,0.2041
+202502,USA,0.1728
+202502,Colombia,0.0083
+202502,Tanzania,0.0053
+202502,Lao People's Dem. Rep.,0.0001
+202502,Kazakhstan,0.0001
+202502,India,0.0
+202502,Kyrgyzstan,0.0
+202502,Mozambique,0.0
+202502,Croatia,0.0
+202502,South Africa,0.0
+202502,Zimbabwe,0.0
+202503,Russian Federation,0.7176
+202503,Mongolia,0.4495
+202503,Australia,0.3906
+202503,Indonesia,0.212
+202503,Canada,0.1402
+202503,USA,0.0308
+202503,New Zealand,0.0109
+202503,Lao People's Dem. Rep.,0.0012
+202503,Kyrgyzstan,0.0002
+202503,Kazakhstan,0.0002
+202503,Tanzania,0.0
+202504,Russian Federation,0.6186
+202504,Australia,0.6114
+202504,Mongolia,0.4417
+202504,Indonesia,0.1759
+202504,Canada,0.1332
+202504,Colombia,0.0134
+202504,USA,0.009
+202504,New Zealand,0.0089
+202504,South Africa,0.0086
+202504,Lao People's Dem. Rep.,0.0005
+202504,Kazakhstan,0.0002
+202504,Kyrgyzstan,0.0
+202504,India,0.0
+202504,Tajikistan,0.0
+202505,Australia,0.6435
+202505,Russian Federation,0.5837
+202505,Mongolia,0.3706
+202505,Indonesia,0.1796
+202505,Canada,0.1008
+202505,Colombia,0.0126
+202505,Kazakhstan,0.008
+202505,New Zealand,0.0062
+202505,Lao People's Dem. Rep.,0.0006
+202505,Kyrgyzstan,0.0001
+202505,South Africa,0.0
+202505,Tanzania,0.0
+202505,USA,0.0
+202506,Russian Federation,0.5472
+202506,Australia,0.5028
+202506,Mongolia,0.3898
+202506,Indonesia,0.2319
+202506,Canada,0.1598
+202506,New Zealand,0.006
+202506,Lao People's Dem. Rep.,0.0004
+202506,Kazakhstan,0.0001
+202506,Kyrgyzstan,0.0001
+202506,Türkiye,0.0
+202506,Colombia,0.0
+202506,USA,0.0
+202506,Areas NES,0.0
+202507,Russian Federation,0.5462
+202507,Australia,0.5134
+202507,Mongolia,0.3563
+202507,Indonesia,0.2113
+202507,Canada,0.1157
+202507,South Africa,0.0155
+202507,Kyrgyzstan,0.0003
+202507,Lao People's Dem. Rep.,0.0001
+202507,Malaysia,0.0
+202507,Mozambique,0.0
+202507,USA,0.0
+202507,Türkiye,0.0
+202508,Russian Federation,0.6288
+202508,Australia,0.5384
+202508,Mongolia,0.4502
+202508,Indonesia,0.316
+202508,Canada,0.1647
+202508,Kazakhstan,0.0167
+202508,Colombia,0.0041
+202508,Kyrgyzstan,0.0002
+202508,Swaziland,0.0
+202508,India,0.0
+202508,Malaysia,0.0
+202508,USA,0.0
+202509,Russian Federation,0.583
+202509,Australia,0.5366
+202509,Mongolia,0.5261
+202509,Indonesia,0.4341
+202509,Canada,0.1969
+202509,Kazakhstan,0.0331
+202509,Mozambique,0.0123
+202509,Viet Nam,0.0065
+202509,Kyrgyzstan,0.0005
+202509,USA,0.0
+202509,Tajikistan,0.0
+202510,Australia,0.6651
+202510,Russian Federation,0.5757
+202510,Mongolia,0.4382
+202510,Indonesia,0.396
+202510,Canada,0.1748
+202510,South Africa,0.008
+202510,Kyrgyzstan,0.0007
+202510,Lao People's Dem. Rep.,0.0001
+202510,Kazakhstan,0.0001
+202510,Ireland,0.0
+202510,USA,0.0
+202510,Areas NES,0.0
+202511,Russian Federation,0.7326
+202511,Australia,0.6059
+202511,Mongolia,0.5663
+202511,Indonesia,0.3603
+202511,Canada,0.1093
+202511,Kyrgyzstan,0.0006
+202511,Lao People's Dem. Rep.,0.0001
+202511,Malaysia,0.0
+202511,Ethiopia,0.0
+202511,Colombia,0.0
+202511,USA,0.0
+202511,Panama,0.0
+202512,Australia,0.9845
+202512,Russian Federation,0.8673
+202512,Mongolia,0.6209
+202512,Indonesia,0.5904
+202512,Canada,0.2294
+202512,Kazakhstan,0.0336
+202512,South Africa,0.0245
+202512,New Zealand,0.0143
+202512,Kyrgyzstan,0.0007
+202512,Lao People's Dem. Rep.,0.0005
+202512,Malaysia,0.0
+202512,Colombia,0.0
+202512,Areas NES,0.0
+202512,Tanzania,0.0
+202601,Australia,0.8345
+202601,Russian Federation,0.6424
+202601,Mongolia,0.6064
+202601,Indonesia,0.3641
+202601,Canada,0.1512
+202601,Colombia,0.0209
+202601,South Africa,0.0046
+202601,Venezuela,0.0025
+202601,Lao People's Dem. Rep.,0.0009
+202601,Kyrgyzstan,0.0002
+202601,Mozambique,0.0
+202601,USA,0.0
+202602,Russian Federation,0.4838
+202602,Australia,0.4777
+202602,Mongolia,0.4278
+202602,Indonesia,0.1928
+202602,Canada,0.0502
+202602,South Africa,0.0036
+202602,Lao People's Dem. Rep.,0.0002
+202602,Kazakhstan,0.0002
+202602,Kyrgyzstan,0.0002
+202602,Zambia,0.0
+202602,Latvia,0.0
+202602,USA,0.0
+202602,New Zealand,0.0
+202603,Mongolia,0.7245
+202603,Russian Federation,0.6808
+202603,Australia,0.4165
+202603,Indonesia,0.1893
+202603,Canada,0.1744
+202603,Colombia,0.009
+202603,Venezuela,0.0045
+202603,Lao People's Dem. Rep.,0.0007
+202603,Kyrgyzstan,0.0004
+202603,Japan,0.0
+202603,USA,0.0
+202603,India,0.0
+202604,Mongolia,0.7275
+202604,Russian Federation,0.5642
+202604,Australia,0.4672
+202604,Indonesia,0.1539
+202604,Canada,0.084
+202604,Venezuela,0.0071
+202604,Lao People's Dem. Rep.,0.001
+202604,Kazakhstan,0.0006
+202604,Kyrgyzstan,0.0005
+202604,Malaysia,0.0
+202604,China,0.0
+202604,Georgia,0.0
+202604,Egypt,0.0
+202604,Latvia,0.0
+202604,Lithuania,0.0
+202604,USA,0.0
+202605,Mongolia,0.6963
+202605,Russian Federation,0.5932
+202605,Australia,0.4771
+202605,Canada,0.1448
+202605,Indonesia,0.1195
+202605,Kazakhstan,0.0194
+202605,Colombia,0.0132
+202605,New Zealand,0.0109
+202605,USA,0.004
+202605,Venezuela,0.0039
+202605,Lao People's Dem. Rep.,0.001
+202605,Kyrgyzstan,0.0005
+202606,Australia,0.9435
+202606,Russian Federation,0.7548
+202606,Mongolia,0.746
+202606,Indonesia,0.2615
+202606,Canada,0.0432
+202606,South Africa,0.0304
+202606,Kazakhstan,0.0113
+202606,Malaysia,0.0017
+202606,Lao People's Dem. Rep.,0.0006
+202606,Kyrgyzstan,0.0004
+202606,Pakistan,0.0
+202606,USA,0.0
+202606,Zambia,0.0
+202607,Australia,1.189
+202607,Russian Federation,0.9892
+202607,Mongolia,0.6789
+202607,Indonesia,0.2861
+202607,Canada,0.11
+202607,Colombia,0.0196
+202607,Kazakhstan,0.0045
+202607,Lao People's Dem. Rep.,0.0006
+202607,Kyrgyzstan,0.0005
+202607,China,0.0
+202607,Peru,0.0
+202607,Republic of Korea,0.0
+202607,USA,0.0
+202607,Egypt,0.0
+202607,Zambia,0.0
+202607,Mexico,0.0
