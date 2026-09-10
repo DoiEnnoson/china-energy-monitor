@@ -314,21 +314,21 @@
     <p class="section-label-h1">Fossil Fuel Imports</p>
 
     <div class="chart-box full">
-      <div class="chart-title">Total Imports by Value — Coal · Crude Oil · Gas</div>
-      <div class="chart-subtitle">Bn USD · Monthly · ComTrade 2020–2024, GACC 2025–present</div>
-      <canvas id="imports-value-overview" height="110"></canvas>
-      <p class="chart-source">Sources: UN ComTrade, GACC</p>
-    </div>
-
-    <div class="chart-box full">
       <div class="chart-title">Total Imports by Quantity — Coal · Crude Oil · Gas</div>
       <div class="chart-subtitle">Million tonnes · Monthly · Quantity data available for ComTrade period (2020–2024) only</div>
       <canvas id="imports-qty-overview" height="110"></canvas>
       <p class="chart-source">Source: UN ComTrade</p>
     </div>
 
+    <div class="chart-box full">
+      <div class="chart-title">Total Imports by Value — Coal · Crude Oil · Gas</div>
+      <div class="chart-subtitle">Bn USD · Monthly · ComTrade 2020–2024, GACC 2025–present</div>
+      <canvas id="imports-value-overview" height="110"></canvas>
+      <p class="chart-source">Sources: UN ComTrade, GACC</p>
+    </div>
+
     <p class="section-label">Coal Imports by Country</p>
-    <div class="chart-row">
+    <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
         <div class="chart-subtitle">Million tonnes · 2020–2024</div>
@@ -344,7 +344,7 @@
     </div>
 
     <p class="section-label">Crude Oil Imports by Country</p>
-    <div class="chart-row">
+    <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
         <div class="chart-subtitle">Million tonnes · 2020–2024</div>
@@ -360,7 +360,7 @@
     </div>
 
     <p class="section-label">LNG Imports by Country</p>
-    <div class="chart-row">
+    <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
         <div class="chart-subtitle">Million tonnes · 2020–2024</div>
@@ -376,7 +376,7 @@
     </div>
 
     <p class="section-label">Pipeline Gas Imports by Country</p>
-    <div class="chart-row">
+    <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
         <div class="chart-subtitle">Million tonnes · 2020–2024</div>
@@ -995,7 +995,7 @@
     ══════════════════════════════════════════ */
     function buildImportsSection(coal, crudeoil, lng, pipe) {
 
-      const COAL_C     = '#8B7355';
+      const COAL_C     = '#7A0404';
       const OIL_C      = '#DE8212';
       const GAS_C      = '#0E9A84';
       const P5_COLORS  = ['#0E9A84', '#DE8212', '#B8860B', '#7A0404', '#2E86C1'];
