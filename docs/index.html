@@ -164,6 +164,10 @@
     }
     .btn-donate:hover { opacity: 0.85; text-decoration: none; }
     .about-legal { font-size: 0.72rem; color: var(--text2); }
+    .method-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .method-table th { text-align: left; color: var(--text2); font-weight: 600; border-bottom: 1px solid var(--border); padding: 0.4rem 0.6rem 0.4rem 0; }
+    .method-table td { vertical-align: top; padding: 0.45rem 0.6rem 0.45rem 0; border-bottom: 1px solid var(--border); color: var(--text); }
+    .method-table tr:last-child td { border-bottom: none; }
   </style>
 </head>
 
@@ -551,6 +555,65 @@
       <p><strong>Feedback and corrections</strong><br>
       Spotted an error? Have a suggestion for a new chart or data source? <a href="mailto:doisnews@gmail.com">Get in touch.</a></p>
       <p class="about-legal">Data is provided in good faith. No liability is accepted for errors or omissions. &copy; Doi Ennoson</p>
+    </div>
+
+    <p class="section-label-h1" id="methodology">Methodology</p>
+    <div class="about-box">
+
+      <p><strong>Data sources and update cadence</strong></p>
+      <table class="method-table">
+        <thead><tr><th>Source</th><th>Data</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://www.stats.gov.cn/english/" target="_blank" rel="noopener">NBS</a> (National Bureau of Statistics, China)</td><td>Domestic fossil fuel production: coal, crude oil, natural gas</td></tr>
+          <tr><td><a href="http://english.customs.gov.cn/" target="_blank" rel="noopener">GACC</a> (General Administration of Customs, China)</td><td>Fossil fuel imports: volume, value, and implied unit price</td></tr>
+          <tr><td><a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a></td><td>Import flows by country of origin, 2020–2024</td></tr>
+          <tr><td><a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></td><td>Power generation by source, grid carbon intensity, installed wind and solar capacity</td></tr>
+          <tr><td><a href="https://energyandcleanair.org/" target="_blank" rel="noopener">CREA</a> (Centre for Research on Energy and Clean Air)</td><td>Monthly capacity additions by source (thermal, nuclear, hydro, wind, solar)</td></tr>
+        </tbody>
+      </table>
+      <p>All source files are available upon <a href="mailto:doisnews@gmail.com?subject=Data%20Request&body=Dear%20Doi%2C%0A%0APlease%20grant%20me%20access%20to%20the%20raw%20data.%0A%0AName%3A%20%0APurpose%3A%20%0A%0AA%20donation%20is%20on%20its%20way!%0A%0ABest%20regards">request</a>. A donation is appreciated.</p>
+
+      <p><strong>Total Energy System view</strong></p>
+      <p>The Total Energy System section combines domestically produced fossil fuels and fossil fuel imports into a single supply figure, then converts everything to terawatt-hours so fossil and clean energy can be placed on the same scale.</p>
+      <p>Fossil fuels are converted from physical units to primary energy equivalent using standard <a href="https://www.iea.org/reports/energy-statistics-manual" target="_blank" rel="noopener">IEA</a> and <a href="https://www.bp.com/en/global/corporate/energy-economics/statistical-review-of-world-energy.html" target="_blank" rel="noopener">BP Statistical Review</a> factors:</p>
+      <table class="method-table">
+        <thead><tr><th>Fuel</th><th>Factor</th><th>Basis</th></tr></thead>
+        <tbody>
+          <tr><td>Coal</td><td>8.14 TWh / Mt</td><td>29.3 GJ/t (hard coal equivalent, tce)</td></tr>
+          <tr><td>Crude oil</td><td>11.63 TWh / Mt</td><td>41.87 GJ/t (oil equivalent, toe)</td></tr>
+          <tr><td>Natural gas</td><td>10.55 TWh / BCM</td><td>38 GJ / 1,000 m³ (gross calorific value)</td></tr>
+        </tbody>
+      </table>
+      <p>Clean power generation (nuclear, hydro, wind, solar, bioenergy) is taken directly from Ember in TWh. Coal and gas power generation from Ember are not added to the fossil supply figures to avoid double-counting.</p>
+      <p><strong>Note on primary vs. final energy:</strong> Fossil fuel volumes represent primary energy content before conversion losses. Clean power generation is final energy (electricity actually produced). Adding both yields a proxy for total energy entering China's system. The two are not physically equivalent, but the combined figure gives a useful order-of-magnitude view of the scale of energy flowing into the Chinese economy.</p>
+
+      <p><strong>Gas unit conversion (GACC to BCM)</strong></p>
+      <p>GACC reports all gas imports (LNG and pipeline gas combined) in metric tonnes. To convert to cubic metres for comparability with NBS production data, a factor of 1 Mt = 1.36 BCM is applied. This factor is standard for LNG and is drawn from the <a href="https://www.bp.com/en/global/corporate/energy-economics/statistical-review-of-world-energy.html" target="_blank" rel="noopener">BP Statistical Review of World Energy</a> (Annex: Conversion Factors). Pipeline gas has a slightly different energy density depending on composition, but since LNG accounts for the majority of Chinese gas imports and GACC does not separate the two in mass units, a single factor is applied across both.</p>
+
+      <p><strong>Import price benchmarks (Value per Unit)</strong></p>
+      <p>GACC publishes the total import value (USD) and total import volume (tonnes) for each fuel each month. Dividing value by volume yields an implied average unit price, sometimes called Value per Unit (VpU). The prices underlying this figure come from customs declarations: the invoices submitted to Chinese customs at the point of import. The VpU is therefore best understood as the declared customs price, averaged across all deliveries in a given month.</p>
+      <p>The benchmark prices shown alongside (Brent, Dubai, Australian coal, LNG Japan) are index prices: they represent spot market quotes, not the prices at which physical cargoes change hands. Most Chinese fuel imports are settled under long-term contracts, often oil-indexed or politically negotiated. The comparison between VpU and benchmarks is therefore only indicative. It shows whether Chinese import prices move broadly in line with world market levels, but it cannot establish whether China paid a premium or a discount on any specific purchase.</p>
+      <p>To compare GACC VpU against market benchmarks, unit conversions are required:</p>
+      <table class="method-table">
+        <thead><tr><th>Fuel</th><th>GACC unit</th><th>Benchmark unit</th><th>Conversion</th></tr></thead>
+        <tbody>
+          <tr><td>Coal</td><td>USD / t</td><td>USD / t</td><td>Direct</td></tr>
+          <tr><td>Crude oil</td><td>USD / t</td><td>USD / bbl</td><td>÷ 7.33 (<a href="https://www.iea.org/data-and-statistics/data-tools/unit-converter" target="_blank" rel="noopener">IEA standard</a>)</td></tr>
+          <tr><td>Natural gas</td><td>USD / t</td><td>USD / MMBtu</td><td>÷ 52 (LNG rule of thumb; <a href="https://giignl.org/" target="_blank" rel="noopener">GIIGNL</a> range: 43–49 MMBtu/t)</td></tr>
+        </tbody>
+      </table>
+      <p>Benchmark prices come from the <a href="https://www.worldbank.org/en/research/commodity-markets" target="_blank" rel="noopener">World Bank</a> Pink Sheet: Brent crude, Dubai crude, Australian coal (Newcastle), and LNG Japan (a proxy for the Japan-Korea Marker).</p>
+      <p><strong>Iran note:</strong> Iranian crude oil does not appear in GACC data. It is reported under third-country names (Malaysia, UAE, Oman). This is a structural data gap that cannot be corrected from public sources.</p>
+
+      <p><strong>Country-of-origin data: ComTrade vs. GACC</strong></p>
+      <p><a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a> provides granular import flows by country of origin from 2020 to 2024 but publishes with an 18–20 month lag. GACC publishes similar country-level data with roughly a six-week lag but does not include volume data (tonnes) in its public downloads. The dashboard merges both sources: ComTrade data takes priority where available; GACC fills the gap from January 2025 onwards. Value charts run continuously; volume charts cover the ComTrade period only (2020–2024).</p>
+
+      <p><strong>January and February reporting (NBS / GACC)</strong></p>
+      <p>NBS and GACC never publish January data in isolation. The two months are always combined and released together as a January–February figure. From 2026 onwards, the dashboard separates January and February for GACC import data by subtracting the standalone February value from the combined total. Year-on-year fields for both months are left empty because comparable monthly breakdowns for 2025 are not available.</p>
+
+      <p><strong>Capacity additions (CREA)</strong></p>
+      <p><a href="https://energyandcleanair.org/" target="_blank" rel="noopener">CREA</a> publishes capacity addition data with a two-month delay. The figures shown for a given month therefore reflect what was actually built two months earlier. Where the chart label reads "January to June 2026," the underlying data runs from November 2025 to April 2026.</p>
+
     </div>
 
   </main>
