@@ -490,6 +490,36 @@
       </div>
     </div>
 
+    <p class="section-label-h1">Import Price Benchmarks</p>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">GACC Value per Unit — All Fuels</div>
+        <div class="chart-subtitle">USD/t · Coal · Crude Oil · Gas</div>
+        <canvas id="bench-vpu-all"></canvas>
+        <p class="chart-source">Source: GACC</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Crude Oil — GACC vs. Benchmarks</div>
+        <div class="chart-subtitle">USD/bbl · GACC VpU ÷ 7.33 · Brent · Dubai</div>
+        <canvas id="bench-crude"></canvas>
+        <p class="chart-source">Sources: GACC, World Bank Pink Sheet</p>
+      </div>
+    </div>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">Gas — GACC vs. LNG Japan</div>
+        <div class="chart-subtitle">USD/MMBtu · GACC VpU ÷ 52 · LNG Japan</div>
+        <canvas id="bench-gas"></canvas>
+        <p class="chart-source">Sources: GACC, World Bank Pink Sheet</p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Coal — GACC vs. Australian Benchmark</div>
+        <div class="chart-subtitle">USD/t · GACC VpU · Coal Australia</div>
+        <canvas id="bench-coal"></canvas>
+        <p class="chart-source">Sources: GACC, World Bank Pink Sheet</p>
+      </div>
+    </div>
+
   </main>
 
   <footer>
@@ -640,11 +670,13 @@
       fetchCSV('data/combined/combined_lng.csv'),
       fetchCSV('data/combined/combined_pipeline_gas.csv'),
       fetchCSV('data/combined/energy_balance.csv'),
-    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb]) => {
+      fetchCSV('data/reference/wb_reference_prices.csv'),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb]) => {
       buildDashboard(ep, cap, ec, fs, gc);
       buildSupplySection(fs, gc, eb);
       buildGenerationDetail(ep, ec);
       buildImportsSection(coal, crudeoil, lng, pipe);
+      buildBenchmarkSection(gc, wb);
     }).catch(err => {
       console.error('Data load failed:', err);
       document.getElementById('header-period').textContent = 'data error';
@@ -1706,6 +1738,88 @@
       buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country');
 
     } /* end buildImportsSection */
+
+    /* ══════════════════════════════════════════
+       IMPORT PRICE BENCHMARKS
+    ══════════════════════════════════════════ */
+    function buildBenchmarkSection(gc, wb) {
+      /* Align on shared periods (GACC drives, WB fills) */
+      const wbMap = {};
+      wb.forEach(r => { wbMap[r.period] = r; });
+
+      const rows = gc.filter(r =>
+        r.coal_usd_per_mt && r.crude_oil_usd_per_mt && r.gas_usd_per_mt
+      );
+      if (!rows.length) return;
+
+      const labels   = rows.map(r => periodToShort(r.period));
+
+      /* ── GACC VpU series (USD/t, raw) ── */
+      const vpuCoal  = rows.map(r => +r.coal_usd_per_mt);
+      const vpuCrude = rows.map(r => +r.crude_oil_usd_per_mt);
+      const vpuGas   = rows.map(r => +r.gas_usd_per_mt);
+
+      /* ── Converted GACC series ── */
+      const vpuCrudeBbl = rows.map(r => +( +r.crude_oil_usd_per_mt / 7.33 ).toFixed(2));
+      const vpuGasMmbtu = rows.map(r => +( +r.gas_usd_per_mt       / 52   ).toFixed(2));
+
+      /* ── WB benchmark series (aligned to GACC periods) ── */
+      const wbBrent  = rows.map(r => wbMap[r.period] ? +wbMap[r.period].brent_usd_bbl    || null : null);
+      const wbDubai  = rows.map(r => wbMap[r.period] ? +wbMap[r.period].dubai_usd_bbl    || null : null);
+      const wbCoalAu = rows.map(r => wbMap[r.period] ? +wbMap[r.period].coal_au_usd_mt   || null : null);
+      const wbLngJp  = rows.map(r => wbMap[r.period] ? +wbMap[r.period].lng_japan_usd_mmbtu || null : null);
+
+      const lineOpts = (yLabel) => ({
+        responsive: true,
+        plugins: { legend: { labels: { color: '#c8c0e8', boxWidth: 12 } } },
+        scales: {
+          x: { ticks: { color: '#8a84aa', maxRotation: 45 }, grid: { color: '#1e1a36' } },
+          y: { ticks: { color: '#8a84aa' }, grid: { color: '#1e1a36' },
+               title: { display: true, text: yLabel, color: '#8a84aa', font: { size: 11 } } }
+        }
+      });
+
+      const mkLine = (id, datasets, yLabel) => new Chart(
+        document.getElementById(id).getContext('2d'),
+        { type: 'line', data: { labels, datasets }, options: lineOpts(yLabel) }
+      );
+
+      const ds = (label, data, color, dash) => ({
+        label, data, borderColor: color,
+        backgroundColor: color + '22',
+        borderWidth: 2,
+        borderDash: dash || [],
+        pointRadius: 3, pointHoverRadius: 5,
+        tension: 0.3, fill: false
+      });
+
+      /* Chart 1 — all three VpU in USD/t */
+      mkLine('bench-vpu-all', [
+        ds('Coal (USD/t)',      vpuCoal,  RED),
+        ds('Crude Oil (USD/t)', vpuCrude, ORANGE),
+        ds('Gas (USD/t)',       vpuGas,   TEAL),
+      ], 'USD / t');
+
+      /* Chart 2 — Crude Oil vs Brent / Dubai */
+      mkLine('bench-crude', [
+        ds('GACC VpU (÷7.33)', vpuCrudeBbl, ORANGE),
+        ds('Brent',            wbBrent,     GOLD,  [4, 3]),
+        ds('Dubai',            wbDubai,     TEAL,  [4, 3]),
+      ], 'USD / bbl');
+
+      /* Chart 3 — Gas vs LNG Japan */
+      mkLine('bench-gas', [
+        ds('GACC VpU (÷52)',  vpuGasMmbtu, TEAL),
+        ds('LNG Japan',       wbLngJp,     ORANGE, [4, 3]),
+      ], 'USD / MMBtu');
+
+      /* Chart 4 — Coal vs Australian Coal */
+      mkLine('bench-coal', [
+        ds('GACC VpU',         vpuCoal,  RED),
+        ds('Coal Australia',   wbCoalAu, ORANGE, [4, 3]),
+      ], 'USD / t');
+
+    } /* end buildBenchmarkSection */
 
   </script>
 
