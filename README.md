@@ -48,6 +48,8 @@ Alle Texte, KPI-Werte, Chart-Titel und Summary-Absätze werden aus den geholten 
 | 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh gestapelt, Share gestapelt, Kohle Dual-Achse, Kapazitätsfaktor Wind + Solar, CO₂-Intensität, Hydro Saisonal (6 Jahrgänge) |
 | 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 Übersichts-Charts + 4 × 2 Länder-Charts in der Reihenfolge Crude Oil → LNG → Coal → Pipeline Gas |
 | 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 Charts (2×2): GACC VpU alle Träger (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
+| 8 | About | — | Spendenaufruf (Stripe), Projektbeschreibung, Datenquellen-Übersicht, Raw-Data-Request (mailto), Feedback-Link |
+| 9 | Methodology | — | Quelltabelle mit Links, TWh-Umrechnungsfaktoren, VpU-Erklärung (GACC-Zollrechnung vs. Spot-Benchmarks), Gas BCM-Konversion, ComTrade/GACC-Merge-Logik, Jan/Feb-Reporting, CREA-Verzögerung |
 
 ### Daten aktualisieren
 
