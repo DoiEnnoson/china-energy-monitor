@@ -137,6 +137,13 @@
     .footer-nav a:hover { color: var(--teal); }
     .footer-credit { font-size: 0.75rem; color: var(--text2); }
     .footer-credit a { color: var(--teal); }
+    .site-nav {
+      display: flex; flex-wrap: wrap; gap: 0.25rem 1.8rem;
+      padding: 0.7rem 0; border-bottom: 1px solid var(--border);
+      font-size: 0.78rem;
+    }
+    .site-nav a { color: var(--text2); text-decoration: none; }
+    .site-nav a:hover { color: var(--teal); }
 
     @media (max-width: 900px) {
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -183,6 +190,16 @@
       <div class="period" id="header-period">Loading…</div>
     </div>
   </header>
+
+  <nav class="site-nav">
+    <a href="#capacity">Capacity Added</a>
+    <a href="#total-energy">Total Energy System</a>
+    <a href="#power-generation">Power Generation</a>
+    <a href="#imports">Fossil Fuel Imports</a>
+    <a href="#benchmarks">Import Price Benchmarks</a>
+    <a href="#about">About</a>
+    <a href="#methodology">Methodology</a>
+  </nav>
 
   <main>
 
@@ -329,7 +346,7 @@
       <p class="chart-source">Source: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a></p>
     </div>
 
-    <p class="section-label-h1">Total Energy System</p>
+    <p class="section-label-h1" id="total-energy">Total Energy System</p>
 
     <div class="kpi-grid" style="grid-template-columns: repeat(2, 1fr);">
       <div class="kpi-box">
@@ -382,7 +399,7 @@
       <p class="chart-source">Sources: NBS (production), GACC (imports)</p>
     </div>
 
-    <p class="section-label-h1">Power Generation — Source Breakdown</p>
+    <p class="section-label-h1" id="power-generation">Power Generation — Source Breakdown</p>
 
     <div class="chart-box full">
       <div class="chart-title">Monthly Generation by Source</div>
@@ -428,7 +445,7 @@
       </div>
     </div>
 
-    <p class="section-label-h1">Fossil Fuel Imports</p>
+    <p class="section-label-h1" id="imports">Fossil Fuel Imports</p>
 
     <div class="chart-box full">
       <div class="chart-title">Total Imports by Quantity — Coal · Crude Oil · Gas</div>
@@ -508,7 +525,7 @@
       </div>
     </div>
 
-    <p class="section-label-h1">Import Price Benchmarks</p>
+    <p class="section-label-h1" id="benchmarks">Import Price Benchmarks</p>
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">GACC Value per Unit — All Fuels</div>
