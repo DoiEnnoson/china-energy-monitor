@@ -465,6 +465,20 @@
       </div>
     </div>
 
+    <p class="section-label">Coal Fleet — Capacity and Utilisation</p>
+    <div class="chart-box full">
+      <div class="chart-title">Coal Capacity Added and Retired</div>
+      <div class="chart-subtitle">GW · Additions above zero · Retirements below zero · Line: total operating capacity (right axis)</div>
+      <canvas id="coal-fleet-diverge" height="110"></canvas>
+      <p class="chart-source">Source: <a href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/" target="_blank" rel="noopener">Global Energy Monitor</a>, Global Coal Plant Tracker July 2026</p>
+    </div>
+    <div class="chart-box full">
+      <div class="chart-title">Coal Fleet Capacity Factor</div>
+      <div class="chart-subtitle">Actual generation ÷ theoretical maximum at full load · percent · monthly · 2016 – present</div>
+      <canvas id="coal-cf-monthly" height="80"></canvas>
+      <p class="chart-source">Sources: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a> (generation), <a href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/" target="_blank" rel="noopener">Global Energy Monitor</a> (installed capacity)</p>
+    </div>
+
     <p class="section-label-h1" id="imports">Fossil Fuel Imports</p>
 
     <div class="chart-box full">
@@ -796,10 +810,12 @@
       fetchCSV('data/combined/combined_pipeline_gas.csv'),
       fetchCSV('data/combined/energy_balance.csv'),
       fetchCSV('data/reference/wb_reference_prices.csv'),
-    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb]) => {
+      fetchCSV('data/power/gem_coal_capacity.csv'),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal]) => {
       buildDashboard(ep, cap, ec, fs, gc);
       buildSupplySection(fs, gc, eb);
       buildGenerationDetail(ep, ec);
+      buildCoalFleetSection(gemCoal, ep);
       buildImportsSection(coal, crudeoil, lng, pipe);
       buildBenchmarkSection(gc, wb);
     }).catch(err => {
@@ -1726,6 +1742,155 @@
       });
 
     } /* end buildGenerationDetail */
+
+    /* ══════════════════════════════════════════
+       COAL FLEET SECTION
+    ══════════════════════════════════════════ */
+    function buildCoalFleetSection(gemCoal, ep) {
+      const teal      = getComputedStyle(document.documentElement).getPropertyValue('--teal').trim();
+      const red       = getComputedStyle(document.documentElement).getPropertyValue('--red').trim();
+      const orange    = getComputedStyle(document.documentElement).getPropertyValue('--orange').trim();
+      const text2     = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim();
+      const border    = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+
+      // ── Chart 1: diverging bars + operating line ──────────────────────
+      const years      = gemCoal.map(r => r.year);
+      const addedGw    = gemCoal.map(r => parseFloat(r.added_gw));
+      const retiredGw  = gemCoal.map(r => -parseFloat(r.retired_gw));
+      const opGw       = gemCoal.map(r => parseFloat(r.operating_gw));
+
+      new Chart(document.getElementById('coal-fleet-diverge'), {
+        data: {
+          labels: years,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Capacity Added',
+              data: addedGw,
+              backgroundColor: teal + 'b3',
+              borderColor: teal,
+              borderWidth: 1,
+              yAxisID: 'yBar',
+              order: 2,
+            },
+            {
+              type: 'bar',
+              label: 'Retirements',
+              data: retiredGw,
+              backgroundColor: red + 'b3',
+              borderColor: red,
+              borderWidth: 1,
+              yAxisID: 'yBar',
+              order: 2,
+            },
+            {
+              type: 'line',
+              label: 'Operating Capacity',
+              data: opGw,
+              borderColor: orange,
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              pointRadius: 2,
+              yAxisID: 'yLine',
+              order: 1,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { labels: { color: text2, font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const v = ctx.raw;
+                  if (ctx.datasetIndex === 1) return ` Retirements: ${Math.abs(v).toFixed(2)} GW`;
+                  if (ctx.datasetIndex === 2) return ` Operating: ${v.toFixed(1)} GW`;
+                  return ` Added: ${v.toFixed(2)} GW`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { ticks: { color: text2 }, grid: { color: border } },
+            yBar: {
+              position: 'left',
+              ticks: { color: text2, callback: v => v + ' GW' },
+              grid: { color: border },
+              title: { display: true, text: 'GW added / retired', color: text2, font: { size: 10 } },
+            },
+            yLine: {
+              position: 'right',
+              ticks: { color: orange, callback: v => v + ' GW' },
+              grid: { drawOnChartArea: false },
+              title: { display: true, text: 'Operating GW', color: orange, font: { size: 10 } },
+            },
+          }
+        }
+      });
+
+      // ── Chart 2: monthly capacity factor ─────────────────────────────
+      // Build GEM year → operating_gw lookup
+      const gemByYear = {};
+      gemCoal.forEach(r => { gemByYear[parseInt(r.year)] = parseFloat(r.operating_gw); });
+
+      function daysInMonth(yyyymm) {
+        const y = Math.floor(yyyymm / 100);
+        const m = yyyymm % 100;
+        return new Date(y, m, 0).getDate();
+      }
+
+      const cfLabels = [];
+      const cfData   = [];
+
+      ep.forEach(r => {
+        const period = parseInt(r.period);
+        const year   = Math.floor(period / 100);
+        if (year < 2016) return;
+        const coalTwh = parseFloat(r.coal_twh);
+        if (isNaN(coalTwh)) return;
+        const opGwYear = gemByYear[year];
+        if (!opGwYear) return;
+        const hours = daysInMonth(period) * 24;
+        const maxTwh = opGwYear * hours / 1000;
+        const cf = (coalTwh / maxTwh) * 100;
+        cfLabels.push(String(period).slice(0,4) + '-' + String(period).slice(4));
+        cfData.push(parseFloat(cf.toFixed(1)));
+      });
+
+      new Chart(document.getElementById('coal-cf-monthly'), {
+        type: 'line',
+        data: {
+          labels: cfLabels,
+          datasets: [{
+            label: 'Coal Capacity Factor',
+            data: cfData,
+            borderColor: orange,
+            backgroundColor: orange + '26',
+            fill: true,
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.3,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { labels: { color: text2, font: { size: 11 } } },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.raw.toFixed(1)} %` } }
+          },
+          scales: {
+            x: { ticks: { color: text2, maxTicksLimit: 24 }, grid: { color: border } },
+            y: {
+              ticks: { color: text2, callback: v => v + ' %' },
+              grid: { color: border },
+              min: 0,
+            }
+          }
+        }
+      });
+    }
 
     /* ══════════════════════════════════════════
        FOSSIL FUEL IMPORTS SECTION
