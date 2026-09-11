@@ -1,6 +1,6 @@
 # china-energy-monitor
 
-Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung — und das öffentliche Dashboard, das darauf aufbaut. Fünf Datenquellen, elf Tabellen, vier automatisierte Update-Zyklen.
+Monthly data on China's energy imports, domestic production, and power generation — and the public dashboard built on top of it. Five data sources, eleven tables, four automated update cycles.
 
 Live: **[china-energy-monitor.com](https://china-energy-monitor.com)**
 
@@ -8,18 +8,19 @@ Live: **[china-energy-monitor.com](https://china-energy-monitor.com)**
 
 ## Frontend / Dashboard
 
-Das Dashboard läuft als statische GitHub-Pages-Site aus dem Ordner `docs/`. Es gibt keine Build-Pipeline und keinen Server: Der Browser lädt `docs/index.html` und holt alle Chart-Daten zur Laufzeit per JavaScript `fetch()` direkt aus den CSVs dieses Repos.
+The dashboard runs as a static GitHub Pages site from the `docs/` folder. There is no build pipeline and no server: the browser loads `docs/index.html` and fetches all chart data at runtime via JavaScript `fetch()` directly from the CSVs in this repo.
 
-### Technischer Aufbau
+### Technical setup
 
-| Komponente | Details |
+| Component | Details |
 |---|---|
-| Rendering | Statisches HTML, kein Framework |
+| Rendering | Static HTML, no framework |
 | Charts | Chart.js 4.4.4 (CDN) |
-| Datenzugriff | `fetch()` gegen `raw.githubusercontent.com` — kein Backend nötig |
-| Deployment | GitHub Pages aus `docs/`; Domain via `docs/CNAME` |
+| Data access | `fetch()` against `raw.githubusercontent.com` — no backend required |
+| Deployment | GitHub Pages from `docs/`; custom domain via `docs/CNAME` |
+| Analytics | GoatCounter (privacy-friendly, no cookies) |
 
-Beim Seitenaufruf werden elf CSVs parallel geladen:
+On page load, eleven CSVs are fetched in parallel:
 
 ```
 data/power/ember_power.csv
@@ -35,438 +36,438 @@ data/combined/energy_balance.csv
 data/reference/wb_reference_prices.csv
 ```
 
-Alle Texte, KPI-Werte, Chart-Titel und Summary-Absätze werden aus den geholten Daten generiert — keine hardcodierten Zahlen oder Datumsangaben im HTML.
+All text, KPI values, chart titles, and summary paragraphs are generated from the fetched data. No hardcoded numbers or dates in the HTML.
 
-### Aktuelle Sektionen
+### Sections
 
-| Nr. | Sektion | Datenquelle | Charts / Inhalt |
+| # | Section | Data source | Content |
 |---|---|---|---|
-| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions | 4 KPI-Karten |
-| 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamischer Fließtext; Fossil Supply (Butterfly + YoY); Power Generation Mix (gestapeltes Flächendiagramm); Electricity Demand vs. Generation (Liniendiagramm) |
-| 3 | Capacity Added | capacity_additions, ember_capacity | 2 Balken (YTD + Monat), 4 Donuts, Fließtext, Installed Capacity Growth (Liniendiagramm Wind + Solar) |
-| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI-Karten (Monat + YTD), 2 Träger-Balken, YTD-Butterfly + YoY-Balken, Import-Dependency Liniendiagramm |
-| 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh gestapelt, Share gestapelt, Kohle Dual-Achse, Kapazitätsfaktor Wind + Solar, CO₂-Intensität, Hydro Saisonal (6 Jahrgänge) |
-| 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 Übersichts-Charts + 4 × 2 Länder-Charts in der Reihenfolge Crude Oil → LNG → Coal → Pipeline Gas |
-| 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 Charts (2×2): GACC VpU alle Träger (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
-| 8 | About | — | Spendenaufruf (Stripe), Projektbeschreibung, Datenquellen-Übersicht, Raw-Data-Request (mailto), Feedback-Link |
-| 9 | Methodology | — | Quelltabelle mit Links, TWh-Umrechnungsfaktoren, VpU-Erklärung (GACC-Zollrechnung vs. Spot-Benchmarks), Gas BCM-Konversion, ComTrade/GACC-Merge-Logik, Jan/Feb-Reporting, CREA-Verzögerung |
+| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions | 4 KPI cards |
+| 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Fossil Supply (Butterfly + YoY); Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
+| 3 | Capacity Added | capacity_additions, ember_capacity | 2 bar charts (YTD + monthly), 4 donuts, prose, Installed Capacity Growth (Wind + Solar line chart) |
+| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, YTD butterfly + YoY bars, Import Dependency line chart |
+| 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh stacked, share stacked, Coal dual-axis, Wind + Solar capacity factor, CO₂ intensity, Hydro seasonal (6 vintages) |
+| 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 overview charts + 4 × 2 country-of-origin charts: Crude Oil → LNG → Coal → Pipeline Gas |
+| 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 charts (2×2): GACC VpU all fuels (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
+| 8 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
+| 9 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation (GACC customs price vs. spot benchmarks), gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay |
 
-### Daten aktualisieren
+### Updating data
 
-Sobald ein neuer Monat in einen der neun CSVs gepusht wird, zeigt das Dashboard beim nächsten Seitenaufruf automatisch die aktuellen Zahlen. Kein Deployment, kein HTML-Edit nötig.
+Once a new month is pushed to any of the eleven CSVs, the dashboard automatically shows the updated numbers on the next page load. No deployment or HTML edit required.
 
 ---
 
-## Datenquellen und Abdeckung
+## Data sources and coverage
 
-| Quelle | Inhalt | Zeitraum | Update |
+| Source | Content | Period | Update |
 |---|---|---|---|
-| [UN ComTrade](https://comtradeplus.un.org/) API | Fossile Brennstoffimporte nach Lieferland | 2020–laufend | monatlich automatisch (15.) |
-| GACC / NBS via Vault | Importmengen + -werte (GACC), Inlandsproduktion (NBS) | Mai 2026–laufend | manuell nach jedem Energiebilanz-RECH |
-| Ember API | Stromerzeugung nach Quelle, Nachfrage, CO₂-Intensität, installierte Wind-/Solarleistung | 2015–laufend | monatlich automatisch (17.–31.) |
-| CREA Monthly Energy & Air Quality Snapshot | Kapazitätszubau nach Energieträger (Kohle, Gas, Kernkraft, Wasserkraft, Wind, Solar) | Mai 2026–laufend | manuell via machine_data-Block; N-2-Verzögerung |
-| [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet | Rohstoff-Benchmarks: Brent, Dubai, Coal AU, LNG Japan | Jan 2026–laufend | monatlich automatisch (15.) |
+| [UN ComTrade](https://comtradeplus.un.org/) API | Fossil fuel imports by country of origin | 2020–ongoing | Monthly automated (15th) |
+| GACC / NBS via Vault | Import volumes + values (GACC), domestic production (NBS) | May 2026–ongoing | Manual after each energy balance report |
+| Ember API | Power generation by source, demand, CO₂ intensity, installed wind/solar capacity | 2015–ongoing | Monthly automated (17th–31st) |
+| CREA Monthly Energy & Air Quality Snapshot | Capacity additions by source (coal, gas, nuclear, hydro, wind, solar) | May 2026–ongoing | Manual via machine_data block; N-2 delay |
+| [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet | Commodity benchmarks: Brent, Dubai, Coal AU, LNG Japan | Jan 2026–ongoing | Monthly automated (15th) |
 
-**ComTrade** liefert granulare Herkunftsland-Daten für Kohle, Rohöl, LNG und Pipelinegas — historisch ab 2020, laufend für 2025 automatisiert per GitHub Actions.
+**ComTrade** provides granular country-of-origin data for coal, crude oil, LNG, and pipeline gas — historical from 2020, automated for 2025 via GitHub Actions.
 
-**GACC/NBS** liefert die offiziellen chinesischen Monatszahlen (Generalzollverwaltung für Importe, Nationales Statistikamt für Inlandsproduktion). Diese Daten kommen nicht über eine API, sondern werden aus den monatlichen Energiebilanz-Rechercheberichten (RECH-Dateien im lokalen Vault) extrahiert.
+**GACC/NBS** provides the official Chinese monthly figures (General Administration of Customs for imports, National Bureau of Statistics for domestic production). These data are not available via API; they are extracted from monthly energy balance research reports (RECH files in the local vault).
 
-**CREA** (Centre for Research on Energy and Clean Air) veröffentlicht monatliche Snapshots zu Chinas Energiesystem und Luftqualität. Der Kapazitätszubau-Abschnitt liefert Daten zu neu installierter Leistung nach Energieträger (in GW) mit einer Verzögerung von zwei Monaten: Für den Berichtsmonat N enthält der Snapshot Daten für N-2. Die Zahlen werden manuell aus dem PDF extrahiert und über den machine_data-Block im RECH-Dokument in `data/power/capacity_additions.csv` gespeichert.
+**CREA** (Centre for Research on Energy and Clean Air) publishes monthly snapshots of China's energy system and air quality. Capacity addition data covers newly installed capacity by source (GW) with a two-month delay: for reporting month N, the current CREA snapshot contains data for N-2. Values are extracted manually from the PDF and written to `data/power/capacity_additions.csv` via the machine_data block in the RECH document.
 
-**Ember** liefert monatliche Stromdaten für China ab 2015: Erzeugung nach Energieträger (TWh und Anteil), Gesamtnachfrage, CO₂-Intensität sowie installierte Leistung für Wind (onshore/offshore) und Solar. Neue Monatsdaten erscheinen typischerweise mit ca. 7 Wochen Verzögerung (Augustdaten ca. 20. September). Der Update-Workflow prüft ab dem 17. jeden Monats täglich auf neue Daten und deaktiviert sich nach dem ersten erfolgreichen Update automatisch.
+**Ember** provides monthly electricity data for China from 2015: generation by source (TWh and share), total demand, CO₂ intensity, and installed capacity for wind (onshore/offshore) and solar. New monthly data typically appear with a ~7-week delay (August data around 20 September). The update workflow checks for new data daily from the 17th of each month and self-deactivates after the first successful update.
 
 ---
 
-## Repo-Struktur
+## Repo structure
 
 ```
 data/
   fuel-imports/
-    comtrade_coal.csv           — Kohleimporte nach Lieferland (ComTrade, 2020–)
-    comtrade_crude_oil.csv      — Rohölimporte nach Lieferland (ComTrade, 2020–)
-    comtrade_lng.csv            — LNG-Importe nach Lieferland (ComTrade, 2020–)
-    comtrade_pipeline_gas.csv   — Pipelinegas-Importe nach Lieferland (ComTrade, 2020–)
-    gacc_imports.csv            — Gesamtimporte Kohle/Rohöl/Gas (GACC, Mai 2026–)
-    gacc_coal.csv               — Kohleimporte nach Lieferland (GACC, Jan 2025–)
-    gacc_crude_oil.csv          — Rohölimporte nach Lieferland (GACC, Jan 2025–)
-    gacc_lng.csv                — LNG-Importe nach Lieferland (GACC, Jan 2025–)
-    gacc_pipeline_gas.csv       — Pipelinegas-Importe nach Lieferland (GACC, Jan 2025–)
+    comtrade_coal.csv           — Coal imports by country of origin (ComTrade, 2020–)
+    comtrade_crude_oil.csv      — Crude oil imports by country of origin (ComTrade, 2020–)
+    comtrade_lng.csv            — LNG imports by country of origin (ComTrade, 2020–)
+    comtrade_pipeline_gas.csv   — Pipeline gas imports by country of origin (ComTrade, 2020–)
+    gacc_imports.csv            — Total imports coal/crude oil/gas (GACC, May 2026–)
+    gacc_coal.csv               — Coal imports by country of origin (GACC, Jan 2025–)
+    gacc_crude_oil.csv          — Crude oil imports by country of origin (GACC, Jan 2025–)
+    gacc_lng.csv                — LNG imports by country of origin (GACC, Jan 2025–)
+    gacc_pipeline_gas.csv       — Pipeline gas imports by country of origin (GACC, Jan 2025–)
   production/
-    nbs_production.csv          — Inlandsproduktion Kohle/Rohöl/Gas (NBS, Mai 2026–)
+    nbs_production.csv          — Domestic production coal/crude oil/gas (NBS, May 2026–)
   power/
-    ember_power.csv             — Stromerzeugung, -nachfrage, CO₂-Intensität (Ember, 2015–)
-    ember_capacity.csv          — Installierte Wind-/Solarleistung (Ember, 2015–)
-    capacity_additions.csv      — Kapazitätszubau nach Träger in GW (CREA, N-2; Mai 2026–)
+    ember_power.csv             — Power generation, demand, CO₂ intensity (Ember, 2015–)
+    ember_capacity.csv          — Installed wind/solar capacity (Ember, 2015–)
+    capacity_additions.csv      — Monthly capacity additions by source in GW (CREA, N-2; May 2026–)
   combined/
-    fossil_supply.csv           — Import + Inlandsproduktion fossil (Mai 2026–); auto-rebuild
-    energy_balance.csv          — Gesamtenergiesystem in TWh: fossil + sauber, YoY, YTD (Mai 2026–)
-    combined_coal.csv           — Kohleimporte nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
-    combined_crude_oil.csv      — Rohölimporte nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
-    combined_lng.csv            — LNG-Importe nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
-    combined_pipeline_gas.csv   — Pipelinegas-Importe nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
+    fossil_supply.csv           — Import + domestic production fossil (May 2026–); auto-rebuild
+    energy_balance.csv          — Total energy system in TWh: fossil + clean, YoY, YTD (May 2026–); auto-rebuild
+    combined_coal.csv           — Coal imports by country, ComTrade+GACC (Jan 2020–); auto-rebuild
+    combined_crude_oil.csv      — Crude oil imports by country, ComTrade+GACC (Jan 2020–); auto-rebuild
+    combined_lng.csv            — LNG imports by country, ComTrade+GACC (Jan 2020–); auto-rebuild
+    combined_pipeline_gas.csv   — Pipeline gas imports by country, ComTrade+GACC (Jan 2020–); auto-rebuild
   reference/
-    wb_reference_prices.csv     — Monatliche Rohstoff-Benchmarks (World Bank Pink Sheet): Brent, Dubai, Coal AU, LNG Japan (Jan 2026–); auto-rebuild am 15.
+    wb_reference_prices.csv     — Monthly commodity benchmarks (World Bank Pink Sheet): Brent, Dubai, Coal AU, LNG Japan (Jan 2026–); auto-rebuild on 15th
 
 scripts/
-  fetch_history.py              — Einmalig: lädt ComTrade-Historie 2020–2024
-  fetch_comtrade.py             — Monatlich: aktualisiert ComTrade-Daten für 2025
-  rech_to_github.py             — Einzeln: extrahiert machine_data aus einer RECH-Datei
-  backfill_to_github.py         — Einmalig/lokal: verarbeitet alle annotierten RECH-Dateien
-  fetch_ember_history.py        — Einmalig: lädt Ember-Stromhistorie ab 2015
-  fetch_ember_monthly.py        — Monatlich: prüft auf neue Ember-Daten und aktualisiert CSVs
-  build_supply.py               — Auto: kombiniert GACC-Importe + NBS-Produktion zu fossil_supply.csv
-  build_energy_balance.py       — Auto: konvertiert alles nach TWh, addiert saubere Stromerzeugung
-  build_combined.py             — Auto: merged ComTrade + GACC Lieferland-CSVs zu combined_*.csv
-  fetch_wb_reference_prices.py  — Monatlich: scrapt Pink Sheet URL, parsed Excel, schreibt wb_reference_prices.csv
+  fetch_history.py              — One-time: loads ComTrade history 2020–2024
+  fetch_comtrade.py             — Monthly: updates ComTrade data for 2025
+  rech_to_github.py             — Single file: extracts machine_data from one RECH file
+  backfill_to_github.py         — One-time/local: processes all annotated RECH files
+  fetch_ember_history.py        — One-time: loads Ember power history from 2015
+  fetch_ember_monthly.py        — Monthly: checks for new Ember data and updates CSVs
+  build_supply.py               — Auto: combines GACC imports + NBS production into fossil_supply.csv
+  build_energy_balance.py       — Auto: converts everything to TWh, adds clean power generation
+  build_combined.py             — Auto: merges ComTrade + GACC country-of-origin CSVs into combined_*.csv
+  fetch_wb_reference_prices.py  — Monthly: scrapes Pink Sheet URL, parses Excel, writes wb_reference_prices.csv
 
 .github/workflows/
-  monthly_update.yml                    — Cron: 15. jeden Monats, 06:00 UTC (ComTrade)
-  fetch_history.yml                     — workflow_dispatch, einmalig (ComTrade)
-  fetch_ember_history.yml               — workflow_dispatch, einmalig (Ember)
-  monthly_ember_update.yml              — Cron: 17.–31. jeden Monats, 06:00 UTC; deaktiviert sich nach Update
-  monthly_ember_reenable.yml            — Cron: 1. jeden Monats, 05:00 UTC; reaktiviert Update-Workflow
-  build_supply.yml                      — Push-Trigger: rebuild fossil_supply.csv + energy_balance.csv wenn GACC/NBS sich ändern; auch von monthly_ember_update.yml dispatcht
-  build_combined.yml                    — Push-Trigger: rebuild combined_*.csv wenn comtrade_*.csv oder gacc_*.csv sich ändern
-  fetch_wb_reference_prices.yml         — Cron: 15. jeden Monats, 06:00 UTC; scrapt World Bank Pink Sheet
-  fetch_wb_reference_prices_history.yml — workflow_dispatch, einmalig (Backfill ab Jan 2026)
+  monthly_update.yml                    — Cron: 15th of each month, 06:00 UTC (ComTrade)
+  fetch_history.yml                     — workflow_dispatch, one-time (ComTrade)
+  fetch_ember_history.yml               — workflow_dispatch, one-time (Ember)
+  monthly_ember_update.yml              — Cron: 17th–31st of each month, 06:00 UTC; self-deactivates after update
+  monthly_ember_reenable.yml            — Cron: 1st of each month, 05:00 UTC; re-enables update workflow
+  build_supply.yml                      — Push trigger: rebuilds fossil_supply.csv + energy_balance.csv when GACC/NBS changes; also dispatched by monthly_ember_update.yml
+  build_combined.yml                    — Push trigger: rebuilds combined_*.csv when comtrade_*.csv or gacc_*.csv changes
+  fetch_wb_reference_prices.yml         — Cron: 15th of each month, 06:00 UTC; scrapes World Bank Pink Sheet
+  fetch_wb_reference_prices_history.yml — workflow_dispatch, one-time (backfill from Jan 2026)
 ```
 
 ---
 
-## Dateiformat
+## File formats
 
 ### `data/fuel-imports/comtrade_*.csv`
 
-Eine Datei pro Energieträger. Jede Zeile ist ein Lieferland für einen Monat.
+One file per fuel. Each row is one country of origin for one month.
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| partner | Text | Lieferland ([UN ComTrade](https://comtradeplus.un.org/) Bezeichnung) |
-| value_usd_bn | Mrd. USD | Importwert |
-| qty_mt | Mio. t | Importmenge |
-| value_per_mt_usd | USD/t | Importwert je Tonne |
+| period | YYYYMM | Reporting month |
+| partner | Text | Country of origin ([UN ComTrade](https://comtradeplus.un.org/) name) |
+| value_usd_bn | USD bn | Import value |
+| qty_mt | Mt | Import volume |
+| value_per_mt_usd | USD/t | Import value per tonne |
 
-HS-Codes: Kohle = 2701, Rohöl = 2709, LNG = 271111, Pipelinegas = 271121.
+HS codes: Coal = 2701, Crude oil = 2709, LNG = 271111, Pipeline gas = 271121.
 
 ### `data/fuel-imports/gacc_imports.csv`
 
-Eine Zeile pro Monat. Gesamtimporte aller Lieferländer (GACC-Aggregat).
+One row per month. Total imports across all countries of origin (GACC aggregate).
 
-**Hinweis Januar/Februar (GACC):** GACC veröffentlicht Januar und Februar nie getrennt, sondern stets als kombinierten Zweimonatswert. Ab 2026 werden Jan und Feb dennoch als separate Zeilen geführt: Jan-only wird aus der Jan-Feb-Gesamtsumme abzüglich des separat ausgewiesenen Feb-Werts errechnet (Quelle: GACC XLS, Sheet "Jan-Feb", Spalten Gesamt minus Feb-alone). Die YoY-Felder beider Zeilen bleiben leer, da vergleichbare Monatseinzelwerte für 2025 nicht vorliegen.
+**January/February note (GACC):** GACC never publishes January and February separately; they are always combined into a single two-month figure. From 2026 onwards, January and February are stored as separate rows: the January-only value is derived by subtracting the standalone February figure from the combined Jan-Feb total (source: GACC XLS, sheet "Jan-Feb"). YoY fields for both rows are left empty because comparable monthly breakdowns for 2025 are not available.
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| coal_mt | Mio. t | Kohleeinfuhren (Menge) |
-| coal_mt_yoy_pct | Prozent | Veränderung Menge gegenüber Vorjahresmonat |
-| coal_usd_bn | Mrd. USD | Kohleeinfuhren (Wert) |
-| coal_usd_bn_yoy_pct | Prozent | Veränderung Wert gegenüber Vorjahresmonat |
-| coal_usd_per_mt | USD/t | Kohlepreis je Tonne |
-| crude_oil_mt | Mio. t | Rohöleinfuhren (Menge) |
-| crude_oil_mt_yoy_pct | Prozent | Veränderung Menge gegenüber Vorjahresmonat |
-| crude_oil_usd_bn | Mrd. USD | Rohöleinfuhren (Wert) |
-| crude_oil_usd_bn_yoy_pct | Prozent | Veränderung Wert gegenüber Vorjahresmonat |
-| crude_oil_usd_per_mt | USD/t | Rohölpreis je Tonne |
-| gas_mt | Mio. t | Gaseinfuhren LNG + Pipeline (Menge) |
-| gas_mt_yoy_pct | Prozent | Veränderung Menge gegenüber Vorjahresmonat |
-| gas_usd_bn | Mrd. USD | Gaseinfuhren (Wert) |
-| gas_usd_bn_yoy_pct | Prozent | Veränderung Wert gegenüber Vorjahresmonat |
-| gas_usd_per_mt | USD/t | Gaspreis je Tonne |
+| period | YYYYMM | Reporting month |
+| coal_mt | Mt | Coal imports (volume) |
+| coal_mt_yoy_pct | Pct | YoY change in volume |
+| coal_usd_bn | USD bn | Coal imports (value) |
+| coal_usd_bn_yoy_pct | Pct | YoY change in value |
+| coal_usd_per_mt | USD/t | Coal price per tonne |
+| crude_oil_mt | Mt | Crude oil imports (volume) |
+| crude_oil_mt_yoy_pct | Pct | YoY change in volume |
+| crude_oil_usd_bn | USD bn | Crude oil imports (value) |
+| crude_oil_usd_bn_yoy_pct | Pct | YoY change in value |
+| crude_oil_usd_per_mt | USD/t | Crude oil price per tonne |
+| gas_mt | Mt | Gas imports LNG + pipeline (volume) |
+| gas_mt_yoy_pct | Pct | YoY change in volume |
+| gas_usd_bn | USD bn | Gas imports (value) |
+| gas_usd_bn_yoy_pct | Pct | YoY change in value |
+| gas_usd_per_mt | USD/t | Gas price per tonne |
 
 ### `data/power/ember_power.csv`
 
-Eine Zeile pro Monat. Stromerzeugung nach Energieträger, Gesamtnachfrage und CO₂-Intensität für China.
+One row per month. Power generation by source, total demand, and CO₂ intensity for China.
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| demand_twh | TWh | Gesamtstromnachfrage |
-| coal_twh | TWh | Stromerzeugung aus Kohle |
-| coal_share_pct | Prozent | Anteil Kohle an Gesamterzeugung |
-| gas_twh | TWh | Stromerzeugung aus Gas |
-| gas_share_pct | Prozent | Anteil Gas |
-| nuclear_twh | TWh | Stromerzeugung aus Kernkraft |
-| nuclear_share_pct | Prozent | Anteil Kernkraft |
-| hydro_twh | TWh | Stromerzeugung aus Wasserkraft |
-| hydro_share_pct | Prozent | Anteil Wasserkraft |
-| wind_twh | TWh | Stromerzeugung aus Wind |
-| wind_share_pct | Prozent | Anteil Wind |
-| solar_twh | TWh | Stromerzeugung aus Solar |
-| solar_share_pct | Prozent | Anteil Solar |
-| bioenergy_twh | TWh | Stromerzeugung aus Bioenergie |
-| bioenergy_share_pct | Prozent | Anteil Bioenergie |
-| other_fossil_twh | TWh | Sonstige fossile Erzeugung |
-| other_fossil_share_pct | Prozent | Anteil sonstige Fossile |
-| net_imports_twh | TWh | Nettostromimporte |
-| net_imports_share_pct | Prozent | Anteil Nettoimporte |
-| fossil_twh | TWh | Summe fossil (Kohle + Gas + sonstige Fossile) |
-| fossil_share_pct | Prozent | Anteil fossil gesamt |
-| clean_twh | TWh | Summe sauber (Erneuerbare + Kernkraft) |
-| clean_share_pct | Prozent | Anteil sauber gesamt |
-| renewables_twh | TWh | Summe erneuerbar (Wasser + Wind + Solar + Bioenergie) |
-| renewables_share_pct | Prozent | Anteil erneuerbar gesamt |
-| carbon_intensity_gco2_kwh | gCO₂/kWh | CO₂-Intensität des Strommixes |
+| period | YYYYMM | Reporting month |
+| demand_twh | TWh | Total electricity demand |
+| coal_twh | TWh | Power generation from coal |
+| coal_share_pct | Pct | Coal share of total generation |
+| gas_twh | TWh | Power generation from gas |
+| gas_share_pct | Pct | Gas share |
+| nuclear_twh | TWh | Power generation from nuclear |
+| nuclear_share_pct | Pct | Nuclear share |
+| hydro_twh | TWh | Power generation from hydro |
+| hydro_share_pct | Pct | Hydro share |
+| wind_twh | TWh | Power generation from wind |
+| wind_share_pct | Pct | Wind share |
+| solar_twh | TWh | Power generation from solar |
+| solar_share_pct | Pct | Solar share |
+| bioenergy_twh | TWh | Power generation from bioenergy |
+| bioenergy_share_pct | Pct | Bioenergy share |
+| other_fossil_twh | TWh | Other fossil generation |
+| other_fossil_share_pct | Pct | Other fossil share |
+| net_imports_twh | TWh | Net electricity imports |
+| net_imports_share_pct | Pct | Net imports share |
+| fossil_twh | TWh | Total fossil (coal + gas + other fossil) |
+| fossil_share_pct | Pct | Total fossil share |
+| clean_twh | TWh | Total clean (renewables + nuclear) |
+| clean_share_pct | Pct | Total clean share |
+| renewables_twh | TWh | Total renewables (hydro + wind + solar + bioenergy) |
+| renewables_share_pct | Pct | Total renewables share |
+| carbon_intensity_gco2_kwh | gCO₂/kWh | Grid carbon intensity |
 
 ### `data/power/ember_capacity.csv`
 
-Eine Zeile pro Monat. Installierte Leistung Wind und Solar.
+One row per month. Installed wind and solar capacity.
 
-**Hinweis:** Ember stellt über die monatliche Kapazitäts-API nur Daten für Onshore-Wind, Offshore-Wind und Solar bereit. Kohle, Gas, Kernkraft und Wasserkraft sind dort nicht verfügbar.
+**Note:** The Ember monthly capacity API provides data for onshore wind, offshore wind, and solar only. Coal, gas, nuclear, and hydro are not available there.
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| onshore_wind_gw | GW | Installierte Onshore-Windleistung |
-| offshore_wind_gw | GW | Installierte Offshore-Windleistung |
-| wind_gw | GW | Installierte Windleistung gesamt (onshore + offshore) |
-| solar_gw | GW | Installierte Solarleistung |
+| period | YYYYMM | Reporting month |
+| onshore_wind_gw | GW | Installed onshore wind capacity |
+| offshore_wind_gw | GW | Installed offshore wind capacity |
+| wind_gw | GW | Total installed wind capacity (onshore + offshore) |
+| solar_gw | GW | Installed solar capacity |
 
 ### `data/production/nbs_production.csv`
 
-Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
+One row per month. Chinese domestic production per NBS.
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| coal_mt | Mio. t | Rohkohleproduktion |
-| coal_mt_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
-| crude_oil_mt | Mio. t | Rohölproduktion |
-| crude_oil_mt_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
-| gas_bcm | Mrd. m³ | Erdgasproduktion |
-| gas_bcm_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
+| period | YYYYMM | Reporting month |
+| coal_mt | Mt | Raw coal production |
+| coal_mt_yoy_pct | Pct | YoY change |
+| crude_oil_mt | Mt | Crude oil production |
+| crude_oil_mt_yoy_pct | Pct | YoY change |
+| gas_bcm | BCM | Natural gas production |
+| gas_bcm_yoy_pct | Pct | YoY change |
 
-**Hinweis Januar/Februar (NBS):** NBS veröffentlicht Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert. Die Zeile mit `period=202601` in `nbs_production.csv` enthält daher den kumulierten Jan-Feb-Wert. Ab März sind Einzelmonatswerte ausgewiesen.
+**January/February note (NBS):** NBS publishes January and February only as a combined two-month figure. The row with `period=202601` in `nbs_production.csv` therefore contains the cumulative Jan-Feb value. From March onwards, individual monthly values are reported.
 
 ### `data/combined/fossil_supply.csv`
 
-Automatisch generiert aus `gacc_imports.csv` + `nbs_production.csv`. Eine Zeile pro Monat. Pro Energieträger: Import, Inlandsproduktion, Gesamtangebot, YoY für jede Komponente und das Gesamtaggregat, sowie kumulatives Jahresangebot (YTD) mit YTD-YoY.
+Auto-generated from `gacc_imports.csv` + `nbs_production.csv`. One row per month. Per fuel: imports, domestic production, total supply, YoY for each component and the aggregate, plus cumulative year-to-date supply (YTD) with YTD YoY.
 
-**Gas-Einheit:** Alle Gasangaben in BCM. GACC-Importe (Mt) werden mit dem folgenden Faktor konvertiert:
+**Gas unit:** All gas figures in BCM. GACC imports (Mt) are converted using the following factor:
 
 ```
 gas_import_bcm = gas_import_mt × 1.36
 ```
 
-**Quelle des Umrechnungsfaktors:** BP Statistical Review of World Energy, Annex: Conversion Factors (jährlich aktualisiert); übereinstimmend mit dem GIIGNL Annual LNG Report (Groupe International des Importateurs de Gaz Naturel Liquéfié).
+**Source of conversion factor:** BP Statistical Review of World Energy, Annex: Conversion Factors (updated annually); consistent with the GIIGNL Annual LNG Report.
 
-**Hinweis:** Der Faktor 1 Mt = 1,36 BCM gilt streng genommen für LNG (Flüssigerdgas). Für Pipelinegas in Masseneinheiten läge der Faktor je nach Gaszusammensetzung und Normierungsdruck bei ca. 1,1–1,3 BCM/Mt. Da GACC LNG und Pipelinegas nicht getrennt in Masseneinheiten ausweist und LNG den Großteil der chinesischen Gasimporte ausmacht, wird 1,36 einheitlich angewendet. Die Ursprungsspalte `gas_import_mt` ist zur Nachvollziehbarkeit enthalten.
+**Note:** The factor 1 Mt = 1.36 BCM applies strictly to LNG. For pipeline gas in mass units, the factor would be approximately 1.1–1.3 BCM/Mt depending on gas composition and reference pressure. Since GACC does not separate LNG and pipeline gas in mass units and LNG accounts for the majority of Chinese gas imports, 1.36 is applied uniformly. The original `gas_import_mt` column is retained for reference.
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| coal_import_mt | Mio. t | Kohleeinfuhren (GACC) |
-| coal_prod_mt | Mio. t | Inlandsproduktion Kohle (NBS) |
-| coal_total_mt | Mio. t | Gesamtangebot Kohle |
-| coal_import_yoy_pct | Prozent | YoY Kohleeinfuhren |
-| coal_prod_yoy_pct | Prozent | YoY Kohleproduktion |
-| coal_total_yoy_pct | Prozent | YoY Gesamtangebot Kohle (aus Einzelkomponenten abgeleitet) |
-| coal_ytd_mt | Mio. t | Kumulatives Jahresangebot Kohle |
-| coal_ytd_yoy_pct | Prozent | YoY kumulatives Jahresangebot Kohle |
-| crude_oil_import_mt | Mio. t | Rohöleinfuhren (GACC) |
-| crude_oil_prod_mt | Mio. t | Inlandsproduktion Rohöl (NBS) |
-| crude_oil_total_mt | Mio. t | Gesamtangebot Rohöl |
-| crude_oil_import_yoy_pct | Prozent | YoY Rohöleinfuhren |
-| crude_oil_prod_yoy_pct | Prozent | YoY Rohölproduktion |
-| crude_oil_total_yoy_pct | Prozent | YoY Gesamtangebot Rohöl |
-| crude_oil_ytd_mt | Mio. t | Kumulatives Jahresangebot Rohöl |
-| crude_oil_ytd_yoy_pct | Prozent | YoY kumulatives Jahresangebot Rohöl |
-| gas_import_mt | Mio. t | Gaseinfuhren LNG + Pipeline (GACC, Originaleinheit) |
-| gas_import_bcm | Mrd. m³ | Gaseinfuhren konvertiert (Mt × 1,36) |
-| gas_prod_bcm | Mrd. m³ | Inlandsproduktion Gas (NBS) |
-| gas_total_bcm | Mrd. m³ | Gesamtangebot Gas |
-| gas_import_yoy_pct | Prozent | YoY Gaseinfuhren |
-| gas_prod_yoy_pct | Prozent | YoY Gasproduktion |
-| gas_total_yoy_pct | Prozent | YoY Gesamtangebot Gas |
-| gas_ytd_bcm | Mrd. m³ | Kumulatives Jahresangebot Gas |
-| gas_ytd_yoy_pct | Prozent | YoY kumulatives Jahresangebot Gas |
+| period | YYYYMM | Reporting month |
+| coal_import_mt | Mt | Coal imports (GACC) |
+| coal_prod_mt | Mt | Domestic coal production (NBS) |
+| coal_total_mt | Mt | Total coal supply |
+| coal_import_yoy_pct | Pct | YoY coal imports |
+| coal_prod_yoy_pct | Pct | YoY coal production |
+| coal_total_yoy_pct | Pct | YoY total coal supply (derived from components) |
+| coal_ytd_mt | Mt | Cumulative YTD coal supply |
+| coal_ytd_yoy_pct | Pct | YoY cumulative coal supply |
+| crude_oil_import_mt | Mt | Crude oil imports (GACC) |
+| crude_oil_prod_mt | Mt | Domestic crude oil production (NBS) |
+| crude_oil_total_mt | Mt | Total crude oil supply |
+| crude_oil_import_yoy_pct | Pct | YoY crude oil imports |
+| crude_oil_prod_yoy_pct | Pct | YoY crude oil production |
+| crude_oil_total_yoy_pct | Pct | YoY total crude oil supply |
+| crude_oil_ytd_mt | Mt | Cumulative YTD crude oil supply |
+| crude_oil_ytd_yoy_pct | Pct | YoY cumulative crude oil supply |
+| gas_import_mt | Mt | Gas imports LNG + pipeline (GACC, original unit) |
+| gas_import_bcm | BCM | Gas imports converted (Mt × 1.36) |
+| gas_prod_bcm | BCM | Domestic gas production (NBS) |
+| gas_total_bcm | BCM | Total gas supply |
+| gas_import_yoy_pct | Pct | YoY gas imports |
+| gas_prod_yoy_pct | Pct | YoY gas production |
+| gas_total_yoy_pct | Pct | YoY total gas supply |
+| gas_ytd_bcm | BCM | Cumulative YTD gas supply |
+| gas_ytd_yoy_pct | Pct | YoY cumulative gas supply |
 
-**YoY-Methode:** Die kombinierten YoY-Werte für Gesamt und YTD werden nicht direkt gemessen, sondern aus den Einzelkomponenten abgeleitet. Dazu werden die 2025-Vorjahreswerte aus den jeweils bekannten Einzelkomponenten-YoY-Angaben zurückgerechnet und anschließend addiert. Die Abweichung gegenüber dem tatsächlichen Vorjahreswert ist bei gut belegten Einzelkomponenten vernachlässigbar.
+**YoY method:** Combined YoY values for totals and YTD are not directly measured but derived from the individual components. Prior-year values are back-calculated from the known component-level YoY figures and then summed. The deviation from the actual prior-year aggregate is negligible when all components are well-documented.
 
 ### `data/combined/energy_balance.csv`
 
-Automatisch generiert aus `fossil_supply.csv` + `ember_power.csv`. Bringt alle Energieträger auf eine gemeinsame Einheit (TWh), so dass das Gesamtenergiesystem — fossile Primärenergie plus saubere Stromerzeugung — in einer einzigen Tabelle vergleichbar wird.
+Auto-generated from `fossil_supply.csv` + `ember_power.csv`. Brings all energy carriers to a common unit (TWh) so the total energy system — fossil primary energy plus clean power generation — can be compared in a single table.
 
-#### Umrechnungsfaktoren
+#### Conversion factors
 
-Alle fossilen Brennstoffe werden mit Standardfaktoren der IEA und des BP Statistical Review of World Energy in TWh umgerechnet:
+All fossil fuels are converted to TWh using standard IEA and BP Statistical Review factors:
 
-| Energieträger | Faktor | Formel | Grundlage |
+| Fuel | Factor | Formula | Basis |
 |---|---|---|---|
-| Kohle | 8,14 TWh/Mt | `Mt × 8,14` | 29,3 GJ/t (Steinkohle-Einheit, tce) |
-| Rohöl | 11,63 TWh/Mt | `Mt × 11,63` | 41,87 GJ/t (Öleinheit, toe) |
-| Gas | 10,55 TWh/BCM | `BCM × 10,55` | 38 GJ/1.000 m³ (Brennwert, GCV) |
+| Coal | 8.14 TWh/Mt | `Mt × 8.14` | 29.3 GJ/t (tce, standard coal equivalent) |
+| Crude oil | 11.63 TWh/Mt | `Mt × 11.63` | 41.87 GJ/t (toe, tonne of oil equivalent) |
+| Gas | 10.55 TWh/BCM | `BCM × 10.55` | 38 GJ/1,000 m³ (gross calorific value) |
 
-**Quellen:** BP Statistical Review of World Energy, Annex: Conversion Factors (jährlich aktualisiert, bp.com/statisticalreview); IEA Energy Statistics Manual (iea.org), Kapitel: Conversion Factors.
+**Sources:** BP Statistical Review of World Energy, Annex: Conversion Factors; IEA Energy Statistics Manual, chapter: Conversion Factors.
 
-Saubere Stromerzeugung (Kernkraft, Wasserkraft, Wind, Solar, Bioenergie) wird direkt aus Ember in TWh übernommen — keine Umrechnung nötig.
+Clean power generation (nuclear, hydro, wind, solar, bioenergy) is taken directly from Ember in TWh — no conversion required.
 
-#### Methodischer Hinweis: Primärenergie vs. Endenergie
+#### Methodological note: primary vs. final energy
 
-Fossile Brennstoffmengen entsprechen dem **Primärenergiegehalt** des Brennstoffs (Wärmeinhalt vor Umwandlungsverlusten). Saubere Stromerzeugung ist **Endenergie** (tatsächlich erzeugter Strom). Die Addition beider Größen ergibt einen Proxy für die „ins chinesische Energiesystem eingehende Gesamtenergie" — eine in der journalistischen Energieberichterstattung verbreitete Annäherung, die keine exakte physikalische Äquivalenz beansprucht.
+Fossil fuel volumes represent the **primary energy content** of the fuel (heat content before conversion losses). Clean power generation is **final energy** (electricity actually produced). Adding both yields a proxy for total energy entering the Chinese system — a common approximation in energy reporting that does not claim physical equivalence.
 
-Kohle- und Gasstromerzeugung (Ember) werden **nicht** addiert, um Doppelzählung mit den fossilen Lieferzahlen zu vermeiden.
+Coal and gas power generation from Ember are **not** added, to avoid double-counting with the fossil supply figures.
 
 #### Schema
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| coal_import_twh | TWh | Kohleeinfuhren in Primärenergie |
-| coal_prod_twh | TWh | Inlandsproduktion Kohle in Primärenergie |
-| coal_total_twh | TWh | Gesamtangebot Kohle |
-| coal_total_yoy_pct | Prozent | YoY Gesamtangebot Kohle |
-| coal_ytd_twh | TWh | Kumulatives Jahresangebot Kohle |
-| crude_oil_import_twh | TWh | Rohöleinfuhren in Primärenergie |
-| crude_oil_prod_twh | TWh | Inlandsproduktion Rohöl in Primärenergie |
-| crude_oil_total_twh | TWh | Gesamtangebot Rohöl |
-| crude_oil_total_yoy_pct | Prozent | YoY Gesamtangebot Rohöl |
-| crude_oil_ytd_twh | TWh | Kumulatives Jahresangebot Rohöl |
-| gas_import_twh | TWh | Gaseinfuhren in Primärenergie |
-| gas_prod_twh | TWh | Inlandsproduktion Gas in Primärenergie |
-| gas_total_twh | TWh | Gesamtangebot Gas |
-| gas_total_yoy_pct | Prozent | YoY Gesamtangebot Gas |
-| gas_ytd_twh | TWh | Kumulatives Jahresangebot Gas |
-| fossil_total_twh | TWh | Fossile Primärenergie gesamt (Kohle + Öl + Gas) |
-| fossil_total_yoy_pct | Prozent | YoY fossile Primärenergie gesamt |
-| fossil_ytd_twh | TWh | Kumulativ fossile Primärenergie |
-| fossil_ytd_yoy_pct | Prozent | YoY kumulativ fossile Primärenergie |
-| nuclear_twh | TWh | Stromerzeugung Kernkraft (Ember) |
-| hydro_twh | TWh | Stromerzeugung Wasserkraft (Ember) |
-| wind_twh | TWh | Stromerzeugung Wind (Ember) |
-| solar_twh | TWh | Stromerzeugung Solar (Ember) |
-| bioenergy_twh | TWh | Stromerzeugung Bioenergie (Ember) |
-| clean_power_twh | TWh | Saubere Stromerzeugung gesamt |
-| clean_power_yoy_pct | Prozent | YoY saubere Stromerzeugung |
-| clean_power_ytd_twh | TWh | Kumulativ saubere Stromerzeugung |
-| clean_power_ytd_yoy_pct | Prozent | YoY kumulativ saubere Stromerzeugung |
-| total_twh | TWh | Gesamtenergiesystem (fossil + sauber) |
-| total_yoy_pct | Prozent | YoY Gesamtenergiesystem |
-| total_ytd_twh | TWh | Kumulativ Gesamtenergiesystem |
-| total_ytd_yoy_pct | Prozent | YoY kumulativ Gesamtenergiesystem |
+| period | YYYYMM | Reporting month |
+| coal_import_twh | TWh | Coal imports in primary energy |
+| coal_prod_twh | TWh | Domestic coal production in primary energy |
+| coal_total_twh | TWh | Total coal supply |
+| coal_total_yoy_pct | Pct | YoY total coal supply |
+| coal_ytd_twh | TWh | Cumulative YTD coal supply |
+| crude_oil_import_twh | TWh | Crude oil imports in primary energy |
+| crude_oil_prod_twh | TWh | Domestic crude oil production in primary energy |
+| crude_oil_total_twh | TWh | Total crude oil supply |
+| crude_oil_total_yoy_pct | Pct | YoY total crude oil supply |
+| crude_oil_ytd_twh | TWh | Cumulative YTD crude oil supply |
+| gas_import_twh | TWh | Gas imports in primary energy |
+| gas_prod_twh | TWh | Domestic gas production in primary energy |
+| gas_total_twh | TWh | Total gas supply |
+| gas_total_yoy_pct | Pct | YoY total gas supply |
+| gas_ytd_twh | TWh | Cumulative YTD gas supply |
+| fossil_total_twh | TWh | Total fossil primary energy (coal + oil + gas) |
+| fossil_total_yoy_pct | Pct | YoY total fossil primary energy |
+| fossil_ytd_twh | TWh | Cumulative YTD fossil primary energy |
+| fossil_ytd_yoy_pct | Pct | YoY cumulative fossil primary energy |
+| nuclear_twh | TWh | Nuclear power generation (Ember) |
+| hydro_twh | TWh | Hydro power generation (Ember) |
+| wind_twh | TWh | Wind power generation (Ember) |
+| solar_twh | TWh | Solar power generation (Ember) |
+| bioenergy_twh | TWh | Bioenergy power generation (Ember) |
+| clean_power_twh | TWh | Total clean power generation |
+| clean_power_yoy_pct | Pct | YoY clean power generation |
+| clean_power_ytd_twh | TWh | Cumulative YTD clean power generation |
+| clean_power_ytd_yoy_pct | Pct | YoY cumulative clean power generation |
+| total_twh | TWh | Total energy system (fossil + clean) |
+| total_yoy_pct | Pct | YoY total energy system |
+| total_ytd_twh | TWh | Cumulative YTD total energy system |
+| total_ytd_yoy_pct | Pct | YoY cumulative total energy system |
 
-**Jan-Feb-Konvention:** Fossil-Perioden folgen der NBS/GACC-Praxis (202601 = Jan+Feb kombiniert). Die entsprechenden Ember-Perioden 202601 und 202602 werden automatisch summiert, bevor sie mit den fossilen Werten zusammengeführt werden.
+**Jan-Feb convention:** Fossil periods follow NBS/GACC practice (202601 = Jan+Feb combined). The corresponding Ember periods 202601 and 202602 are automatically summed before merging with the fossil figures.
 
 ---
 
 ### `data/power/capacity_additions.csv`
 
-Monatlicher Kapazitätszubau nach Energieträger in Gigawatt (GW). Quelle: CREA Monthly Energy & Air Quality Snapshot. Die Daten erscheinen mit zwei Monaten Verzögerung: Für den Berichtsmonat N liefert CREA Daten für N-2 (der Wert in `crea_period` weicht daher vom RECH-Berichtsmonat in `period` ab). Die Werte werden manuell aus dem CREA-PDF extrahiert und über den machine_data-Block in die CSV geschrieben.
+Monthly capacity additions by source in gigawatts (GW). Source: CREA Monthly Energy & Air Quality Snapshot. Data appear with a two-month delay: for reporting month N, CREA provides data for N-2 (the `crea_period` column therefore differs from the RECH reporting month in `period`). Values are extracted manually from the CREA PDF and written to the CSV via the machine_data block.
 
-| Spalte | Einheit | Inhalt |
+| Column | Unit | Content |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat des RECH-Dokuments (NBS/GACC-Periode) |
-| crea_period | YYYYMM | Monat, für den CREA Zubaudaten liefert (bei Echtzeit-Workflow = period − 2 Monate) |
-| thermal_gw | GW | Neu installierte thermische Leistung im Monat (Kohle + Gas kombiniert; CREA weist keine Aufschlüsselung aus) |
-| thermal_yoy_pct | Prozent | YoY thermisch, Monat |
-| nuclear_gw | GW | Neu installierte Kernkraftleistung im Monat |
-| nuclear_yoy_pct | Prozent | YoY Nuklear, Monat (null wenn Vorjahr = 0 GW) |
-| hydro_gw | GW | Neu installierte Wasserkraftleistung im Monat |
-| hydro_yoy_pct | Prozent | YoY Wasser, Monat |
-| wind_gw | GW | Neu installierte Windleistung im Monat (onshore + offshore) |
-| wind_yoy_pct | Prozent | YoY Wind, Monat |
-| solar_gw | GW | Neu installierte Solarleistung im Monat |
-| solar_yoy_pct | Prozent | YoY Solar, Monat |
-| total_gw | GW | Gesamter Zubau im Monat |
-| total_yoy_pct | Prozent | YoY Gesamt, Monat (abgeleitet; null wenn Komponente fehlt) |
-| thermal_ytd_gw | GW | Kumulierter thermischer Zubau Jan–crea_period |
-| thermal_ytd_yoy_pct | Prozent | YoY thermisch, kumuliert |
-| nuclear_ytd_gw | GW | Kumulierter Nuklear-Zubau |
-| nuclear_ytd_yoy_pct | Prozent | YoY Nuklear, kumuliert (null wenn Vorjahr = 0 GW) |
-| hydro_ytd_gw | GW | Kumulierter Wasser-Zubau |
-| hydro_ytd_yoy_pct | Prozent | YoY Wasser, kumuliert |
-| wind_ytd_gw | GW | Kumulierter Wind-Zubau |
-| wind_ytd_yoy_pct | Prozent | YoY Wind, kumuliert |
-| solar_ytd_gw | GW | Kumulierter Solar-Zubau |
-| solar_ytd_yoy_pct | Prozent | YoY Solar, kumuliert |
-| total_ytd_gw | GW | Gesamter kumulierter Zubau |
-| total_ytd_yoy_pct | Prozent | YoY Gesamt, kumuliert (abgeleitet; null wenn Komponente fehlt) |
+| period | YYYYMM | Reporting month of the RECH document (NBS/GACC period) |
+| crea_period | YYYYMM | Month for which CREA provides capacity data (in real-time workflow = period minus 2 months) |
+| thermal_gw | GW | Newly installed thermal capacity in the month (coal + gas combined; CREA provides no breakdown) |
+| thermal_yoy_pct | Pct | YoY thermal, month |
+| nuclear_gw | GW | Newly installed nuclear capacity in the month |
+| nuclear_yoy_pct | Pct | YoY nuclear, month (null if prior year = 0 GW) |
+| hydro_gw | GW | Newly installed hydro capacity in the month |
+| hydro_yoy_pct | Pct | YoY hydro, month |
+| wind_gw | GW | Newly installed wind capacity in the month (onshore + offshore) |
+| wind_yoy_pct | Pct | YoY wind, month |
+| solar_gw | GW | Newly installed solar capacity in the month |
+| solar_yoy_pct | Pct | YoY solar, month |
+| total_gw | GW | Total additions in the month |
+| total_yoy_pct | Pct | YoY total, month (derived; null if a component is missing) |
+| thermal_ytd_gw | GW | Cumulative thermal additions Jan–crea_period |
+| thermal_ytd_yoy_pct | Pct | YoY thermal, cumulative |
+| nuclear_ytd_gw | GW | Cumulative nuclear additions |
+| nuclear_ytd_yoy_pct | Pct | YoY nuclear, cumulative (null if prior year = 0 GW) |
+| hydro_ytd_gw | GW | Cumulative hydro additions |
+| hydro_ytd_yoy_pct | Pct | YoY hydro, cumulative |
+| wind_ytd_gw | GW | Cumulative wind additions |
+| wind_ytd_yoy_pct | Pct | YoY wind, cumulative |
+| solar_ytd_gw | GW | Cumulative solar additions |
+| solar_ytd_yoy_pct | Pct | YoY solar, cumulative |
+| total_ytd_gw | GW | Total cumulative additions |
+| total_ytd_yoy_pct | Pct | YoY total, cumulative (derived; null if a component is missing) |
 
-**Quelle:** Centre for Research on Energy and Clean Air (CREA), Monthly Energy & Air Quality Snapshot, energyandcleanair.org
+**Source:** Centre for Research on Energy and Clean Air (CREA), Monthly Energy & Air Quality Snapshot, energyandcleanair.org
 
 ---
 
 ### `data/reference/wb_reference_prices.csv`
 
-Monatliche Rohstoff-Referenzpreise aus dem [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet (CMO-Historical-Data-Monthly.xlsx). Wird am 15. jeden Monats automatisch aktualisiert.
+Monthly commodity reference prices from the [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet (CMO-Historical-Data-Monthly.xlsx). Updated automatically on the 15th of each month.
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| brent_usd_bbl | USD/bbl | Brent-Rohöl (Spot) |
-| dubai_usd_bbl | USD/bbl | Dubai-Rohöl (Spot) |
-| coal_au_usd_mt | USD/t | Australische Kraftwerkskohle (Newcastle) |
-| lng_japan_usd_mmbtu | USD/MMBtu | LNG Japan (JKM-Proxy) |
+| period | YYYYMM | Reporting month |
+| brent_usd_bbl | USD/bbl | Brent crude oil (spot) |
+| dubai_usd_bbl | USD/bbl | Dubai crude oil (spot) |
+| coal_au_usd_mt | USD/t | Australian thermal coal (Newcastle) |
+| lng_japan_usd_mmbtu | USD/MMBtu | LNG Japan (JKM proxy) |
 
-**Verwendungszweck im Dashboard:** Vergleich mit den GACC-Importpreisen (VpU) in der Sektion "Import Price Benchmarks". Für den Vergleich wird der GACC-VpU umgerechnet: Rohöl USD/t ÷ 7,33 = USD/bbl; Gas USD/t ÷ 52 = USD/MMBtu; Kohle direkt.
+**Purpose in the dashboard:** Comparison with GACC import prices (VpU) in the Import Price Benchmarks section. For the comparison, GACC VpU is converted: crude oil USD/t ÷ 7.33 = USD/bbl; gas USD/t ÷ 52 = USD/MMBtu; coal direct.
 
-**Datenquelle:** [World Bank](https://www.worldbank.org/en/research/commodity-markets) Commodity Markets, Pink Sheet (monatlich). Die Excel-URL ändert sich monatlich; `fetch_wb_reference_prices.py` scrapt sie zur Laufzeit von der WB-Seite.
+**Data source:** [World Bank](https://www.worldbank.org/en/research/commodity-markets) Commodity Markets, Pink Sheet (monthly). The Excel URL changes each month; `fetch_wb_reference_prices.py` scrapes it at runtime from the WB page.
 
 ---
 
-## Automatisierung: ComTrade
+## Automation: ComTrade
 
-**GitHub Actions** läuft am 15. jeden Monats (06:00 UTC) und ruft `fetch_comtrade.py` auf. Das Script holt alle verfügbaren 2025-Monate per ComTrade API und pflegt sie per Upsert in die vier Commodity-CSVs ein. Bereits vorhandene 2025-Zeilen werden vollständig ersetzt (idempotent). Ältere Jahre (2020–2024) bleiben unberührt.
+**GitHub Actions** runs on the 15th of each month (06:00 UTC) and calls `fetch_comtrade.py`. The script fetches all available 2025 months via the ComTrade API and upserts them into the four commodity CSVs. Existing 2025 rows are fully replaced (idempotent). Years 2020–2024 are not touched.
 
-ComTrade veröffentlicht Monatsdaten typischerweise mit 2–3 Monaten Verzögerung. Das Script bricht sauber ab, wenn noch keine 2025-Daten verfügbar sind.
+ComTrade typically publishes monthly data with a 2–3 month lag. The script exits cleanly if no 2025 data are available yet.
 
-Erforderliche GitHub Secrets:
+Required GitHub Secrets:
 - `COMTRADE_PRIMARY_KEY` — [UN ComTrade](https://comtradeplus.un.org/) API Primary Key
 
 ---
 
-## Automatisierung: Ember
+## Automation: Ember
 
-**GitHub Actions** prüft ab dem 17. jeden Monats täglich (06:00 UTC), ob Ember neue Monatsdaten für China veröffentlicht hat. Liegt ein neuer Monat vor, werden `ember_power.csv` und `ember_capacity.csv` vollständig neu geschrieben und der Workflow deaktiviert sich selbst. Am 1. des Folgemonats (05:00 UTC) reaktiviert ein separater Workflow den Update-Zyklus.
+**GitHub Actions** checks from the 17th of each month daily (06:00 UTC) whether Ember has published new monthly data for China. If a new month is available, `ember_power.csv` and `ember_capacity.csv` are fully rewritten and the workflow self-deactivates. On the 1st of the following month (05:00 UTC), a separate workflow re-enables the update cycle.
 
-**Warum dieser Mechanismus?** Ember veröffentlicht neue Monatsdaten unregelmäßig, typischerweise mit ca. 7 Wochen Verzögerung. Ein einfacher Tages-Cron würde dauerhaft laufen. Der Selbstdeaktivierungs-Mechanismus stellt sicher, dass der Workflow nach dem ersten erfolgreichen Update bis zum nächsten Monat inaktiv bleibt.
+**Why this mechanism?** Ember publishes new monthly data irregularly, typically with a ~7-week lag. A simple daily cron would run indefinitely. The self-deactivation mechanism ensures the workflow stays inactive after the first successful update until the next month.
 
-**Einmaliger Historien-Import** (bereits ausgeführt):
+**One-time history import** (already completed):
 
 ```bash
 export EMBER_KEY=<key>
 python scripts/fetch_ember_history.py
 ```
 
-Alternativ per `fetch_ember_history`-Workflow (workflow_dispatch). Schreibt beide CSVs mit der vollständigen Geschichte ab 2015.
+Alternatively via the `fetch_ember_history` workflow (workflow_dispatch). Writes both CSVs with the full history from 2015.
 
-**Manueller Update-Test:**
+**Manual update test:**
 
 ```bash
 export EMBER_KEY=<key>
 python scripts/fetch_ember_monthly.py
 ```
 
-Das Script gibt `new_data=true/false` und `new_period=YYYYMM` aus. Im GitHub Actions-Kontext werden diese Werte als Step-Outputs gesetzt und steuern Commit und Selbstdeaktivierung.
+The script outputs `new_data=true/false` and `new_period=YYYYMM`. In the GitHub Actions context, these values are set as step outputs and control the commit and self-deactivation.
 
-Erforderliche GitHub Secrets:
+Required GitHub Secrets:
 - `EMBER_KEY` — Ember API Key
 
 ---
 
-## Automatisierung: World Bank Reference Prices
+## Automation: World Bank Reference Prices
 
-**GitHub Actions** läuft am 15. jeden Monats (06:00 UTC) und ruft `fetch_wb_reference_prices.py` auf. Das Script scrapt die aktuelle Pink-Sheet-URL von der [World Bank](https://www.worldbank.org/en/research/commodity-markets) Commodity Markets-Seite, downloaded das Excel, parsed das Sheet "Monthly Prices" und schreibt `data/reference/wb_reference_prices.csv` per Upsert. Bereits vorhandene Zeilen werden ersetzt, ältere bleiben erhalten.
+**GitHub Actions** runs on the 15th of each month (06:00 UTC) and calls `fetch_wb_reference_prices.py`. The script scrapes the current Pink Sheet URL from the [World Bank](https://www.worldbank.org/en/research/commodity-markets) Commodity Markets page, downloads the Excel file, parses the "Monthly Prices" sheet, and writes `data/reference/wb_reference_prices.csv` via upsert. Existing rows are replaced; older rows are preserved.
 
-Der Update-Zeitpunkt (15.) liegt bewusst vor dem Energiebilanz-Update (~20.), sodass bei jedem manuellen GACC-Push aktuelle Referenzpreise vorliegen.
+The update timing (15th) is intentionally ahead of the energy balance update (~20th), so current reference prices are available whenever a manual GACC push is made.
 
-**Einmaliger Backfill** (bereits ausgeführt, ab Jan 2026):
+**One-time backfill** (already completed, from Jan 2026):
 
 ```bash
 START_PERIOD=202601 python scripts/fetch_wb_reference_prices.py
 ```
 
-Alternativ per `fetch_wb_reference_prices_history`-Workflow (workflow_dispatch).
+Alternatively via the `fetch_wb_reference_prices_history` workflow (workflow_dispatch).
 
-Keine zusätzlichen GitHub Secrets erforderlich — der [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet ist öffentlich zugänglich.
+No additional GitHub Secrets required — the [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet is publicly accessible.
 
 ---
 
-## Automatisierung: fossil_supply.csv
+## Automation: fossil_supply.csv
 
-`build_supply.yml` triggert automatisch bei jedem Push, der `gacc_imports.csv` oder `nbs_production.csv` verändert. Das Script liest beide CSVs aus dem Repo, berechnet das kombinierte Angebot und committed `data/combined/fossil_supply.csv`. Da der Commit von `github-actions[bot]` stammt, wird kein weiterer Workflow ausgelöst.
+`build_supply.yml` triggers automatically on any push that modifies `gacc_imports.csv` or `nbs_production.csv`. The script reads both CSVs from the repo, calculates the combined supply, and commits `data/combined/fossil_supply.csv`. Since the commit originates from `github-actions[bot]`, no further workflow is triggered.
 
-Das Script kann auch lokal ausgeführt werden:
+The script can also be run locally:
 
 ```bash
 python scripts/build_supply.py
@@ -474,13 +475,13 @@ python scripts/build_supply.py
 
 ---
 
-## Manueller Workflow: GACC/NBS-Daten
+## Manual workflow: GACC/NBS data
 
-GACC und NBS stellen keine maschinenlesbare API bereit. Die Daten werden stattdessen über einen strukturierten Annotationsprozess aus den monatlichen Energiebilanz-Rechercheberichten extrahiert.
+GACC and NBS do not provide a machine-readable API. Data are instead extracted from monthly energy balance research reports via a structured annotation process.
 
-### Schritt 1: machine_data-Block in RECH-Datei
+### Step 1: machine_data block in RECH file
 
-Jede Energiebilanz-RECH-Datei im Vault enthält am Ende einen HTML-Kommentarblock mit den Strukturdaten des Monats:
+Each energy balance RECH file in the vault contains an HTML comment block at the end with the structured data for that month:
 
 ```
 <!--machine_data
@@ -496,55 +497,55 @@ production:
 -->
 ```
 
-Einheiten: `qty_mt` und `*_mt` in Mio. Tonnen, `value_usd_bn` in Mrd. USD, `gas_bcm` in Mrd. m³. `null` steht für fehlende Daten, nicht für Null.
+Units: `qty_mt` and `*_mt` in million tonnes, `value_usd_bn` in USD billion, `gas_bcm` in BCM. `null` means missing data, not zero.
 
-### Schritt 2: Extraktion
+### Step 2: Extraction
 
-Nach dem Annotieren eine RECH-Datei einzeln verarbeiten:
+After annotating, process a single RECH file:
 
 ```bash
-# Voraussetzung: Python-Venv mit requirements.txt, gh CLI authentifiziert
+# Prerequisite: Python venv with requirements.txt, gh CLI authenticated
 python scripts/rech_to_github.py \
     --file "11_Recherche/Berichte/260820_RECH_China_Energiebilanz_Juli2026.md"
 ```
 
-Das Script liest den machine_data-Block, berechnet die `*_usd_per_mt`-Werte, pflegt die Zeile per Upsert in `gacc_imports.csv` und `nbs_production.csv` ein und pusht.
+The script reads the machine_data block, calculates `*_usd_per_mt` values, upserts the row into `gacc_imports.csv` and `nbs_production.csv`, and pushes.
 
-Alle annotierten RECH-Dateien auf einmal verarbeiten (Backfill nach einer neuen Annotation-Runde):
+To process all annotated RECH files at once (backfill after a new annotation round):
 
 ```bash
 python scripts/backfill_to_github.py
 ```
 
-`backfill_to_github.py` läuft ausschließlich lokal — es braucht Zugriff auf den Vault unter `/Users/hado/Documents/Arbeit/China-Archiv`.
+`backfill_to_github.py` runs locally only — it requires access to the vault at `/Users/hado/Documents/Arbeit/China-Archiv`.
 
-### Schritt 3: value_per_mt-Berechnung
+### Step 3: value_per_mt calculation
 
-`rech_to_github.py` und `backfill_to_github.py` berechnen den Preis je Tonne automatisch:
+`rech_to_github.py` and `backfill_to_github.py` calculate the price per tonne automatically:
 
 ```
 value_per_mt_usd = round(value_usd_bn * 1000 / qty_mt, 1)
 ```
 
-Ist einer der beiden Eingangswerte `null`, bleibt `value_per_mt_usd` ebenfalls leer.
+If either input is `null`, `value_per_mt_usd` is also left empty.
 
 ---
 
-## Manueller Workflow: CREA-Kapazitätszubau
+## Manual workflow: CREA capacity additions
 
-CREA veröffentlicht den monatlichen Snapshot als PDF auf energyandcleanair.org. Die Kapazitätszubau-Daten werden im Rahmen des `/energiebilanz`-Skills (Schritt 9b) aus dem PDF extrahiert und über den machine_data-Block in `capacity_additions.csv` übertragen.
+CREA publishes the monthly snapshot as a PDF at energyandcleanair.org. Capacity addition data are extracted from the PDF as part of the `/energiebilanz` skill (step 9b) and written to `capacity_additions.csv` via the machine_data block.
 
-### Datenverzögerung
+### Data delay
 
-CREA liefert Daten mit ca. zwei Monaten Verzögerung. Für den Energiebilanz-Bericht zu Berichtsmonat N enthält der aktuelle CREA-Snapshot die Zubaudaten für Monat N-2. Die Spalte `crea_period` im CSV dokumentiert, für welchen Monat die Zubaudaten tatsächlich gelten.
+CREA delivers data with approximately a two-month delay. For an energy balance report covering reporting month N, the current CREA snapshot contains capacity data for month N-2. The `crea_period` column in the CSV documents which month the capacity data actually refer to.
 
-### Schritt 1: CREA-Snapshot beschaffen
+### Step 1: Obtain CREA snapshot
 
-Der aktuelle Snapshot wird per Gmail-Suche oder direkt von energyandcleanair.org bezogen. Das PDF wird als Quelle in ein NotebookLM-Notebook geladen und per Chat-Abfrage ausgewertet (automatisiert über `/energiebilanz` Schritt 1, 3 und 9b).
+The current snapshot is retrieved via Gmail search or directly from energyandcleanair.org. The PDF is loaded into a NotebookLM notebook as a source and queried via chat (automated via `/energiebilanz` steps 1, 3, and 9b).
 
-### Schritt 2: machine_data-Block befüllen
+### Step 2: Fill machine_data block
 
-Die aus dem Notebook extrahierten Werte werden in den `capacity_additions`-Block am Ende der RECH-Datei eingetragen:
+The values extracted from the notebook are entered into the `capacity_additions` block at the end of the RECH file:
 
 ```
 <!--machine_data
@@ -563,39 +564,28 @@ capacity_additions:
   solar_yoy_pct: -91.0
   total_gw: 18.5
   total_yoy_pct: null
-  thermal_ytd_gw: 32.4
-  thermal_ytd_yoy_pct: 84.0
-  nuclear_ytd_gw: 3.6
-  nuclear_ytd_yoy_pct: null
-  hydro_ytd_gw: 4.1
-  hydro_ytd_yoy_pct: 24.0
-  wind_ytd_gw: 25.0
-  wind_ytd_yoy_pct: -46.0
-  solar_ytd_gw: 59.6
-  solar_ytd_yoy_pct: -70.0
-  total_ytd_gw: 124.7
-  total_ytd_yoy_pct: null
+  ...
 -->
 ```
 
-`null` bei `nuclear_yoy_pct` und `nuclear_ytd_yoy_pct` wenn der Vorjahreswert 0 GW betrug (Division durch null). `total_yoy_pct` und `total_ytd_yoy_pct` werden manuell aus den Komponenten rückgerechnet und eingetragen, wenn alle Komponenten bekannt sind.
+`null` for `nuclear_yoy_pct` and `nuclear_ytd_yoy_pct` when the prior-year value was 0 GW (division by zero). `total_yoy_pct` and `total_ytd_yoy_pct` are back-calculated from the components and entered manually when all components are known.
 
-### Schritt 3: Extraktion und Push
+### Step 3: Extraction and push
 
-Identisch zum GACC/NBS-Workflow:
+Identical to the GACC/NBS workflow:
 
 ```bash
 python scripts/rech_to_github.py \
     --file "11_Recherche/Berichte/260902_RECH_China_Energiebilanz_August2026.md"
 ```
 
-Das Script liest den `capacity_additions`-Block und schreibt die Zeile per Upsert in `data/power/capacity_additions.csv`.
+The script reads the `capacity_additions` block and upserts the row into `data/power/capacity_additions.csv`.
 
 ---
 
-## Einmaliger Historien-Import (2020–2024)
+## One-time history import (2020–2024)
 
-`fetch_history.py` lädt die komplette ComTrade-Historie 2020–2024 und schreibt die vier Commodity-CSVs neu. Dieses Script wurde einmalig über den `fetch_history`-Workflow ausgeführt und muss nicht wiederholt werden, es sei denn, die historischen Daten werden in ComTrade nachträglich revidiert.
+`fetch_history.py` loads the complete ComTrade history 2020–2024 and rewrites the four commodity CSVs. This script was run once via the `fetch_history` workflow and does not need to be repeated unless ComTrade revises historical data retroactively.
 
 ```bash
 export COMTRADE_PRIMARY_KEY=<key>
@@ -604,102 +594,102 @@ python scripts/fetch_history.py
 
 ---
 
-## Abhängigkeiten
+## Dependencies
 
 ```
-comtradeapicall   — UN ComTrade Python-Wrapper
-pandas            — Datenverarbeitung
+comtradeapicall   — UN ComTrade Python wrapper
+pandas            — Data processing
 requests          — HTTP
-urllib3           — HTTP-Transport
-pyyaml            — YAML-Parsing der machine_data-Blöcke
-openpyxl          — Excel-Parsing (World Bank Pink Sheet)
+urllib3           — HTTP transport
+pyyaml            — YAML parsing of machine_data blocks
+openpyxl          — Excel parsing (World Bank Pink Sheet)
 ```
 
-Lokal: `pip install -r requirements.txt` in einem venv. Auf macOS mit extern verwaltetem Python empfiehlt sich ein venv unter `/tmp/` oder `~/.venv/`.
+Local: `pip install -r requirements.txt` in a venv. On macOS with an externally managed Python, a venv under `/tmp/` or `~/.venv/` is recommended.
 
 ---
 
-## GACC Lieferland-Daten (gacc_*.csv)
+## GACC country-of-origin data (gacc_*.csv)
 
-GACC veröffentlicht monatlich granulare Importdaten nach Lieferland. Die vier Lieferland-CSVs (`gacc_coal.csv`, `gacc_crude_oil.csv`, `gacc_lng.csv`, `gacc_pipeline_gas.csv`) füllen die ComTrade-Lücke ab Januar 2025: ComTrade liefert Monatsdaten mit 18–20 Monaten Verzögerung und hat die 2025er Daten noch nicht. GACC liefert aktuell bis ca. 6 Wochen nach Berichtsmonat.
+GACC publishes monthly granular import data by country of origin. The four country-of-origin CSVs (`gacc_coal.csv`, `gacc_crude_oil.csv`, `gacc_lng.csv`, `gacc_pipeline_gas.csv`) fill the ComTrade gap from January 2025 onwards: ComTrade delivers monthly data with an 18–20 month lag and has not yet published 2025 data. GACC data are available with approximately a 6-week lag.
 
-**Schema** (identisch für alle vier Dateien):
+**Schema** (identical for all four files):
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| partner | Text | Lieferland (ComTrade-Namenskonvention) |
-| value_usd_bn | Mrd. USD | Importwert |
+| period | YYYYMM | Reporting month |
+| partner | Text | Country of origin (ComTrade naming convention) |
+| value_usd_bn | USD bn | Import value |
 
-**Abweichungen zu ComTrade:** GACC weist keine Mengendaten (`qty_mt`) in den öffentlichen CSV-Downloads aus. Spalten `qty_mt` und `value_per_mt_usd` fehlen daher in den GACC-Lieferland-CSVs. Im Dashboard werden Mengendiagramme nur für den ComTrade-Zeitraum (2020–2024) gerendert.
+**Differences from ComTrade:** GACC does not include volume data (`qty_mt`) in its public CSV downloads. The `qty_mt` and `value_per_mt_usd` columns are therefore absent from the GACC country-of-origin CSVs. Volume charts in the dashboard are rendered only for the ComTrade period (2020–2024).
 
-**HS-Codes und Kategorisierung:**
+**HS codes and categorisation:**
 
-| Kategorie | GACC-HS-Codes | ComTrade-HS-Code |
+| Category | GACC HS codes | ComTrade HS code |
 |---|---|---|
 | coal | 270111 + 270112 + 270119 | 2701 |
 | crude_oil | 270900 | 2709 |
 | lng | 271111 | 271111 |
 | pipeline_gas | 271121 | 271121 |
 
-**Manuelle Aktualisierung:** GACC stellt keine maschinenlesbare API bereit. Neue CSVs werden von GACC heruntergeladen (GBK-Encoding), transformiert und ins Repo gepusht. Bei Push triggert `build_combined.yml` automatisch den Rebuild der `combined_*.csv`.
+**Manual update:** GACC does not provide a machine-readable API. New CSVs are downloaded from GACC (GBK encoding), transformed, and pushed to the repo. On push, `build_combined.yml` automatically triggers a rebuild of the `combined_*.csv` files.
 
 ---
 
-## Automatisierung: combined_*.csv
+## Automation: combined_*.csv
 
-`build_combined.yml` triggert bei jedem Push, der `data/fuel-imports/comtrade_*.csv` oder `data/fuel-imports/gacc_*.csv` verändert. Das Script `scripts/build_combined.py` mergt beide Quellen mit ComTrade-Priorität:
+`build_combined.yml` triggers on any push that modifies `data/fuel-imports/comtrade_*.csv` or `data/fuel-imports/gacc_*.csv`. The script `scripts/build_combined.py` merges both sources with ComTrade taking priority:
 
-- Für jeden `(period, partner)`-Eintrag, der in ComTrade vorliegt, werden die ComTrade-Werte verwendet.
-- GACC füllt alle Perioden, für die ComTrade noch keine Daten hat (aktuell ab Januar 2025).
-- Wenn ComTrade 2025-Daten nachliefert, überschreibt der nächste Rebuild automatisch die GACC-Zeilen für diese Perioden.
+- For any `(period, partner)` entry present in ComTrade, ComTrade values are used.
+- GACC fills all periods for which ComTrade has no data yet (currently from January 2025).
+- When ComTrade delivers 2025 data, the next rebuild automatically overwrites the GACC rows for those periods.
 
-Lokal ausführen:
+Run locally:
 
 ```bash
 python scripts/build_combined.py
 ```
 
-**Output-Schema** (`data/combined/combined_*.csv`):
+**Output schema** (`data/combined/combined_*.csv`):
 
-| Spalte | Einheit | Beschreibung |
+| Column | Unit | Description |
 |---|---|---|
-| period | YYYYMM | Berichtsmonat |
-| partner | Text | Lieferland |
-| value_usd_bn | Mrd. USD | Importwert |
-| qty_mt | Mio. t | Importmenge (nur ComTrade-Zeilen; GACC: leer) |
-| value_per_mt_usd | USD/t | Preis je Tonne (nur ComTrade-Zeilen) |
-| source | comtrade / gacc | Herkunft der Zeile |
+| period | YYYYMM | Reporting month |
+| partner | Text | Country of origin |
+| value_usd_bn | USD bn | Import value |
+| qty_mt | Mt | Import volume (ComTrade rows only; GACC: empty) |
+| value_per_mt_usd | USD/t | Price per tonne (ComTrade rows only) |
+| source | comtrade / gacc | Row origin |
 
 ---
 
-## Offene Erweiterungen
+## Open items
 
-- **2026 ComTrade**: Sobald UN ComTrade 2026-Daten verfügbar macht, `YEAR` in `fetch_comtrade.py` aktualisieren und den Workflow manuell antriggern.
-- **Pipeline-Gas Begleittext**: Dashboard-Abschnitt "Pipeline Gas Imports" braucht einen erklärenden Textblock. Thema: warum die Pipelinegas-Importe bis 2021 nominal höher erscheinen als danach (Central Asia Line D-Stall, Turkmenistan-Lieferprobleme, beschleunigtes chinesisches Shale-Gas-Wachstum, Power of Siberia-Hochlauf ab 2019). Auch SEO-relevant.
+- **2026 ComTrade**: Once UN ComTrade makes 2026 data available, update `YEAR` in `fetch_comtrade.py` and trigger the workflow manually.
+- **Pipeline Gas explainer**: The "Pipeline Gas Imports" section needs an explanatory text block covering why pipeline gas imports appear nominally higher before 2021 (Central Asia Line D stall, Turkmenistan supply problems, accelerating Chinese shale gas growth, Power of Siberia ramp-up from 2019). Also relevant for SEO.
 
 ---
 
-## Import Price Benchmarks — Konzept und Methodik
+## Import Price Benchmarks — concept and methodology
 
-`gacc_imports.csv` enthält für Kohle, Rohöl und Gas den impliziten Importpreis (Value per Unit, VpU) aus den GACC-Zolldaten. Dieser Preis ist ein gewichteter Durchschnitt aller tatsächlichen physischen Transaktionen im Monat — kein Spot- oder Papierpreis, sondern was China tatsächlich bezahlt hat. Ein Vergleich mit Markt-Benchmarks erlaubt näherungsweise Aussagen darüber, ob China über oder unter Marktpreisen kauft.
+`gacc_imports.csv` contains the implied import price (Value per Unit, VpU) for coal, crude oil, and gas derived from GACC customs data. This price is a weighted average of all actual physical transactions in the month — not a spot or paper price, but what China actually paid. Comparing it with market benchmarks allows approximate assessments of whether China bought above or below market prices.
 
-**Methodischer Vorbehalt:** Alle Benchmark-Preise sind Spot- oder Assessment-Preise, Chinas Importe basieren größtenteils auf Langzeitverträgen (oft ölindexiert) oder politisch ausgehandelten Preisen (Zentralasien, Russland). Der Vergleich ist strukturell ungleich, aber journalistisch aussagekräftig — insbesondere Trendbrüche (China kauft Öl nach 2022 deutlich unter Brent = Russland-Rabatt-Effekt) sind sichtbar.
+**Methodological caveat:** All benchmark prices are spot or assessment prices. China's imports are largely based on long-term contracts (often oil-indexed) or politically negotiated prices (Central Asia, Russia). The comparison is structurally uneven but analytically meaningful — trend breaks in particular (China buying oil well below Brent after 2022 = Russia discount effect) are visible.
 
-**Iran-Hinweis:** Iranisches Öl taucht in GACC-Daten nicht auf (erfasst als Malaysia, UAE, Oman). Strukturelles Datenloch.
+**Iran note:** Iranian crude oil does not appear in GACC data (recorded as Malaysia, UAE, Oman). A structural data gap.
 
-### Einheiten und Umrechnungen
+### Units and conversions
 
-| Träger | GACC-VpU | Dashboard-Einheit | Umrechnung |
+| Fuel | GACC VpU | Dashboard unit | Conversion |
 |---|---|---|---|
-| Kohle | USD/t | USD/t | direkt vergleichbar |
-| Rohöl | USD/t | USD/bbl | ÷ 7,33 (IEA-Standardfaktor) |
-| Gas | USD/t | USD/MMBtu | ÷ 52 (LNG-Faustregel; GIIGNL: 43–49 MMBtu/t) |
+| Coal | USD/t | USD/t | Direct |
+| Crude oil | USD/t | USD/bbl | ÷ 7.33 (IEA standard factor) |
+| Gas | USD/t | USD/MMBtu | ÷ 52 (LNG rule of thumb; GIIGNL: 43–49 MMBtu/t) |
 
-### Benchmark-Quellen
+### Benchmark sources
 
-| Träger | Benchmark | Quelle |
+| Fuel | Benchmark | Source |
 |---|---|---|
-| Rohöl | Brent ($/bbl) + Dubai ($/bbl) | World Bank Pink Sheet |
-| Gas | LNG Japan ($/MMBtu) — JKM-Proxy | World Bank Pink Sheet |
-| Kohle | Coal Australian — Newcastle ($/t) | World Bank Pink Sheet |
+| Crude oil | Brent (USD/bbl) + Dubai (USD/bbl) | World Bank Pink Sheet |
+| Gas | LNG Japan (USD/MMBtu) — JKM proxy | World Bank Pink Sheet |
+| Coal | Coal Australian — Newcastle (USD/t) | World Bank Pink Sheet |
