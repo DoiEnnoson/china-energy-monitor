@@ -1026,7 +1026,7 @@
         const ytdYoY  = [cRow.solar_ytd_yoy_pct, cRow.wind_ytd_yoy_pct, cRow.hydro_ytd_yoy_pct, cRow.nuclear_ytd_yoy_pct, cRow.thermal_ytd_yoy_pct].map(fmtYoY);
         const monYoY  = [cRow.solar_yoy_pct,     cRow.wind_yoy_pct,     cRow.hydro_yoy_pct,     cRow.nuclear_yoy_pct,     cRow.thermal_yoy_pct].map(fmtYoY);
 
-        function makeCapBar(id, data, yoyArr) {
+        function makeCapBar(id, data, yoyArr, yMax, yStep) {
           new Chart(document.getElementById(id), {
             type: 'bar',
             data: {
@@ -1041,15 +1041,17 @@
               },
               scales: {
                 x: { grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 12 } } },
-                y: { grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' GW' } }
+                y: { grid: { color: '#1e1a3a' },
+                     ...(yMax !== undefined ? { max: yMax } : {}),
+                     ticks: { ...(yStep ? { stepSize: yStep } : {}), callback: v => v + ' GW' } }
               }
             },
             plugins: [barValuePlugin]
           });
         }
 
-        makeCapBar('cap-bar-ytd',   ytdGW, ytdYoY);
-        makeCapBar('cap-bar-month', monGW, monYoY);
+        makeCapBar('cap-bar-ytd',   ytdGW, ytdYoY, 80, 20);
+        makeCapBar('cap-bar-month', monGW, monYoY, 15,  5);
 
         /* Donut helper */
         function makeDonut(id, labels, data, colors) {
@@ -1351,7 +1353,9 @@
           },
           scales: {
             x: { grid: { color: '#1e1a3a' } },
-            y: { grid: { color: '#1e1a3a' }, min: 0, max: 100, ticks: { callback: v => v + '%' } }
+            y: { grid: { color: '#1e1a3a' }, min: 0, max: 100,
+                 ticks: { callback: v => v + '%' },
+                 afterBuildTicks: axis => { axis.ticks = [0, 25, 50, 100].map(v => ({ value: v })); } }
           }
         }
       });
@@ -1439,7 +1443,7 @@
       new Chart(document.getElementById('gen-share-stacked'), {
         type: 'bar',
         data: { labels: LABELS, datasets: sourceDatasets([COAL_SH, GAS_SH, NUC_SH, HYDRO_SH, WIND_SH, SOLAR_SH, BIO_SH]) },
-        options: stackedBarOpts('%', 102)
+        options: stackedBarOpts('%', 100)
       });
 
       /* ── Chart 3: Coal dual-axis (bar = TWh, line = share %) ── */
@@ -1467,7 +1471,8 @@
           },
           scales: {
             x: xAxis,
-            y:  { position: 'left',  grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' TWh' } },
+            y:  { position: 'left',  grid: { color: '#1e1a3a' }, max: 600,
+                  ticks: { stepSize: 200, callback: v => v + ' TWh' } },
             y1: { position: 'right', grid: { drawOnChartArea: false }, min: 35, max: 80,
                   ticks: { callback: v => v + '%' } }
           }
@@ -1518,7 +1523,8 @@
           scales: {
             x: { grid: { color: '#1e1a3a' },
                  ticks: { callback: (_, i) => CF_YR_SET.has(CF_LABELS[i]) ? CF_LABELS[i].slice(0, 4) : '', maxRotation: 0, minRotation: 0 } },
-            y: { grid: { color: '#1e1a3a' }, min: 0, ticks: { callback: v => v + '%' } }
+            y: { grid: { color: '#1e1a3a' }, min: 0, max: 35,
+                 ticks: { stepSize: 10, callback: v => v + '%' } }
           }
         }
       });
@@ -1546,7 +1552,8 @@
           },
           scales: {
             x: xAxis,
-            y: { grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' g' } }
+            y: { grid: { color: '#1e1a3a' }, min: 500, max: 800,
+                 ticks: { stepSize: 100, callback: v => v + ' g' } }
           }
         }
       });
@@ -1587,7 +1594,8 @@
           },
           scales: {
             x: { grid: { color: '#1e1a3a' } },
-            y: { grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' TWh' } }
+            y: { grid: { color: '#1e1a3a' }, max: 200,
+                 ticks: { stepSize: 50, callback: v => v + ' TWh' } }
           }
         }
       });
@@ -1633,11 +1641,13 @@
       const xTicks = (periods) => ({
         callback: (_, i) => periods[i] && periods[i].endsWith('01') ? periods[i].slice(0, 4) : ''
       });
-      const stackedOpts = (periods, unit) => ({
+      const stackedOpts = (periods, unit, yMax, yStep) => ({
         responsive: true, animation: false,
         scales: {
           x: { stacked: true, grid: { color: '#1e1a3a' }, ticks: xTicks(periods) },
-          y: { stacked: true, grid: { color: '#1e1a3a' }, ticks: { callback: v => v + ' ' + unit } }
+          y: { stacked: true, grid: { color: '#1e1a3a' },
+               ...(yMax  !== undefined ? { max: yMax }       : {}),
+               ticks: { ...(yStep ? { stepSize: yStep } : {}), callback: v => v + ' ' + unit } }
         },
         plugins: {
           legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } },
@@ -1666,7 +1676,7 @@
             { label: 'Gas',       data: allPeriods.map(p => +((lngVal[p] || 0) + (pipeVal[p] || 0)).toFixed(2)), backgroundColor: GAS_C, borderWidth: 0 },
           ]
         },
-        options: stackedOpts(allPeriods, 'bn')
+        options: stackedOpts(allPeriods, 'bn', 45, 10)
       });
 
       /* ── Overview 2: Total by Quantity (ComTrade only) ── */
@@ -1695,11 +1705,11 @@
             { label: 'Gas',       data: ctPeriods.map(p => +((lngQty[p] || 0) + (pipeQty[p] || 0)).toFixed(2)), backgroundColor: GAS_C, borderWidth: 0 },
           ]
         },
-        options: stackedOpts(ctPeriods, 'Mt')
+        options: stackedOpts(ctPeriods, 'Mt', 100, 50)
       });
 
       /* ── Country pairs ── */
-      function buildCountryPair(rows, qtyId, valId) {
+      function buildCountryPair(rows, qtyId, valId, qMax, qStep, vMax, vStep) {
         const top    = top5(rows);
         const ctRows = rows.filter(r => r.source === 'comtrade');
         const vPer   = uniqSortedPeriods(rows);
@@ -1715,7 +1725,7 @@
               backgroundColor: P5_COLORS[i], borderWidth: 0,
             }))
           },
-          options: stackedOpts(vPer, 'bn')
+          options: stackedOpts(vPer, 'bn', vMax, vStep)
         });
 
         new Chart(document.getElementById(qtyId), {
@@ -1728,14 +1738,15 @@
               backgroundColor: P5_COLORS[i], borderWidth: 0,
             }))
           },
-          options: stackedOpts(qPer, 'Mt')
+          options: stackedOpts(qPer, 'Mt', qMax, qStep)
         });
       }
 
-      buildCountryPair(coal,     'coal-qty-country', 'coal-val-country');
-      buildCountryPair(crudeoil, 'oil-qty-country',  'oil-val-country');
-      buildCountryPair(lng,      'lng-qty-country',  'lng-val-country');
-      buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country');
+      //                               qMax qStep  vMax vStep
+      buildCountryPair(coal,     'coal-qty-country', 'coal-val-country',  35, 10,   4,  1);
+      buildCountryPair(crudeoil, 'oil-qty-country',  'oil-val-country',   35, 10,  30, 10);
+      buildCountryPair(lng,      'lng-qty-country',  'lng-val-country',    8,  2,   8,  2);
+      buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country',   6,  1,   2,  0.5);
 
     } /* end buildImportsSection */
 
@@ -1769,19 +1780,22 @@
       const wbCoalAu = rows.map(r => wbMap[r.period] ? +wbMap[r.period].coal_au_usd_mt   || null : null);
       const wbLngJp  = rows.map(r => wbMap[r.period] ? +wbMap[r.period].lng_japan_usd_mmbtu || null : null);
 
-      const lineOpts = (yLabel) => ({
+      const lineOpts = (yLabel, yMin, yMax, yStep) => ({
         responsive: true,
         plugins: { legend: { labels: { color: '#c8c0e8', boxWidth: 12 } } },
         scales: {
           x: { ticks: { color: '#8a84aa', maxRotation: 45 }, grid: { color: '#1e1a36' } },
-          y: { ticks: { color: '#8a84aa' }, grid: { color: '#1e1a36' },
+          y: { ticks: { color: '#8a84aa', ...(yStep ? { stepSize: yStep } : {}) },
+               grid: { color: '#1e1a36' },
+               ...(yMin !== undefined ? { min: yMin } : {}),
+               ...(yMax !== undefined ? { max: yMax } : {}),
                title: { display: true, text: yLabel, color: '#8a84aa', font: { size: 11 } } }
         }
       });
 
-      const mkLine = (id, datasets, yLabel) => new Chart(
+      const mkLine = (id, datasets, yLabel, yMin, yMax, yStep) => new Chart(
         document.getElementById(id).getContext('2d'),
-        { type: 'line', data: { labels, datasets }, options: lineOpts(yLabel) }
+        { type: 'line', data: { labels, datasets }, options: lineOpts(yLabel, yMin, yMax, yStep) }
       );
 
       const ds = (label, data, color, dash) => ({
@@ -1798,26 +1812,26 @@
         ds('Coal (USD/t)',      vpuCoal,  RED),
         ds('Crude Oil (USD/t)', vpuCrude, ORANGE),
         ds('Gas (USD/t)',       vpuGas,   TEAL),
-      ], 'USD / t');
+      ], 'USD / t', 0, 1000, 250);
 
       /* Chart 2 — Crude Oil vs Brent / Dubai */
       mkLine('bench-crude', [
         ds('GACC VpU (÷7.33)', vpuCrudeBbl, ORANGE),
         ds('Brent',            wbBrent,     GOLD,  [4, 3]),
         ds('Dubai',            wbDubai,     TEAL,  [4, 3]),
-      ], 'USD / bbl');
+      ], 'USD / bbl', 0, 150, 50);
 
       /* Chart 3 — Gas vs LNG Japan */
       mkLine('bench-gas', [
         ds('GACC VpU (÷52)',  vpuGasMmbtu, TEAL),
         ds('LNG Japan',       wbLngJp,     ORANGE, [4, 3]),
-      ], 'USD / MMBtu');
+      ], 'USD / MMBtu', 0, 16, 5);
 
       /* Chart 4 — Coal vs Australian Coal */
       mkLine('bench-coal', [
         ds('GACC VpU',         vpuCoal,  RED),
         ds('Coal Australia',   wbCoalAu, ORANGE, [4, 3]),
-      ], 'USD / t');
+      ], 'USD / t', 0, 150, 50);
 
     } /* end buildBenchmarkSection */
 
