@@ -59,10 +59,11 @@ Sobald ein neuer Monat in einen der neun CSVs gepusht wird, zeigt das Dashboard 
 
 | Quelle | Inhalt | Zeitraum | Update |
 |---|---|---|---|
-| UN ComTrade API | Fossile Brennstoffimporte nach Lieferland | 2020–laufend | monatlich automatisch (15.) |
+| [UN ComTrade](https://comtradeplus.un.org/) API | Fossile Brennstoffimporte nach Lieferland | 2020–laufend | monatlich automatisch (15.) |
 | GACC / NBS via Vault | Importmengen + -werte (GACC), Inlandsproduktion (NBS) | Mai 2026–laufend | manuell nach jedem Energiebilanz-RECH |
 | Ember API | Stromerzeugung nach Quelle, Nachfrage, CO₂-Intensität, installierte Wind-/Solarleistung | 2015–laufend | monatlich automatisch (17.–31.) |
 | CREA Monthly Energy & Air Quality Snapshot | Kapazitätszubau nach Energieträger (Kohle, Gas, Kernkraft, Wasserkraft, Wind, Solar) | Mai 2026–laufend | manuell via machine_data-Block; N-2-Verzögerung |
+| [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet | Rohstoff-Benchmarks: Brent, Dubai, Coal AU, LNG Japan | Jan 2026–laufend | monatlich automatisch (15.) |
 
 **ComTrade** liefert granulare Herkunftsland-Daten für Kohle, Rohöl, LNG und Pipelinegas — historisch ab 2020, laufend für 2025 automatisiert per GitHub Actions.
 
@@ -139,7 +140,7 @@ Eine Datei pro Energieträger. Jede Zeile ist ein Lieferland für einen Monat.
 | Spalte | Einheit | Beschreibung |
 |---|---|---|
 | period | YYYYMM | Berichtsmonat |
-| partner | Text | Lieferland (UN ComTrade Bezeichnung) |
+| partner | Text | Lieferland ([UN ComTrade](https://comtradeplus.un.org/) Bezeichnung) |
 | value_usd_bn | Mrd. USD | Importwert |
 | qty_mt | Mio. t | Importmenge |
 | value_per_mt_usd | USD/t | Importwert je Tonne |
@@ -385,7 +386,7 @@ Monatlicher Kapazitätszubau nach Energieträger in Gigawatt (GW). Quelle: CREA 
 
 ### `data/reference/wb_reference_prices.csv`
 
-Monatliche Rohstoff-Referenzpreise aus dem World Bank Pink Sheet (CMO-Historical-Data-Monthly.xlsx). Wird am 15. jeden Monats automatisch aktualisiert.
+Monatliche Rohstoff-Referenzpreise aus dem [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet (CMO-Historical-Data-Monthly.xlsx). Wird am 15. jeden Monats automatisch aktualisiert.
 
 | Spalte | Einheit | Beschreibung |
 |---|---|---|
@@ -397,7 +398,7 @@ Monatliche Rohstoff-Referenzpreise aus dem World Bank Pink Sheet (CMO-Historical
 
 **Verwendungszweck im Dashboard:** Vergleich mit den GACC-Importpreisen (VpU) in der Sektion "Import Price Benchmarks". Für den Vergleich wird der GACC-VpU umgerechnet: Rohöl USD/t ÷ 7,33 = USD/bbl; Gas USD/t ÷ 52 = USD/MMBtu; Kohle direkt.
 
-**Datenquelle:** World Bank Commodity Markets, Pink Sheet (monatlich). Die Excel-URL ändert sich monatlich; `fetch_wb_reference_prices.py` scrapt sie zur Laufzeit von der WB-Seite.
+**Datenquelle:** [World Bank](https://www.worldbank.org/en/research/commodity-markets) Commodity Markets, Pink Sheet (monatlich). Die Excel-URL ändert sich monatlich; `fetch_wb_reference_prices.py` scrapt sie zur Laufzeit von der WB-Seite.
 
 ---
 
@@ -408,7 +409,7 @@ Monatliche Rohstoff-Referenzpreise aus dem World Bank Pink Sheet (CMO-Historical
 ComTrade veröffentlicht Monatsdaten typischerweise mit 2–3 Monaten Verzögerung. Das Script bricht sauber ab, wenn noch keine 2025-Daten verfügbar sind.
 
 Erforderliche GitHub Secrets:
-- `COMTRADE_PRIMARY_KEY` — UN ComTrade API Primary Key
+- `COMTRADE_PRIMARY_KEY` — [UN ComTrade](https://comtradeplus.un.org/) API Primary Key
 
 ---
 
@@ -443,7 +444,7 @@ Erforderliche GitHub Secrets:
 
 ## Automatisierung: World Bank Reference Prices
 
-**GitHub Actions** läuft am 15. jeden Monats (06:00 UTC) und ruft `fetch_wb_reference_prices.py` auf. Das Script scrapt die aktuelle Pink-Sheet-URL von der World Bank Commodity Markets-Seite, downloaded das Excel, parsed das Sheet "Monthly Prices" und schreibt `data/reference/wb_reference_prices.csv` per Upsert. Bereits vorhandene Zeilen werden ersetzt, ältere bleiben erhalten.
+**GitHub Actions** läuft am 15. jeden Monats (06:00 UTC) und ruft `fetch_wb_reference_prices.py` auf. Das Script scrapt die aktuelle Pink-Sheet-URL von der [World Bank](https://www.worldbank.org/en/research/commodity-markets) Commodity Markets-Seite, downloaded das Excel, parsed das Sheet "Monthly Prices" und schreibt `data/reference/wb_reference_prices.csv` per Upsert. Bereits vorhandene Zeilen werden ersetzt, ältere bleiben erhalten.
 
 Der Update-Zeitpunkt (15.) liegt bewusst vor dem Energiebilanz-Update (~20.), sodass bei jedem manuellen GACC-Push aktuelle Referenzpreise vorliegen.
 
@@ -455,7 +456,7 @@ START_PERIOD=202601 python scripts/fetch_wb_reference_prices.py
 
 Alternativ per `fetch_wb_reference_prices_history`-Workflow (workflow_dispatch).
 
-Keine zusätzlichen GitHub Secrets erforderlich — der World Bank Pink Sheet ist öffentlich zugänglich.
+Keine zusätzlichen GitHub Secrets erforderlich — der [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet ist öffentlich zugänglich.
 
 ---
 
