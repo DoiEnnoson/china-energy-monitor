@@ -470,13 +470,13 @@
       <div class="chart-title">Coal Capacity Added and Retired</div>
       <div class="chart-subtitle">GW · Additions above zero · Retirements below zero · Line: total operating capacity (right axis)</div>
       <canvas id="coal-fleet-diverge" height="110"></canvas>
-      <p class="chart-source">Source: <a href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/" target="_blank" rel="noopener">Global Energy Monitor</a>, Global Coal Plant Tracker July 2026</p>
+      <p class="chart-source">Source: Global Coal Plant Tracker, <a href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/" target="_blank" rel="noopener">Global Energy Monitor</a></p>
     </div>
     <div class="chart-box full">
       <div class="chart-title">Coal Fleet Capacity Factor</div>
       <div class="chart-subtitle">Actual generation ÷ theoretical maximum at full load · percent · monthly · 2016 – present</div>
       <canvas id="coal-cf-monthly" height="80"></canvas>
-      <p class="chart-source">Sources: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a> (generation), <a href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/" target="_blank" rel="noopener">Global Energy Monitor</a> (installed capacity)</p>
+      <p class="chart-source">Sources: <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a> (generation), Global Coal Plant Tracker, <a href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/" target="_blank" rel="noopener">Global Energy Monitor</a> (installed capacity)</p>
     </div>
 
     <p class="section-label-h1" id="imports">Fossil Fuel Imports</p>
@@ -1877,8 +1877,8 @@
             {
               label: 'Monthly',
               data: cfData,
-              borderColor: orange + '55',
-              backgroundColor: orange + '18',
+              borderColor: text2 + '66',
+              backgroundColor: text2 + '18',
               fill: true,
               borderWidth: 1,
               pointRadius: 0,
@@ -1887,9 +1887,9 @@
             {
               label: '12-Month MA',
               data: ma12,
-              borderColor: orange,
+              borderColor: teal,
               backgroundColor: 'transparent',
-              borderWidth: 2,
+              borderWidth: 2.5,
               pointRadius: 0,
               tension: 0.4,
               spanGaps: false,
