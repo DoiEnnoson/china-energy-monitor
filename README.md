@@ -1,6 +1,6 @@
 # china-energy-monitor
 
-Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung — und das öffentliche Dashboard, das darauf aufbaut. Vier Datenquellen, zehn Tabellen, drei automatisierte Update-Zyklen.
+Strukturierte Monatsdaten zu Chinas Energieimporten, -produktion und Stromerzeugung — und das öffentliche Dashboard, das darauf aufbaut. Fünf Datenquellen, elf Tabellen, vier automatisierte Update-Zyklen.
 
 Live: **[china-energy-monitor.com](https://china-energy-monitor.com)**
 
@@ -19,7 +19,7 @@ Das Dashboard läuft als statische GitHub-Pages-Site aus dem Ordner `docs/`. Es 
 | Datenzugriff | `fetch()` gegen `raw.githubusercontent.com` — kein Backend nötig |
 | Deployment | GitHub Pages aus `docs/`; Domain via `docs/CNAME` |
 
-Beim Seitenaufruf werden neun CSVs parallel geladen:
+Beim Seitenaufruf werden elf CSVs parallel geladen:
 
 ```
 data/power/ember_power.csv
@@ -31,24 +31,23 @@ data/combined/combined_coal.csv
 data/combined/combined_crude_oil.csv
 data/combined/combined_lng.csv
 data/combined/combined_pipeline_gas.csv
+data/combined/energy_balance.csv
+data/reference/wb_reference_prices.csv
 ```
 
 Alle Texte, KPI-Werte, Chart-Titel und Summary-Absätze werden aus den geholten Daten generiert — keine hardcodierten Zahlen oder Datumsangaben im HTML.
 
 ### Aktuelle Sektionen
 
-| Sektion | Datenquelle | Charts |
-|---|---|---|
-| This Month At A Glance | ember_power, gacc_imports, capacity_additions | 4 KPI-Karten |
-| Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamischer Fließtext |
-| Fossil Supply | fossil_supply, gacc_imports | Butterfly-Balken, YoY-Balken |
-| Power Generation Mix | ember_power | Gestapeltes Flächendiagramm |
-| Electricity Demand vs. Generation | ember_power | Liniendiagramm |
-| Capacity Added | capacity_additions | 2 Balken + 4 Donuts + Fließtext |
-| Installed Capacity Growth | ember_capacity | Liniendiagramm Wind + Solar |
-| Total Energy System | energy_balance, fossil_supply | 2 KPI-Karten (Monat + YTD), 2 Träger-Balken (Monat + YTD), YTD-Butterfly + YoY-Balken, Import-Dependency Liniendiagramm |
-| Power Generation — Source Breakdown | ember_power, ember_capacity | TWh gestapelt, Share gestapelt, Kohle Dual-Achse, Kapazitätsfaktor Wind + Solar, CO₂-Intensität, Hydro Saisonal (6 Jahrgänge) |
-| Fossil Fuel Imports | combined_*.csv (ComTrade + GACC) | 2 Übersichts-Charts + 4 × 2 Länder-Charts (10 Charts) |
+| Nr. | Sektion | Datenquelle | Charts / Inhalt |
+|---|---|---|---|
+| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions | 4 KPI-Karten |
+| 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamischer Fließtext; Fossil Supply (Butterfly + YoY); Power Generation Mix (gestapeltes Flächendiagramm); Electricity Demand vs. Generation (Liniendiagramm) |
+| 3 | Capacity Added | capacity_additions, ember_capacity | 2 Balken (YTD + Monat), 4 Donuts, Fließtext, Installed Capacity Growth (Liniendiagramm Wind + Solar) |
+| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI-Karten (Monat + YTD), 2 Träger-Balken, YTD-Butterfly + YoY-Balken, Import-Dependency Liniendiagramm |
+| 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh gestapelt, Share gestapelt, Kohle Dual-Achse, Kapazitätsfaktor Wind + Solar, CO₂-Intensität, Hydro Saisonal (6 Jahrgänge) |
+| 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 Übersichts-Charts + 4 × 2 Länder-Charts in der Reihenfolge Crude Oil → LNG → Coal → Pipeline Gas |
+| 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 Charts (2×2): GACC VpU alle Träger (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
 
 ### Daten aktualisieren
 
@@ -102,26 +101,31 @@ data/
     combined_crude_oil.csv      — Rohölimporte nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
     combined_lng.csv            — LNG-Importe nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
     combined_pipeline_gas.csv   — Pipelinegas-Importe nach Lieferland, ComTrade+GACC (Jan 2020–); auto-rebuild
+  reference/
+    wb_reference_prices.csv     — Monatliche Rohstoff-Benchmarks (World Bank Pink Sheet): Brent, Dubai, Coal AU, LNG Japan (Jan 2026–); auto-rebuild am 15.
 
 scripts/
-  fetch_history.py        — Einmalig: lädt ComTrade-Historie 2020–2024
-  fetch_comtrade.py       — Monatlich: aktualisiert ComTrade-Daten für 2025
-  rech_to_github.py       — Einzeln: extrahiert machine_data aus einer RECH-Datei
-  backfill_to_github.py   — Einmalig/lokal: verarbeitet alle annotierten RECH-Dateien
-  fetch_ember_history.py  — Einmalig: lädt Ember-Stromhistorie ab 2015
-  fetch_ember_monthly.py  — Monatlich: prüft auf neue Ember-Daten und aktualisiert CSVs
-  build_supply.py         — Auto: kombiniert GACC-Importe + NBS-Produktion zu fossil_supply.csv
-  build_energy_balance.py — Auto: konvertiert alles nach TWh, addiert saubere Stromerzeugung
-  build_combined.py       — Auto: merged ComTrade + GACC Lieferland-CSVs zu combined_*.csv
+  fetch_history.py              — Einmalig: lädt ComTrade-Historie 2020–2024
+  fetch_comtrade.py             — Monatlich: aktualisiert ComTrade-Daten für 2025
+  rech_to_github.py             — Einzeln: extrahiert machine_data aus einer RECH-Datei
+  backfill_to_github.py         — Einmalig/lokal: verarbeitet alle annotierten RECH-Dateien
+  fetch_ember_history.py        — Einmalig: lädt Ember-Stromhistorie ab 2015
+  fetch_ember_monthly.py        — Monatlich: prüft auf neue Ember-Daten und aktualisiert CSVs
+  build_supply.py               — Auto: kombiniert GACC-Importe + NBS-Produktion zu fossil_supply.csv
+  build_energy_balance.py       — Auto: konvertiert alles nach TWh, addiert saubere Stromerzeugung
+  build_combined.py             — Auto: merged ComTrade + GACC Lieferland-CSVs zu combined_*.csv
+  fetch_wb_reference_prices.py  — Monatlich: scrapt Pink Sheet URL, parsed Excel, schreibt wb_reference_prices.csv
 
 .github/workflows/
-  monthly_update.yml          — Cron: 15. jeden Monats, 06:00 UTC (ComTrade)
-  fetch_history.yml           — workflow_dispatch, einmalig (ComTrade)
-  fetch_ember_history.yml     — workflow_dispatch, einmalig (Ember)
-  monthly_ember_update.yml    — Cron: 17.–31. jeden Monats, 06:00 UTC; deaktiviert sich nach Update
-  monthly_ember_reenable.yml  — Cron: 1. jeden Monats, 05:00 UTC; reaktiviert Update-Workflow
-  build_supply.yml            — Push-Trigger: rebuild fossil_supply.csv + energy_balance.csv wenn GACC/NBS sich ändern; auch von monthly_ember_update.yml dispatcht
-  build_combined.yml          — Push-Trigger: rebuild combined_*.csv wenn comtrade_*.csv oder gacc_*.csv sich ändern
+  monthly_update.yml                    — Cron: 15. jeden Monats, 06:00 UTC (ComTrade)
+  fetch_history.yml                     — workflow_dispatch, einmalig (ComTrade)
+  fetch_ember_history.yml               — workflow_dispatch, einmalig (Ember)
+  monthly_ember_update.yml              — Cron: 17.–31. jeden Monats, 06:00 UTC; deaktiviert sich nach Update
+  monthly_ember_reenable.yml            — Cron: 1. jeden Monats, 05:00 UTC; reaktiviert Update-Workflow
+  build_supply.yml                      — Push-Trigger: rebuild fossil_supply.csv + energy_balance.csv wenn GACC/NBS sich ändern; auch von monthly_ember_update.yml dispatcht
+  build_combined.yml                    — Push-Trigger: rebuild combined_*.csv wenn comtrade_*.csv oder gacc_*.csv sich ändern
+  fetch_wb_reference_prices.yml         — Cron: 15. jeden Monats, 06:00 UTC; scrapt World Bank Pink Sheet
+  fetch_wb_reference_prices_history.yml — workflow_dispatch, einmalig (Backfill ab Jan 2026)
 ```
 
 ---
@@ -145,6 +149,8 @@ HS-Codes: Kohle = 2701, Rohöl = 2709, LNG = 271111, Pipelinegas = 271121.
 ### `data/fuel-imports/gacc_imports.csv`
 
 Eine Zeile pro Monat. Gesamtimporte aller Lieferländer (GACC-Aggregat).
+
+**Hinweis Januar/Februar (GACC):** GACC veröffentlicht Januar und Februar nie getrennt, sondern stets als kombinierten Zweimonatswert. Ab 2026 werden Jan und Feb dennoch als separate Zeilen geführt: Jan-only wird aus der Jan-Feb-Gesamtsumme abzüglich des separat ausgewiesenen Feb-Werts errechnet (Quelle: GACC XLS, Sheet "Jan-Feb", Spalten Gesamt minus Feb-alone). Die YoY-Felder beider Zeilen bleiben leer, da vergleichbare Monatseinzelwerte für 2025 nicht vorliegen.
 
 | Spalte | Einheit | Beschreibung |
 |---|---|---|
@@ -227,7 +233,7 @@ Eine Zeile pro Monat. Chinesische Inlandsproduktion nach NBS.
 | gas_bcm | Mrd. m³ | Erdgasproduktion |
 | gas_bcm_yoy_pct | Prozent | Veränderung gegenüber Vorjahresmonat |
 
-**Hinweis Januar/Februar (NBS):** NBS und GACC veröffentlichen Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert. Die Zeile mit `period=202601` enthält daher den kumulierten Jan-Feb-Wert (z. B. 760 Mio. t Kohle für zwei Monate). Die YoY-Angaben beziehen sich ebenfalls auf den kombinierten Zweimonatszeitraum. Ab März sind Einzelmonatswerte ausgewiesen. Diese Struktur ist konsistent mit der GACC-Berichtspraxis.
+**Hinweis Januar/Februar (NBS):** NBS veröffentlicht Januar und Februar grundsätzlich nur als kombinierten Zweimonatswert. Die Zeile mit `period=202601` in `nbs_production.csv` enthält daher den kumulierten Jan-Feb-Wert. Ab März sind Einzelmonatswerte ausgewiesen.
 
 ### `data/combined/fossil_supply.csv`
 
@@ -377,6 +383,24 @@ Monatlicher Kapazitätszubau nach Energieträger in Gigawatt (GW). Quelle: CREA 
 
 ---
 
+### `data/reference/wb_reference_prices.csv`
+
+Monatliche Rohstoff-Referenzpreise aus dem World Bank Pink Sheet (CMO-Historical-Data-Monthly.xlsx). Wird am 15. jeden Monats automatisch aktualisiert.
+
+| Spalte | Einheit | Beschreibung |
+|---|---|---|
+| period | YYYYMM | Berichtsmonat |
+| brent_usd_bbl | USD/bbl | Brent-Rohöl (Spot) |
+| dubai_usd_bbl | USD/bbl | Dubai-Rohöl (Spot) |
+| coal_au_usd_mt | USD/t | Australische Kraftwerkskohle (Newcastle) |
+| lng_japan_usd_mmbtu | USD/MMBtu | LNG Japan (JKM-Proxy) |
+
+**Verwendungszweck im Dashboard:** Vergleich mit den GACC-Importpreisen (VpU) in der Sektion "Import Price Benchmarks". Für den Vergleich wird der GACC-VpU umgerechnet: Rohöl USD/t ÷ 7,33 = USD/bbl; Gas USD/t ÷ 52 = USD/MMBtu; Kohle direkt.
+
+**Datenquelle:** World Bank Commodity Markets, Pink Sheet (monatlich). Die Excel-URL ändert sich monatlich; `fetch_wb_reference_prices.py` scrapt sie zur Laufzeit von der WB-Seite.
+
+---
+
 ## Automatisierung: ComTrade
 
 **GitHub Actions** läuft am 15. jeden Monats (06:00 UTC) und ruft `fetch_comtrade.py` auf. Das Script holt alle verfügbaren 2025-Monate per ComTrade API und pflegt sie per Upsert in die vier Commodity-CSVs ein. Bereits vorhandene 2025-Zeilen werden vollständig ersetzt (idempotent). Ältere Jahre (2020–2024) bleiben unberührt.
@@ -414,6 +438,24 @@ Das Script gibt `new_data=true/false` und `new_period=YYYYMM` aus. Im GitHub Act
 
 Erforderliche GitHub Secrets:
 - `EMBER_KEY` — Ember API Key
+
+---
+
+## Automatisierung: World Bank Reference Prices
+
+**GitHub Actions** läuft am 15. jeden Monats (06:00 UTC) und ruft `fetch_wb_reference_prices.py` auf. Das Script scrapt die aktuelle Pink-Sheet-URL von der World Bank Commodity Markets-Seite, downloaded das Excel, parsed das Sheet "Monthly Prices" und schreibt `data/reference/wb_reference_prices.csv` per Upsert. Bereits vorhandene Zeilen werden ersetzt, ältere bleiben erhalten.
+
+Der Update-Zeitpunkt (15.) liegt bewusst vor dem Energiebilanz-Update (~20.), sodass bei jedem manuellen GACC-Push aktuelle Referenzpreise vorliegen.
+
+**Einmaliger Backfill** (bereits ausgeführt, ab Jan 2026):
+
+```bash
+START_PERIOD=202601 python scripts/fetch_wb_reference_prices.py
+```
+
+Alternativ per `fetch_wb_reference_prices_history`-Workflow (workflow_dispatch).
+
+Keine zusätzlichen GitHub Secrets erforderlich — der World Bank Pink Sheet ist öffentlich zugänglich.
 
 ---
 
@@ -567,6 +609,7 @@ pandas            — Datenverarbeitung
 requests          — HTTP
 urllib3           — HTTP-Transport
 pyyaml            — YAML-Parsing der machine_data-Blöcke
+openpyxl          — Excel-Parsing (World Bank Pink Sheet)
 ```
 
 Lokal: `pip install -r requirements.txt` in einem venv. Auf macOS mit extern verwaltetem Python empfiehlt sich ein venv unter `/tmp/` oder `~/.venv/`.
@@ -631,68 +674,29 @@ python scripts/build_combined.py
 
 - **2026 ComTrade**: Sobald UN ComTrade 2026-Daten verfügbar macht, `YEAR` in `fetch_comtrade.py` aktualisieren und den Workflow manuell antriggern.
 - **Pipeline-Gas Begleittext**: Dashboard-Abschnitt "Pipeline Gas Imports" braucht einen erklärenden Textblock. Thema: warum die Pipelinegas-Importe bis 2021 nominal höher erscheinen als danach (Central Asia Line D-Stall, Turkmenistan-Lieferprobleme, beschleunigtes chinesisches Shale-Gas-Wachstum, Power of Siberia-Hochlauf ab 2019). Auch SEO-relevant.
-- **Referenzpreise (Marktbenchmarks)**: Geplante Erweiterung um eine neue CSV `data/reference/market_prices.csv` mit monatlichen Marktpreisen zum Vergleich mit den GACC-Importpreisen. Details siehe unten.
 
-## Geplante Erweiterung: Markt-Referenzpreise
+---
 
-### Konzept
+## Import Price Benchmarks — Konzept und Methodik
 
-`gacc_imports.csv` enthält für Kohle, Rohöl und Gas den impliziten Importpreis (Value per Unit, VpU) aus den GACC-Zolldaten. Dieser Preis ist ein gewichteter Durchschnitt aller tatsächlichen physischen Transaktionen im Monat — also kein Spot- oder Papierpreis, sondern was China tatsächlich bezahlt hat. Ein Vergleich mit Markt-Benchmarks erlaubt näherungsweise Aussagen darüber, ob China über oder unter Marktpreisen kauft.
+`gacc_imports.csv` enthält für Kohle, Rohöl und Gas den impliziten Importpreis (Value per Unit, VpU) aus den GACC-Zolldaten. Dieser Preis ist ein gewichteter Durchschnitt aller tatsächlichen physischen Transaktionen im Monat — kein Spot- oder Papierpreis, sondern was China tatsächlich bezahlt hat. Ein Vergleich mit Markt-Benchmarks erlaubt näherungsweise Aussagen darüber, ob China über oder unter Marktpreisen kauft.
 
-**Methodischer Vorbehalt:** Alle Benchmark-Preise sind Spot- oder Assessment-Preise, Chinas Importe basieren größtenteils auf Langzeitverträgen (oft ölindexiert) oder politisch ausgehandelten Preisen (Zentralasien, Russland). Der Vergleich ist strukturell ungleich, aber journalistisch aussagekräftig — insbesondere Trendbrüche (z. B. China kauft Öl nach 2022 deutlich unter Brent = Russland-Rabatt-Effekt) sind sichtbar.
+**Methodischer Vorbehalt:** Alle Benchmark-Preise sind Spot- oder Assessment-Preise, Chinas Importe basieren größtenteils auf Langzeitverträgen (oft ölindexiert) oder politisch ausgehandelten Preisen (Zentralasien, Russland). Der Vergleich ist strukturell ungleich, aber journalistisch aussagekräftig — insbesondere Trendbrüche (China kauft Öl nach 2022 deutlich unter Brent = Russland-Rabatt-Effekt) sind sichtbar.
 
 **Iran-Hinweis:** Iranisches Öl taucht in GACC-Daten nicht auf (erfasst als Malaysia, UAE, Oman). Strukturelles Datenloch.
 
-### Einheiten
+### Einheiten und Umrechnungen
 
-| Träger | GACC-VpU | Markteinheit | Umrechnung |
+| Träger | GACC-VpU | Dashboard-Einheit | Umrechnung |
 |---|---|---|---|
 | Kohle | USD/t | USD/t | direkt vergleichbar |
-| Rohöl | USD/t | USD/bbl | ÷ 7,33 (Standardfaktor Rohöl) |
+| Rohöl | USD/t | USD/bbl | ÷ 7,33 (IEA-Standardfaktor) |
 | Gas | USD/t | USD/MMBtu | ÷ 52 (LNG-Faustregel; GIIGNL: 43–49 MMBtu/t) |
 
-### Datenquellen (recherchiert 10.09.2026)
+### Benchmark-Quellen
 
-| Quelle | Liefert | Zugang | Abdeckung |
-|---|---|---|---|
-| **EIA API** (kostenlos, Key vorhanden) | Brent ($/bbl), WTI ($/bbl), Henry Hub ($/MMBtu) | REST, `petroleum/pri/spt` + `natural-gas/pri/fut` | aktuell bis Aug 2026 |
-| **World Bank Pink Sheet** | Brent, Dubai, WTI, Coal Australian ($/t), LNG Japan ($/MMBtu) | Excel-Download, kein REST-API | aktuell bis Aug 2026, monatlich aktualisiert |
-| **Urals** | russisches Rohöl-Referenzpreis | kein freier Zugang (Platts/Argus proprietär, Yahoo Finance hat es nicht) | entfällt |
-| **Data360 (World Bank)** | nicht geeignet — enthält Entwicklungsindikatoren, keine Rohstoffpreise | — | — |
-| **IMF SDMX** | hätte Dubai, LNG Japan | aus dieser Umgebung geblockt | — |
-
-**Bevorzugte Kombination:**
-- Kohle-Referenz: World Bank Pink Sheet `Coal, Australian` ($/t) — direkt mit GACC vergleichbar, kein Umrechnungsbedarf
-- Öl-Referenz: EIA API `Brent` + World Bank Pink Sheet `Dubai` (beide $/bbl, GACC-VpU mit ÷ 7,33 umrechnen)
-- Gas-Referenz: World Bank Pink Sheet `Liquefied natural gas, Japan` ($/MMBtu) — bester freier JKM-Proxy
-
-**Pink Sheet URL-Logik:** Die URL ändert sich monatlich. Aktueller Link wird von der World Bank Commodity Markets-Seite gescraped:
-```
-https://www.worldbank.org/en/research/commodity-markets
-→ grep 'CMO-Historical-Data-Monthly.xlsx'
-→ Download via thedocs.worldbank.org/...
-```
-
-### Geplante Implementierung
-
-```
-scripts/fetch_reference_prices.py
-  → scrapt Pink Sheet URL von WB Commodity Markets-Seite
-  → downloaded und parsed Excel (Sheet: 'Monthly Prices')
-  → ruft EIA API für Brent/WTI ab (als Redundanz und für aktuelle Monate falls PinkSheet laggt)
-  → schreibt data/reference/market_prices.csv
-
-GitHub Action: fetch_reference_prices.yml
-  → monatlicher Trigger (z. B. 5. jedes Monats)
-  → läuft nach fetch_comtrade.yml
-```
-
-**Ziel-Schema `data/reference/market_prices.csv`:**
-
-| Spalte | Einheit | Quelle |
+| Träger | Benchmark | Quelle |
 |---|---|---|
-| `period` | YYYYMM | — |
-| `brent_usd_bbl` | $/bbl | EIA / Pink Sheet |
-| `dubai_usd_bbl` | $/bbl | Pink Sheet |
-| `coal_au_usd_mt` | $/t | Pink Sheet |
-| `lng_japan_usd_mmbtu` | $/MMBtu | Pink Sheet |
+| Rohöl | Brent ($/bbl) + Dubai ($/bbl) | World Bank Pink Sheet |
+| Gas | LNG Japan ($/MMBtu) — JKM-Proxy | World Bank Pink Sheet |
+| Kohle | Coal Australian — Newcastle ($/t) | World Bank Pink Sheet |
