@@ -138,12 +138,19 @@
     .footer-credit { font-size: 0.75rem; color: var(--text2); }
     .footer-credit a { color: var(--teal); }
     .site-nav {
-      display: flex; flex-wrap: wrap; gap: 0.25rem 1.8rem;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 0.7rem 0; border-bottom: 1px solid var(--border);
       font-size: 0.78rem;
     }
+    .site-nav-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.8rem; }
     .site-nav a { color: var(--text2); text-decoration: none; }
     .site-nav a:hover { color: var(--teal); }
+    .btn-nav-donate {
+      background: var(--teal); color: #080614; font-weight: 700;
+      padding: 0.25rem 0.9rem; border-radius: 4px; font-size: 0.75rem;
+      text-decoration: none; white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-nav-donate:hover { opacity: 0.85; text-decoration: none; }
 
     @media (max-width: 900px) {
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -192,13 +199,16 @@
   </header>
 
   <nav class="site-nav">
-    <a href="#capacity">Capacity Added</a>
-    <a href="#total-energy">Total Energy System</a>
-    <a href="#power-generation">Power Generation</a>
-    <a href="#imports">Fossil Fuel Imports</a>
-    <a href="#benchmarks">Import Price Benchmarks</a>
-    <a href="#about">About</a>
-    <a href="#methodology">Methodology</a>
+    <div class="site-nav-links">
+      <a href="#capacity">Capacity Added</a>
+      <a href="#total-energy">Total Energy System</a>
+      <a href="#power-generation">Power Generation</a>
+      <a href="#imports">Fossil Fuel Imports</a>
+      <a href="#benchmarks">Import Price Benchmarks</a>
+      <a href="#about">About</a>
+      <a href="#methodology">Methodology</a>
+    </div>
+    <a href="https://buy.stripe.com/fZu4gy9yp6CTbqw3Ak5Vu00" class="btn-nav-donate" target="_blank" rel="noopener">Support This Project</a>
   </nav>
 
   <main>
