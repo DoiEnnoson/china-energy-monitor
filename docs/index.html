@@ -1771,6 +1771,7 @@
               borderColor: teal,
               borderWidth: 1,
               yAxisID: 'yBar',
+              stack: 'coal',
               order: 2,
             },
             {
@@ -1781,6 +1782,7 @@
               borderColor: red,
               borderWidth: 1,
               yAxisID: 'yBar',
+              stack: 'coal',
               order: 2,
             },
             {
@@ -1816,6 +1818,7 @@
             x: { ticks: { color: text2 }, grid: { color: border } },
             yBar: {
               position: 'left',
+              stacked: true,
               ticks: { color: text2, callback: v => v + ' GW' },
               grid: { color: border },
               title: { display: true, text: 'GW added / retired', color: text2, font: { size: 10 } },
@@ -1859,26 +1862,45 @@
         cfData.push(parseFloat(cf.toFixed(1)));
       });
 
+      // 12-month moving average
+      const ma12 = cfData.map((_, i) => {
+        if (i < 11) return null;
+        const slice = cfData.slice(i - 11, i + 1);
+        return parseFloat((slice.reduce((a, b) => a + b, 0) / 12).toFixed(1));
+      });
+
       new Chart(document.getElementById('coal-cf-monthly'), {
         type: 'line',
         data: {
           labels: cfLabels,
-          datasets: [{
-            label: 'Coal Capacity Factor',
-            data: cfData,
-            borderColor: orange,
-            backgroundColor: orange + '26',
-            fill: true,
-            borderWidth: 2,
-            pointRadius: 0,
-            tension: 0.3,
-          }]
+          datasets: [
+            {
+              label: 'Monthly',
+              data: cfData,
+              borderColor: orange + '55',
+              backgroundColor: orange + '18',
+              fill: true,
+              borderWidth: 1,
+              pointRadius: 0,
+              tension: 0.3,
+            },
+            {
+              label: '12-Month MA',
+              data: ma12,
+              borderColor: orange,
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              pointRadius: 0,
+              tension: 0.4,
+              spanGaps: false,
+            }
+          ]
         },
         options: {
           responsive: true,
           plugins: {
             legend: { labels: { color: text2, font: { size: 11 } } },
-            tooltip: { callbacks: { label: ctx => ` ${ctx.raw.toFixed(1)} %` } }
+            tooltip: { callbacks: { label: ctx => ` ${ctx.raw !== null ? ctx.raw.toFixed(1) : '—'} %` } }
           },
           scales: {
             x: { ticks: { color: text2, maxTicksLimit: 24 }, grid: { color: border } },
