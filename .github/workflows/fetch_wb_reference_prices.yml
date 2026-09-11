@@ -21,12 +21,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Fetch Pink Sheet benchmark prices
-        run: python scripts/fetch_reference_prices.py
+      - name: Fetch WB reference prices
+        run: python scripts/fetch_wb_reference_prices.py
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/reference/
-          git diff --staged --quiet || (git commit -m "data: update market_prices.csv $(date -u +%Y-%m-%d)" && git push)
+          git diff --staged --quiet || (git commit -m "data: update wb_reference_prices.csv $(date -u +%Y-%m-%d)" && git push)

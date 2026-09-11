@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-fetch_reference_prices.py
+fetch_wb_reference_prices.py
 
 Scrapes the World Bank Pink Sheet (CMO-Historical-Data-Monthly.xlsx) and
-writes monthly benchmark prices to data/reference/market_prices.csv.
+writes monthly benchmark prices to data/reference/wb_reference_prices.csv.
 
 Columns written:
   period            — YYYYMM
@@ -31,7 +31,7 @@ from io import BytesIO
 from pathlib import Path
 
 WB_PAGE_URL  = "https://www.worldbank.org/en/research/commodity-markets"
-OUTPUT_CSV   = Path("data/reference/market_prices.csv")
+OUTPUT_CSV   = Path("data/reference/wb_reference_prices.csv")
 START_PERIOD = int(os.environ.get("START_PERIOD", "202601"))
 
 # Pink Sheet column name → output column name

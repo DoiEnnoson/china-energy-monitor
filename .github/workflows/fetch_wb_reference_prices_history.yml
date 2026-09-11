@@ -1,4 +1,4 @@
-name: Fetch Reference Prices History
+name: Fetch WB Reference Prices History
 
 on:
   workflow_dispatch:   # manual trigger only — one-time backfill
@@ -22,11 +22,11 @@ jobs:
       - name: Fetch Pink Sheet history from Jan 2026
         env:
           START_PERIOD: "202601"
-        run: python scripts/fetch_reference_prices.py
+        run: python scripts/fetch_wb_reference_prices.py
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/reference/
-          git diff --staged --quiet || (git commit -m "data: backfill market_prices.csv 2026-01 to present" && git push)
+          git diff --staged --quiet || (git commit -m "data: backfill wb_reference_prices.csv 2026-01 to present" && git push)
