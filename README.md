@@ -693,3 +693,17 @@ python scripts/build_combined.py
 | Crude oil | Brent (USD/bbl) + Dubai (USD/bbl) | World Bank Pink Sheet |
 | Gas | LNG Japan (USD/MMBtu) — JKM proxy | World Bank Pink Sheet |
 | Coal | Coal Australian — Newcastle (USD/t) | World Bank Pink Sheet |
+---
+
+## Article Cards
+
+Four *China Business Spotlight* articles are displayed in the dashboard below the Monthly Summary section. To update: swap the placeholder images in `docs/` and restore the `<a>` wrappers in the `article-grid` block in `docs/index.html`.
+
+| # | Title | URL | Image |
+|---|---|---|---|
+| 1 | China's 3-Layer Grid Replaces Baseload | https://chinabusinessspotlight.substack.com/p/chinas-3-layer-grid-replaces-baseload | cem-1.jpeg |
+| 2 | Coal vs. AI: China's Strategy Against the Dunkelflaute | https://chinabusinessspotlight.substack.com/p/coal-vs-ai-chinas-strategy-against | cem-2.jpeg |
+| 3 | China Grid Bottleneck Slows Solar and Wind Expansion | https://chinabusinessspotlight.substack.com/p/china-grid-bottleneck-slows-solar | cem-3.jpeg |
+| 4 | China Out of Gas: The Hormuz Shock in Traffic Data | https://chinabusinessspotlight.substack.com/p/china-out-of-gas-the-hormuz-shock | cem-4.jpeg |
+
+Referral parameter for all links: `?r=25gtpf`
