@@ -697,13 +697,15 @@ python scripts/build_combined.py
 
 ## Article Cards
 
-Four *China Business Spotlight* articles are displayed in the dashboard below the Monthly Summary section. To update: swap the placeholder images in `docs/` and restore the `<a>` wrappers in the `article-grid` block in `docs/index.html`.
+Four *China Business Spotlight* articles are displayed in the dashboard below the Monthly Summary section. Each card links to the article with referral parameter `?r=25gtpf`.
+
+Images are stored locally in `docs/` as square JPEGs (1:1 aspect ratio). The dashboard renders them at 1:1 via `aspect-ratio: 1/1` in the CSS.
 
 | # | Title | URL | Image |
 |---|---|---|---|
-| 1 | China's 3-Layer Grid Replaces Baseload | https://chinabusinessspotlight.substack.com/p/chinas-3-layer-grid-replaces-baseload | cem-1.jpeg |
-| 2 | Coal vs. AI: China's Strategy Against the Dunkelflaute | https://chinabusinessspotlight.substack.com/p/coal-vs-ai-chinas-strategy-against | cem-2.jpeg |
-| 3 | China Grid Bottleneck Slows Solar and Wind Expansion | https://chinabusinessspotlight.substack.com/p/china-grid-bottleneck-slows-solar | cem-3.jpeg |
-| 4 | China Out of Gas: The Hormuz Shock in Traffic Data | https://chinabusinessspotlight.substack.com/p/china-out-of-gas-the-hormuz-shock | cem-4.jpeg |
+| 1 | China's 3-Layer Grid Replaces Baseload | https://chinabusinessspotlight.substack.com/p/chinas-3-layer-grid-replaces-baseload?r=25gtpf | cem-card-1.jpg |
+| 2 | Coal vs. AI: China's Strategy Against the Dunkelflaute | https://chinabusinessspotlight.substack.com/p/coal-vs-ai-chinas-strategy-against?r=25gtpf | cem-card-2.jpg |
+| 3 | China Grid Bottleneck Slows Solar and Wind Expansion | https://chinabusinessspotlight.substack.com/p/china-grid-bottleneck-slows-solar?r=25gtpf | cem-card-3.jpg |
+| 4 | China Out of Gas: The Hormuz Shock in Traffic Data | https://chinabusinessspotlight.substack.com/p/china-out-of-gas-the-hormuz-shock?r=25gtpf | cem-card-4.jpg |
 
-Referral parameter for all links: `?r=25gtpf`
+To update a card: replace the corresponding `docs/cem-card-N.jpg` file and update the URL and title in the `article-grid` block in `docs/index.html`.
