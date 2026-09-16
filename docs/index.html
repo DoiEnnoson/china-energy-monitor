@@ -74,7 +74,7 @@
     }
 
     .kpi-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
+      display: grid; grid-template-columns: repeat(5, 1fr);
       gap: var(--gap); margin-top: 1.2rem;
     }
     .kpi-box {
@@ -236,6 +236,11 @@
         <div class="kpi-label">Capacity Added YTD</div>
         <div class="kpi-value" id="kpi-cap">—</div>
         <div class="kpi-delta" id="kpi-cap-delta">—</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-label">BEV Share</div>
+        <div class="kpi-value" id="kpi-bev-share">—</div>
+        <div class="kpi-delta" id="kpi-bev-share-yoy">—</div>
       </div>
     </div>
 
@@ -2219,6 +2224,23 @@
           }
         }
       });
+
+      /* ── BEV SHARE KPI ── */
+      if (monthly.length > 0) {
+        const last = monthly[monthly.length - 1];
+        const bevShare = +last.BEV / +last.TOTAL * 100;
+        const priorPeriod = (parseInt(last.period.slice(0, 4)) - 1) + '-' + last.period.slice(5);
+        const priorRow = monthly.find(r => r.period === priorPeriod);
+        const yoyDelta = priorRow ? bevShare - (+priorRow.BEV / +priorRow.TOTAL * 100) : null;
+
+        const valEl = document.getElementById('kpi-bev-share');
+        const yoyEl = document.getElementById('kpi-bev-share-yoy');
+        if (valEl) valEl.textContent = bevShare.toFixed(1) + '%';
+        if (yoyEl && yoyDelta !== null) {
+          yoyEl.textContent = (yoyDelta >= 0 ? '+' : '') + yoyDelta.toFixed(1) + ' pp YoY';
+          yoyEl.className = 'kpi-delta ' + (yoyDelta >= 0 ? 'pos' : 'neg');
+        }
+      }
 
       /* ── TRAJECTORY ── */
       const allPeriods = proj.map(r => r.period);
