@@ -207,6 +207,7 @@
       <a href="#power-generation">Power Generation</a>
       <a href="#imports">Fossil Fuel Imports</a>
       <a href="#benchmarks">Import Price Benchmarks</a>
+      <a href="#ev-transition">EV Transition</a>
       <a href="#about">About</a>
       <a href="#methodology">Methodology</a>
     </div>
@@ -599,7 +600,7 @@
     </div>
 
     <!-- ── TRANSPORT ── -->
-    <p class="section-label">Transport — EV Transition</p>
+    <p class="section-label" id="ev-transition">EV Transition</p>
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">China Passenger Car Sales: The Cliff</div>
@@ -690,6 +691,15 @@
 
       <p><strong>Capacity additions (CREA)</strong></p>
       <p><a href="https://energyandcleanair.org/" target="_blank" rel="noopener">CREA</a> publishes capacity addition data with a two-month delay. The figures shown for a given month therefore reflect what was actually built two months earlier. Where the chart label reads "January to June 2026," the underlying data runs from November 2025 to April 2026.</p>
+
+      <p><strong>EV transition — data source and S-curve projection</strong></p>
+      <p>Passenger car sales data comes from the China Passenger Car Association (CPCA) as compiled and published by <a href="https://x.com/leRaffl" target="_blank" rel="noopener">@leRaffl</a>. Figures cover retail sales of passenger vehicles by drivetrain: BEV (battery electric), PHEV (plug-in hybrid), EREV (extended-range electric), and ICE (internal combustion engine). The data series begins in November 2016, the first month for which monthly BEV volumes are recorded.</p>
+      <p>The "Trajectory to 2040" projection uses a logistic (S-curve) function fitted to the observed BEV market share series:</p>
+      <p style="font-family: monospace; font-size: 0.82rem; color: var(--text2); padding: 0.4rem 0;">BEV share(t) = L / (1 + exp(−k × (t − t₀)))</p>
+      <p>The saturation ceiling <strong>L = 0.85</strong> is a model assumption, not an official target. China's government has set a broad goal for new energy vehicles (NEVs, which include BEV and PHEV) to dominate new car sales by 2035, without publishing a specific BEV-only percentage. The value 0.85 reflects the view that PHEVs and EREVs retain a long-run floor share, leaving BEV a realistic ceiling of around 85 percent of the market.</p>
+      <p>The growth rate <strong>k</strong> and inflection point <strong>t₀</strong> are fitted from monthly CPCA retail data using nonlinear least squares (<code>scipy.optimize.curve_fit</code>). The fitted inflection point — the month of fastest BEV adoption growth — currently falls in mid-2026, consistent with China's EV market being near the steepest part of the adoption curve at the time of writing.</p>
+      <p>PHEV and EREV share is projected by anchoring to the trailing 12-month observed average and then declining linearly to a floor of 8 percent by 2040, on the assumption that BEV range and charging infrastructure improvements erode the practical advantages of hybrid drivetrains over time. ICE share is the residual: 1 − BEV − PHEV/EREV, floored at 1 percent.</p>
+      <p>The projection is rebuilt automatically each month when new CPCA data is available. Parameters will shift as the adoption curve evolves.</p>
 
       <p><strong>Coal fleet — capacity and utilisation</strong></p>
       <p>Capacity addition and retirement data come from the <a href="https://globalenergymonitor.org/projects/global-coal-plant-tracker/" target="_blank" rel="noopener">Global Coal Plant Tracker</a> published by Global Energy Monitor (GEM), July 2026 edition. The tracker records individual generating units with start year, retirement year, installed capacity, and operating status, and is updated bi-annually in January and July. Annual additions represent the sum of capacity commissioned in a given year; retirements represent capacity taken offline. Cumulative operating capacity is the running total of all units commissioned minus all units retired.</p>
