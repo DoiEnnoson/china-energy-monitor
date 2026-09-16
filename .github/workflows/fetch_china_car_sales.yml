@@ -25,6 +25,10 @@ jobs:
         id: fetch
         run: python scripts/fetch_china_car_sales.py
 
+      - name: Rebuild S-curve projection
+        if: steps.fetch.outputs.updated == 'true'
+        run: python scripts/build_car_projection.py
+
       - name: Commit and push if updated
         if: steps.fetch.outputs.updated == 'true'
         run: |

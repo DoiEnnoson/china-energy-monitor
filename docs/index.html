@@ -245,6 +245,23 @@
       <p id="month-summary-fuels">Loading…</p>
     </div>
 
+    <!-- ── TRANSPORT ── -->
+    <p class="section-label">Transport — EV Transition</p>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">China Passenger Car Sales: The Cliff</div>
+        <div class="chart-subtitle">Monthly share of new car sales · BEV / PHEV / EREV / ICE</div>
+        <canvas id="cliff"></canvas>
+        <p class="chart-source">Source: CPCA via <a href="https://x.com/leRaffl" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="width:10px;height:10px;vertical-align:middle;fill:currentColor"><path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg> @leRaffl</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">China EV Adoption: Trajectory to 2040</div>
+        <div class="chart-subtitle">Market share · monthly data (bars) + S-curve projection to 2040 (lines)</div>
+        <canvas id="trajectory"></canvas>
+        <p class="chart-source">Source: CPCA via <a href="https://x.com/leRaffl" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="width:10px;height:10px;vertical-align:middle;fill:currentColor"><path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg> @leRaffl</a> · <a href="#methodology">Methodology</a></p>
+      </div>
+    </div>
+
     <p class="section-label">From China Business Spotlight</p>
     <div class="article-grid">
       <a class="article-card" href="https://chinabusinessspotlight.substack.com/p/chinas-3-layer-grid-replaces-baseload?r=25gtpf" target="_blank" rel="noopener">
@@ -817,13 +834,16 @@
       fetchCSV('data/combined/energy_balance.csv'),
       fetchCSV('data/reference/wb_reference_prices.csv'),
       fetchCSV('data/power/gem_coal_capacity.csv'),
-    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal]) => {
+      fetchCSV('data/transport/china_car_sales_retail.csv'),
+      fetchCSV('data/transport/china_car_sales_projection.csv'),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal, carRetail, carProj]) => {
       buildDashboard(ep, cap, ec, fs, gc);
       buildSupplySection(fs, gc, eb);
       buildGenerationDetail(ep, ec);
       buildCoalFleetSection(gemCoal, ep);
       buildImportsSection(coal, crudeoil, lng, pipe);
       buildBenchmarkSection(gc, wb);
+      buildTransportSection(carRetail, carProj);
     }).catch(err => {
       console.error('Data load failed:', err);
       document.getElementById('header-period').textContent = 'data error';
@@ -2152,6 +2172,105 @@
       ], 'USD / t', 0, 150, 50);
 
     } /* end buildBenchmarkSection */
+
+    /* ══════════════════════════════════════════
+       TRANSPORT — EV TRANSITION
+    ══════════════════════════════════════════ */
+
+    function buildTransportSection(retail, proj) {
+      const ICE_C  = '#6b5f72';
+      const PHEV_C = ORANGE;
+      const EREV_C = GOLD;
+      const BEV_C  = TEAL;
+
+      const monthly = retail.filter(r => r.time_interval === 'monthly' && +r.TOTAL > 0);
+
+      /* ── THE CLIFF ── */
+      const cliffLabels = monthly.map(r => r.period);
+      const toShare = (arr, key) => arr.map(r => +(+r[key] / +r.TOTAL * 100).toFixed(2));
+
+      new Chart(document.getElementById('cliff'), {
+        type: 'bar',
+        data: {
+          labels: cliffLabels,
+          datasets: [
+            { label: 'ICE',  data: toShare(monthly, 'ICE'),  backgroundColor: ICE_C,  stack: 's', borderWidth: 0 },
+            { label: 'EREV', data: toShare(monthly, 'EREV'), backgroundColor: EREV_C, stack: 's', borderWidth: 0 },
+            { label: 'PHEV', data: toShare(monthly, 'PHEV'), backgroundColor: PHEV_C, stack: 's', borderWidth: 0 },
+            { label: 'BEV',  data: toShare(monthly, 'BEV'),  backgroundColor: BEV_C,  stack: 's', borderWidth: 0 },
+          ]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } },
+            tooltip: {
+              mode: 'index', intersect: false,
+              callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}%` }
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              ticks: { maxTicksLimit: 8, callback: (_, i) => cliffLabels[i]?.slice(0, 7) || '' },
+              grid: { display: false }
+            },
+            y: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%', stepSize: 25 } }
+          }
+        }
+      });
+
+      /* ── TRAJECTORY ── */
+      const allPeriods = proj.map(r => r.period);
+      const histMap = {};
+      monthly.forEach(r => {
+        histMap[r.period] = {
+          bev: +(+r.BEV / +r.TOTAL * 100).toFixed(2),
+          ice: +(+r.ICE / +r.TOTAL * 100).toFixed(2),
+        };
+      });
+
+      const histBev = allPeriods.map(p => histMap[p]?.bev ?? null);
+      const histIce = allPeriods.map(p => histMap[p]?.ice ?? null);
+      const projBev = proj.map(r => r.bev_proj !== '' ? +(+r.bev_proj * 100).toFixed(2) : null);
+      const projIce = proj.map(r => r.ice_proj !== '' ? +(+r.ice_proj * 100).toFixed(2) : null);
+
+      new Chart(document.getElementById('trajectory'), {
+        type: 'bar',
+        data: {
+          labels: allPeriods,
+          datasets: [
+            { type: 'bar',  label: 'BEV (actual)',     data: histBev, backgroundColor: BEV_C + '55', borderWidth: 0, barPercentage: 0.6 },
+            { type: 'bar',  label: 'ICE (actual)',     data: histIce, backgroundColor: ICE_C + '55', borderWidth: 0, barPercentage: 0.6 },
+            { type: 'line', label: 'BEV projection',   data: projBev, borderColor: BEV_C,  backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.4 },
+            { type: 'line', label: 'ICE projection',   data: projIce, borderColor: ICE_C,  backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.4, borderDash: [4, 3] },
+          ]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } },
+            tooltip: {
+              mode: 'index', intersect: false,
+              callbacks: { label: ctx => ctx.raw !== null ? `${ctx.dataset.label}: ${ctx.raw}%` : '' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                maxTicksLimit: 10,
+                callback: (_, i) => {
+                  const p = allPeriods[i];
+                  return p && p.slice(5) === '01' ? p.slice(0, 4) : '';
+                }
+              },
+              grid: { display: false }
+            },
+            y: { min: 0, max: 100, ticks: { callback: v => v + '%', stepSize: 25 } }
+          }
+        }
+      });
+    } /* end buildTransportSection */
 
   </script>
 
