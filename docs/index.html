@@ -250,23 +250,6 @@
       <p id="month-summary-fuels">Loading…</p>
     </div>
 
-    <!-- ── TRANSPORT ── -->
-    <p class="section-label">Transport — EV Transition</p>
-    <div class="chart-row-equal">
-      <div class="chart-box">
-        <div class="chart-title">China Passenger Car Sales: The Cliff</div>
-        <div class="chart-subtitle">Monthly share of new car sales · BEV / PHEV / EREV / ICE</div>
-        <canvas id="cliff"></canvas>
-        <p class="chart-source">Source: CPCA via <a href="https://x.com/leRaffl" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="width:10px;height:10px;vertical-align:middle;fill:currentColor"><path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg> @leRaffl</a></p>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">China EV Adoption: Trajectory to 2040</div>
-        <div class="chart-subtitle">Market share · monthly data (bars) + S-curve projection to 2040 (lines)</div>
-        <canvas id="trajectory"></canvas>
-        <p class="chart-source">Source: CPCA via <a href="https://x.com/leRaffl" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="width:10px;height:10px;vertical-align:middle;fill:currentColor"><path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg> @leRaffl</a> · <a href="#methodology">Methodology</a></p>
-      </div>
-    </div>
-
     <p class="section-label">From China Business Spotlight</p>
     <div class="article-grid">
       <a class="article-card" href="https://chinabusinessspotlight.substack.com/p/chinas-3-layer-grid-replaces-baseload?r=25gtpf" target="_blank" rel="noopener">
@@ -612,6 +595,23 @@
         <div class="chart-subtitle">USD/t · GACC VpU · Coal Australia</div>
         <canvas id="bench-coal"></canvas>
         <p class="chart-source">Sources: GACC, <a href="https://www.worldbank.org/en/research/commodity-markets" target="_blank" rel="noopener">World Bank</a></p>
+      </div>
+    </div>
+
+    <!-- ── TRANSPORT ── -->
+    <p class="section-label">Transport — EV Transition</p>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">China Passenger Car Sales: The Cliff</div>
+        <div class="chart-subtitle">Monthly share of new car sales · BEV / PHEV / EREV / ICE</div>
+        <canvas id="cliff"></canvas>
+        <p class="chart-source">Source: CPCA via <a href="https://x.com/leRaffl" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="width:10px;height:10px;vertical-align:middle;fill:currentColor"><path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg> @leRaffl</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">China EV Adoption: Trajectory to 2040</div>
+        <div class="chart-subtitle">Market share · monthly data (bars) + S-curve projection to 2040 (lines)</div>
+        <canvas id="trajectory"></canvas>
+        <p class="chart-source">Source: CPCA via <a href="https://x.com/leRaffl" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="width:10px;height:10px;vertical-align:middle;fill:currentColor"><path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg> @leRaffl</a> · <a href="#methodology">Methodology</a></p>
       </div>
     </div>
 
@@ -2243,7 +2243,12 @@
       }
 
       /* ── TRAJECTORY ── */
-      const allPeriods = proj.map(r => r.period);
+      // Start from first month with actual BEV data; no empty lefthand wasteland
+      const firstBevRow = monthly.find(r => +r.BEV > 0);
+      const startPeriod = firstBevRow ? firstBevRow.period : '2016-01';
+      const projSlice = proj.filter(r => r.period >= startPeriod);
+
+      const allPeriods = projSlice.map(r => r.period);
       const histMap = {};
       monthly.forEach(r => {
         histMap[r.period] = {
@@ -2254,18 +2259,22 @@
 
       const histBev = allPeriods.map(p => histMap[p]?.bev ?? null);
       const histIce = allPeriods.map(p => histMap[p]?.ice ?? null);
-      const projBev = proj.map(r => r.bev_proj !== '' ? +(+r.bev_proj * 100).toFixed(2) : null);
-      const projIce = proj.map(r => r.ice_proj !== '' ? +(+r.ice_proj * 100).toFixed(2) : null);
+      const projBev = projSlice.map(r => r.bev_proj !== '' ? +(+r.bev_proj * 100).toFixed(2) : null);
+      const projIce = projSlice.map(r => r.ice_proj !== '' ? +(+r.ice_proj * 100).toFixed(2) : null);
+
+      // Actual bars: lighter shades, clearly distinct from the darker projection lines
+      const BEV_BAR = '#7dd4ca';   // light teal — contrast to line #0E9A84
+      const ICE_BAR = '#b0a8b7';   // light mauve — contrast to line #6b5f72
 
       new Chart(document.getElementById('trajectory'), {
         type: 'bar',
         data: {
           labels: allPeriods,
           datasets: [
-            { type: 'bar',  label: 'BEV (actual)',     data: histBev, backgroundColor: BEV_C + '55', borderWidth: 0, barPercentage: 0.6 },
-            { type: 'bar',  label: 'ICE (actual)',     data: histIce, backgroundColor: ICE_C + '55', borderWidth: 0, barPercentage: 0.6 },
-            { type: 'line', label: 'BEV projection',   data: projBev, borderColor: BEV_C,  backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.4 },
-            { type: 'line', label: 'ICE projection',   data: projIce, borderColor: ICE_C,  backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.4, borderDash: [4, 3] },
+            { type: 'bar',  label: 'BEV (actual)',   data: histBev, backgroundColor: BEV_BAR, borderWidth: 0, barPercentage: 0.6 },
+            { type: 'bar',  label: 'ICE (actual)',   data: histIce, backgroundColor: ICE_BAR, borderWidth: 0, barPercentage: 0.6 },
+            { type: 'line', label: 'BEV projection', data: projBev, borderColor: BEV_C, backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.4 },
+            { type: 'line', label: 'ICE projection', data: projIce, borderColor: ICE_C, backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.4, borderDash: [4, 3] },
           ]
         },
         options: {
