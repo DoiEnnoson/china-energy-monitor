@@ -1,6 +1,6 @@
 # china-energy-monitor
 
-Monthly data on China's energy imports, domestic production, and power generation — and the public dashboard built on top of it. Five data sources, eleven tables, four automated update cycles.
+Monthly data on China's energy system and EV transition — and the public dashboard built on top of it. Six data sources, thirteen CSVs, five automated update cycles.
 
 Live: **[china-energy-monitor.com](https://china-energy-monitor.com)**
 
@@ -20,7 +20,7 @@ The dashboard runs as a static GitHub Pages site from the `docs/` folder. There 
 | Deployment | GitHub Pages from `docs/`; custom domain via `docs/CNAME` |
 | Analytics | GoatCounter (privacy-friendly, no cookies) |
 
-On page load, eleven CSVs are fetched in parallel:
+On page load, thirteen CSVs are fetched in parallel:
 
 ```
 data/power/ember_power.csv
@@ -34,6 +34,8 @@ data/combined/combined_lng.csv
 data/combined/combined_pipeline_gas.csv
 data/combined/energy_balance.csv
 data/reference/wb_reference_prices.csv
+data/transport/china_car_sales_retail.csv
+data/transport/china_car_sales_projection.csv
 ```
 
 All text, KPI values, chart titles, and summary paragraphs are generated from the fetched data. No hardcoded numbers or dates in the HTML.
@@ -42,15 +44,16 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 
 | # | Section | Data source | Content |
 |---|---|---|---|
-| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions | 4 KPI cards |
+| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail | 5 KPI cards (energy + BEV share) |
 | 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Fossil Supply (Butterfly + YoY); Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
 | 3 | Capacity Added | capacity_additions, ember_capacity | 2 bar charts (YTD + monthly), 4 donuts, prose, Installed Capacity Growth (Wind + Solar line chart) |
 | 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, YTD butterfly + YoY bars, Import Dependency line chart |
 | 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh stacked, share stacked, Coal dual-axis, Wind + Solar capacity factor, CO₂ intensity, Hydro seasonal (6 vintages) |
 | 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 overview charts + 4 × 2 country-of-origin charts: Crude Oil → LNG → Coal → Pipeline Gas |
 | 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 charts (2×2): GACC VpU all fuels (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
-| 8 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
-| 9 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation (GACC customs price vs. spot benchmarks), gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay |
+| 8 | EV Transition | china_car_sales_retail, china_car_sales_projection | The Cliff (stacked bar: BEV/PHEV/EREV/ICE share); Trajectory to 2040 (actual bars + S-curve projection lines) |
+| 9 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
+| 10 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation, gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay, EV S-curve parameters |
 
 ### Updating data
 
@@ -67,6 +70,7 @@ Once a new month is pushed to any of the eleven CSVs, the dashboard automaticall
 | Ember API | Power generation by source, demand, CO₂ intensity, installed wind/solar capacity | 2015–ongoing | Monthly automated (17th–31st) |
 | CREA Monthly Energy & Air Quality Snapshot | Capacity additions by source (coal, gas, nuclear, hydro, wind, solar) | May 2026–ongoing | Manual via machine_data block; N-2 delay |
 | [World Bank](https://www.worldbank.org/en/research/commodity-markets) Pink Sheet | Commodity benchmarks: Brent, Dubai, Coal AU, LNG Japan | Jan 2026–ongoing | Monthly automated (15th) |
+| CPCA via [@leRaffl](https://x.com/leRaffl) | Monthly passenger car retail + wholesale sales by drivetrain (BEV, PHEV, EREV, ICE) | Nov 2016–ongoing | Monthly automated (8th–end of month) |
 
 **ComTrade** provides granular country-of-origin data for coal, crude oil, LNG, and pipeline gas — historical from 2020, automated for 2025 via GitHub Actions.
 
@@ -107,6 +111,10 @@ data/
     combined_pipeline_gas.csv   — Pipeline gas imports by country, ComTrade+GACC (Jan 2020–); auto-rebuild
   reference/
     wb_reference_prices.csv     — Monthly commodity benchmarks (World Bank Pink Sheet): Brent, Dubai, Coal AU, LNG Japan (Jan 2026–); auto-rebuild on 15th
+  transport/
+    china_car_sales_retail.csv  — Monthly retail car sales by drivetrain: BEV, PHEV, EREV, ICE, TOTAL (CPCA via @leRaffl, Nov 2016–)
+    china_car_sales_wholesale.csv — Monthly wholesale car sales by drivetrain (CPCA via @leRaffl, Sep 2024–)
+    china_car_sales_projection.csv — S-curve BEV projection 2016–2040 (auto-rebuilt monthly)
 
 scripts/
   fetch_history.py              — One-time: loads ComTrade history 2020–2024
@@ -119,6 +127,8 @@ scripts/
   build_energy_balance.py       — Auto: converts everything to TWh, adds clean power generation
   build_combined.py             — Auto: merges ComTrade + GACC country-of-origin CSVs into combined_*.csv
   fetch_wb_reference_prices.py  — Monthly: scrapes Pink Sheet URL, parses Excel, writes wb_reference_prices.csv
+  fetch_china_car_sales.py      — Monthly: pulls retail + wholesale CSVs from @leRaffl, appends new rows only
+  build_car_projection.py       — Auto: fits logistic S-curve to retail BEV share, writes china_car_sales_projection.csv
 
 .github/workflows/
   monthly_update.yml                    — Cron: 15th of each month, 06:00 UTC (ComTrade)
@@ -130,6 +140,7 @@ scripts/
   build_combined.yml                    — Push trigger: rebuilds combined_*.csv when comtrade_*.csv or gacc_*.csv changes
   fetch_wb_reference_prices.yml         — Cron: 15th of each month, 06:00 UTC; scrapes World Bank Pink Sheet
   fetch_wb_reference_prices_history.yml — workflow_dispatch, one-time (backfill from Jan 2026)
+  fetch_china_car_sales.yml             — Cron: daily 07:00 UTC from 8th of each month; pulls @leRaffl data, rebuilds projection, self-stops after first new data found
 ```
 
 ---
@@ -603,6 +614,7 @@ requests          — HTTP
 urllib3           — HTTP transport
 pyyaml            — YAML parsing of machine_data blocks
 openpyxl          — Excel parsing (World Bank Pink Sheet)
+scipy             — Nonlinear least squares for S-curve fitting (build_car_projection.py)
 ```
 
 Local: `pip install -r requirements.txt` in a venv. On macOS with an externally managed Python, a venv under `/tmp/` or `~/.venv/` is recommended.
@@ -663,10 +675,29 @@ python scripts/build_combined.py
 
 ---
 
+## Automation: CPCA car sales
+
+**GitHub Actions** checks for new CPCA data daily from the 8th of each month (07:00 UTC) and stops as soon as new data is found. The workflow pulls the retail and wholesale CSVs from [@leRaffl's public gallery](https://leraffl.github.io/LeRaffl-Gallery/), compares the latest period in the remote file against the local copy, appends any new rows, and immediately rebuilds the S-curve projection.
+
+The commit only happens if at least one new row was appended. The workflow does not run from the 1st through the 7th because CPCA typically does not release monthly data before the 8th.
+
+**Manual run:**
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -q
+.venv/bin/python scripts/fetch_china_car_sales.py
+.venv/bin/python scripts/build_car_projection.py
+```
+
+No additional GitHub Secrets required — all source data is publicly accessible.
+
+---
+
 ## Open items
 
 - **2026 ComTrade**: Once UN ComTrade makes 2026 data available, update `YEAR` in `fetch_comtrade.py` and trigger the workflow manually.
-- **Pipeline Gas explainer**: The "Pipeline Gas Imports" section needs an explanatory text block covering why pipeline gas imports appear nominally higher before 2021 (Central Asia Line D stall, Turkmenistan supply problems, accelerating Chinese shale gas growth, Power of Siberia ramp-up from 2019). Also relevant for SEO.
+- **Pipeline Gas explainer**: The "Pipeline Gas Imports" section needs an explanatory text block covering why pipeline gas imports appear nominally higher before 2021 (Central Asia Line D stall, Turkmenistan supply problems, accelerating Chinese shale gas growth, Power of Siberia ramp-up from 2019). SEO-relevant.
+- **Canonical URL**: `<link rel="canonical">` in `docs/index.html` still points at the GitHub subdomain instead of china-energy-monitor.com; one-line fix.
 
 ---
 
