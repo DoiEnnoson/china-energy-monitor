@@ -1,0 +1,34 @@
+name: Monthly China Car Sales Update
+
+on:
+  schedule:
+    - cron: '0 7 8-31 * *'   # daily 07:00 UTC from the 8th; stops committing once data is found
+  workflow_dispatch:           # manual trigger via GitHub UI
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch China car sales data
+        id: fetch
+        run: python scripts/fetch_china_car_sales.py
+
+      - name: Commit and push if updated
+        if: steps.fetch.outputs.updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/transport/
+          git diff --staged --quiet || (git commit -m "data: update china car sales through $(python -c "import pandas as pd; print(pd.read_csv('data/transport/china_car_sales_retail.csv')['period'].max())")" && git push)
