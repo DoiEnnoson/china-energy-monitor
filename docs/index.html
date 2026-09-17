@@ -208,6 +208,7 @@
       <a href="#imports">Fossil Fuel Imports</a>
       <a href="#benchmarks">Import Price Benchmarks</a>
       <a href="#ev-transition">EV Transition</a>
+      <a href="#fuel-savings">Oil Displacement</a>
       <a href="#about">About</a>
       <a href="#methodology">Methodology</a>
     </div>
@@ -616,6 +617,35 @@
       </div>
     </div>
 
+    <!-- ── FUEL SAVINGS ── -->
+    <p class="section-label" id="fuel-savings">Oil Displacement &amp; Energy Balance</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-bottom:var(--gap)">
+      <div class="kpi-box orange">
+        <div class="kpi-label">Est. Crude Oil Displaced &middot; Full Year 2026</div>
+        <div class="kpi-value" id="kpi-crude-2026">—</div>
+        <div class="kpi-delta" id="kpi-crude-2026-note" style="color:var(--text2)"></div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-label">Est. Net Primary Energy Saved &middot; Full Year 2026</div>
+        <div class="kpi-value" id="kpi-pe-2026">—</div>
+        <div class="kpi-delta" id="kpi-pe-2026-note" style="color:var(--text2)"></div>
+      </div>
+    </div>
+    <div class="chart-row-equal">
+      <div class="chart-box">
+        <div class="chart-title">Crude Oil Displaced by China's EV Fleet</div>
+        <div class="chart-subtitle">Million barrels per day &middot; bars = actual &middot; line = projected</div>
+        <canvas id="fuel-disp"></canvas>
+        <p class="chart-source">Model: Weibull fleet survival &middot; IEA GEO 2026 &middot; JEC WTW v5 &middot; <a href="#fuel-savings-method">Methodology</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Primary Energy Balance: Fuel Savings vs. Grid Cost</div>
+        <div class="chart-subtitle">TWh/month &middot; fuel savings (teal) &middot; electricity primary cost (orange) &middot; net (line)</div>
+        <canvas id="pe-balance"></canvas>
+        <p class="chart-source">Grid factor: China 1.80 (2025) &rarr; 1.15 (2040) &middot; IEA Physical Energy Content method</p>
+      </div>
+    </div>
+
     <p class="section-label-h1" id="about">About</p>
     <div class="about-box">
       <div class="about-donate">
@@ -853,7 +883,8 @@
       fetchCSV('data/power/gem_coal_capacity.csv'),
       fetchCSV('data/transport/china_car_sales_retail.csv'),
       fetchCSV('data/transport/china_car_sales_projection.csv'),
-    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal, carRetail, carProj]) => {
+      fetchCSV('data/transport/fuel_savings.csv'),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal, carRetail, carProj, fuelSavings]) => {
       buildDashboard(ep, cap, ec, fs, gc);
       buildSupplySection(fs, gc, eb);
       buildGenerationDetail(ep, ec);
@@ -861,6 +892,7 @@
       buildImportsSection(coal, crudeoil, lng, pipe);
       buildBenchmarkSection(gc, wb);
       buildTransportSection(carRetail, carProj);
+      buildFuelSavingsSection(fuelSavings);
     }).catch(err => {
       console.error('Data load failed:', err);
       document.getElementById('header-period').textContent = 'data error';
@@ -2314,6 +2346,181 @@
         }
       });
     } /* end buildTransportSection */
+
+    /* ══════════════════════════════════════════
+       FUEL SAVINGS SECTION
+    ══════════════════════════════════════════ */
+    function buildFuelSavingsSection(data) {
+      if (!data || data.length === 0) return;
+
+      const periods   = data.map(r => r.period);
+      const isProj    = data.map(r => r.type === 'projected');
+      const mbdValues = data.map(r => +r.crude_disp_mb_d);
+      const mbMonth   = data.map(r => +r.crude_disp_mb_month);
+      const peSaved   = data.map(r => +r.pe_saved_twh);
+      const peAdded   = data.map(r => +r.pe_added_twh);
+      const peNet     = data.map(r => +r.pe_net_twh);
+
+      /* ── KPI tiles: full year 2026 ── */
+      const y2026 = data.filter(r => r.period.startsWith('2026'));
+      if (y2026.length > 0) {
+        const totalMb  = y2026.reduce((s, r) => s + +r.crude_disp_mb_month, 0);
+        const totalTwh = y2026.reduce((s, r) => s + +r.pe_net_twh, 0);
+        const histCount = y2026.filter(r => r.type === 'historical').length;
+        const projCount = y2026.filter(r => r.type === 'projected').length;
+
+        const crudeEl = document.getElementById('kpi-crude-2026');
+        const crudeNote = document.getElementById('kpi-crude-2026-note');
+        if (crudeEl) crudeEl.textContent = Math.round(totalMb).toLocaleString('en-US') + ' mb';
+        if (crudeNote) crudeNote.textContent =
+          histCount + ' months actual' + (projCount > 0 ? ' + ' + projCount + ' projected' : '');
+
+        const peEl = document.getElementById('kpi-pe-2026');
+        const peNote = document.getElementById('kpi-pe-2026-note');
+        if (peEl) peEl.textContent = Math.round(totalTwh) + ' TWh';
+        if (peNote) peNote.textContent = 'net: fuel savings minus grid primary cost';
+      }
+
+      /* ── Chart 1: Monthly oil displacement ── */
+      const histMbd = mbdValues.map((v, i) => isProj[i] ? null : v);
+      const projMbd = mbdValues.map((v, i) => {
+        if (i === 0) return null;
+        // connect at the boundary: include last historical point
+        const prevIsHist = !isProj[i - 1];
+        return (isProj[i] || prevIsHist) ? v : null;
+      });
+      // Smooth boundary: start proj line at last historical value
+      const lastHistIdx = isProj.lastIndexOf(false);
+      const projLine = periods.map((_, i) => {
+        if (i < lastHistIdx) return null;
+        return mbdValues[i];
+      });
+
+      new Chart(document.getElementById('fuel-disp'), {
+        type: 'bar',
+        data: {
+          labels: periods,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Crude displaced (actual)',
+              data: histMbd,
+              backgroundColor: ORANGE,
+              borderWidth: 0,
+              barPercentage: 0.75,
+            },
+            {
+              type: 'line',
+              label: 'Crude displaced (projected)',
+              data: projLine,
+              borderColor: ORANGE,
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [5, 4],
+              pointRadius: 0,
+              tension: 0.3,
+            },
+          ]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } },
+            tooltip: {
+              mode: 'index', intersect: false,
+              callbacks: {
+                label: ctx => ctx.raw !== null ? `${ctx.dataset.label}: ${ctx.raw.toFixed(3)} mb/d` : ''
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                maxTicksLimit: 10,
+                callback: (_, i) => periods[i]?.slice(5) === '01' ? periods[i].slice(0, 4) : ''
+              },
+              grid: { display: false }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { callback: v => v.toFixed(2) + ' mb/d' }
+            }
+          }
+        }
+      });
+
+      /* ── Chart 2: Primary energy balance ── */
+      // Stacked area: savings above 0, cost below 0 (as negative), net as line
+      const peAddedNeg = peAdded.map(v => -v);
+
+      new Chart(document.getElementById('pe-balance'), {
+        type: 'bar',
+        data: {
+          labels: periods,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'PE fuel savings',
+              data: peSaved,
+              backgroundColor: TEAL,
+              borderWidth: 0,
+              barPercentage: 0.8,
+              stack: 's',
+            },
+            {
+              type: 'bar',
+              label: 'PE grid cost',
+              data: peAddedNeg,
+              backgroundColor: ORANGE,
+              borderWidth: 0,
+              barPercentage: 0.8,
+              stack: 's',
+            },
+            {
+              type: 'line',
+              label: 'Net PE savings',
+              data: peNet,
+              borderColor: '#f5e642',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              pointRadius: 0,
+              tension: 0.3,
+            },
+          ]
+        },
+        options: {
+          responsive: true, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } },
+            tooltip: {
+              mode: 'index', intersect: false,
+              callbacks: {
+                label: ctx => {
+                  if (ctx.raw === null) return '';
+                  const v = ctx.dataset.label === 'PE grid cost'
+                    ? (-ctx.raw).toFixed(1) : ctx.raw.toFixed(1);
+                  return `${ctx.dataset.label}: ${v} TWh`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              ticks: {
+                maxTicksLimit: 10,
+                callback: (_, i) => periods[i]?.slice(5) === '01' ? periods[i].slice(0, 4) : ''
+              },
+              grid: { display: false }
+            },
+            y: {
+              stacked: true,
+              ticks: { callback: v => v.toFixed(0) + ' TWh' }
+            }
+          }
+        }
+      });
+    } /* end buildFuelSavingsSection */
 
   </script>
 

@@ -29,6 +29,10 @@ jobs:
         if: steps.fetch.outputs.updated == 'true'
         run: python scripts/build_car_projection.py
 
+      - name: Compute fuel savings model
+        if: steps.fetch.outputs.updated == 'true'
+        run: python scripts/compute_fuel_savings.py
+
       - name: Commit and push if updated
         if: steps.fetch.outputs.updated == 'true'
         run: |
