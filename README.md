@@ -1,6 +1,6 @@
 # china-energy-monitor
 
-Monthly data on China's energy system and EV transition — and the public dashboard built on top of it. Six data sources, thirteen CSVs, five automated update cycles.
+Monthly data on China's energy system and EV transition — and the public dashboard built on top of it. Six data sources, fourteen CSVs, five automated update cycles.
 
 Live: **[china-energy-monitor.com](https://china-energy-monitor.com)**
 
@@ -20,7 +20,7 @@ The dashboard runs as a static GitHub Pages site from the `docs/` folder. There 
 | Deployment | GitHub Pages from `docs/`; custom domain via `docs/CNAME` |
 | Analytics | GoatCounter (privacy-friendly, no cookies) |
 
-On page load, thirteen CSVs are fetched in parallel:
+On page load, fourteen CSVs are fetched in parallel:
 
 ```
 data/power/ember_power.csv
@@ -34,8 +34,10 @@ data/combined/combined_lng.csv
 data/combined/combined_pipeline_gas.csv
 data/combined/energy_balance.csv
 data/reference/wb_reference_prices.csv
+data/power/gem_coal_capacity.csv
 data/transport/china_car_sales_retail.csv
 data/transport/china_car_sales_projection.csv
+data/transport/fuel_savings.csv
 ```
 
 All text, KPI values, chart titles, and summary paragraphs are generated from the fetched data. No hardcoded numbers or dates in the HTML.
@@ -44,7 +46,7 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 
 | # | Section | Data source | Content |
 |---|---|---|---|
-| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail | 5 KPI cards (energy + BEV share) |
+| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail, fuel_savings | 6 KPI cards (energy + BEV share + EV oil displacement YTD) |
 | 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Fossil Supply (Butterfly + YoY); Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
 | 3 | Capacity Added | capacity_additions, ember_capacity | 2 bar charts (YTD + monthly), 4 donuts, prose, Installed Capacity Growth (Wind + Solar line chart) |
 | 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, YTD butterfly + YoY bars, Import Dependency line chart |
@@ -52,8 +54,9 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 | 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 overview charts + 4 × 2 country-of-origin charts: Crude Oil → LNG → Coal → Pipeline Gas |
 | 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 charts (2×2): GACC VpU all fuels (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
 | 8 | EV Transition | china_car_sales_retail, china_car_sales_projection | The Cliff (stacked bar: BEV/PHEV/EREV/ICE share); Trajectory to 2040 (actual bars + S-curve projection lines) |
-| 9 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
-| 10 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation, gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay, EV S-curve parameters |
+| 9 | Oil Displacement & Energy Balance | fuel_savings | 2 KPI tiles (full-year 2026 crude mb + net TWh); Crude Oil Displaced (bar + projection line, mb/d); Primary Energy Balance (stacked area: fuel savings vs. grid cost, TWh/month) |
+| 10 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
+| 11 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation, gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay, EV S-curve parameters, oil displacement model |
 
 ### Updating data
 
@@ -115,6 +118,7 @@ data/
     china_car_sales_retail.csv  — Monthly retail car sales by drivetrain: BEV, PHEV, EREV, ICE, TOTAL (CPCA via @leRaffl, Nov 2016–)
     china_car_sales_wholesale.csv — Monthly wholesale car sales by drivetrain (CPCA via @leRaffl, Sep 2024–)
     china_car_sales_projection.csv — S-curve BEV projection 2016–2040 (auto-rebuilt monthly)
+    fuel_savings.csv            — Monthly crude oil displacement (mb/d) and primary energy balance (TWh) from China's EV fleet (Weibull model, auto-rebuilt monthly)
 
 scripts/
   fetch_history.py              — One-time: loads ComTrade history 2020–2024
@@ -129,6 +133,7 @@ scripts/
   fetch_wb_reference_prices.py  — Monthly: scrapes Pink Sheet URL, parses Excel, writes wb_reference_prices.csv
   fetch_china_car_sales.py      — Monthly: pulls retail + wholesale CSVs from @leRaffl, appends new rows only
   build_car_projection.py       — Auto: fits logistic S-curve to retail BEV share, writes china_car_sales_projection.csv
+  compute_fuel_savings.py       — Auto: Weibull fleet model; reads retail + projection CSVs, writes fuel_savings.csv
 
 .github/workflows/
   monthly_update.yml                    — Cron: 15th of each month, 06:00 UTC (ComTrade)
@@ -140,7 +145,7 @@ scripts/
   build_combined.yml                    — Push trigger: rebuilds combined_*.csv when comtrade_*.csv or gacc_*.csv changes
   fetch_wb_reference_prices.yml         — Cron: 15th of each month, 06:00 UTC; scrapes World Bank Pink Sheet
   fetch_wb_reference_prices_history.yml — workflow_dispatch, one-time (backfill from Jan 2026)
-  fetch_china_car_sales.yml             — Cron: daily 07:00 UTC from 8th of each month; pulls @leRaffl data, rebuilds projection, self-stops after first new data found
+  fetch_china_car_sales.yml             — Cron: daily 07:00 UTC from 8th of each month; pulls @leRaffl data, rebuilds projection, runs fuel savings model, self-stops after first new data found
 ```
 
 ---
@@ -413,6 +418,26 @@ Monthly commodity reference prices from the [World Bank](https://www.worldbank.o
 **Purpose in the dashboard:** Comparison with GACC import prices (VpU) in the Import Price Benchmarks section. For the comparison, GACC VpU is converted: crude oil USD/t ÷ 7.33 = USD/bbl; gas USD/t ÷ 52 = USD/MMBtu; coal direct.
 
 **Data source:** [World Bank](https://www.worldbank.org/en/research/commodity-markets) Commodity Markets, Pink Sheet (monthly). The Excel URL changes each month; `fetch_wb_reference_prices.py` scrapes it at runtime from the WB page.
+
+### `data/transport/fuel_savings.csv`
+
+Auto-generated by `compute_fuel_savings.py` after each CPCA update. One row per month from November 2016 to December 2030. Rows with `type = historical` use actual CPCA sales data; rows with `type = projected` use S-curve market share projections applied to a trailing 12-month average sales volume.
+
+| Column | Unit | Description |
+|---|---|---|
+| period | YYYY-MM | Reporting month |
+| type | historical / projected | Whether the underlying sales data are actual or projected |
+| crude_disp_mb_d | mb/d | Crude oil displaced by the active EV fleet in that month, in million barrels per day |
+| crude_disp_mb_month | mb | Total crude oil displaced in that month, in million barrels |
+| pe_saved_twh | TWh | Gross primary energy saved (fuel not burned), well-to-tank basis |
+| pe_added_twh | TWh | Primary energy added by the grid to power the EV fleet |
+| pe_net_twh | TWh | Net primary energy saved (pe_saved_twh − pe_added_twh) |
+
+**Model scope:** Passenger cars only (CPCA retail sales). Two-wheelers, buses, and commercial vehicles are excluded.
+
+**Key parameters:** Weibull k = 2.5, λ = 14.9 yr · ICE 11,000 km/yr at 6.2 L/100 km · BEV 12,500 km/yr at 16.0 kWh/100 km · PHEV utility factor 0.50 · EREV utility factor 0.65 · displacement coefficient 0.90 · WTT factor 1.24 (JEC WTW v5 COG1) · refinery yield 0.43 · grid factor 1.80 (2025) → 1.15 (2040).
+
+**Calibration anchor:** IEA GEO 2026 — China passenger car EV fleet ≈ 1.0 mb/d for full-year 2025.
 
 ---
 
