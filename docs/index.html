@@ -74,7 +74,7 @@
     }
 
     .kpi-grid {
-      display: grid; grid-template-columns: repeat(5, 1fr);
+      display: grid; grid-template-columns: repeat(6, 1fr);
       gap: var(--gap); margin-top: 1.2rem;
     }
     .kpi-box {
@@ -243,6 +243,11 @@
         <div class="kpi-label">BEV Share</div>
         <div class="kpi-value" id="kpi-bev-share">—</div>
         <div class="kpi-delta" id="kpi-bev-share-yoy">—</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-label">EV Oil Displacement YTD</div>
+        <div class="kpi-value" id="kpi-ev-ytd">—</div>
+        <div class="kpi-delta" id="kpi-ev-ytd-yoy">—</div>
       </div>
     </div>
 
@@ -2379,6 +2384,28 @@
         const peNote = document.getElementById('kpi-pe-2026-note');
         if (peEl) peEl.textContent = Math.round(totalTwh) + ' TWh';
         if (peNote) peNote.textContent = 'net: fuel savings minus grid primary cost';
+      }
+
+      /* ── Top KPI: EV Oil Displacement YTD ── */
+      const curYear  = new Date().getFullYear().toString();
+      const histCur  = data.filter(r => r.period.startsWith(curYear) && r.type === 'historical');
+      if (histCur.length > 0) {
+        const ytdMb      = histCur.reduce((s, r) => s + +r.crude_disp_mb_month, 0);
+        const lastMonth  = histCur[histCur.length - 1].period.slice(5);   // 'MM'
+        const prevYear   = (parseInt(curYear) - 1).toString();
+        const histPrev   = data.filter(r =>
+          r.period.startsWith(prevYear) && r.period.slice(5) <= lastMonth
+        );
+        const ytdMbPrev  = histPrev.reduce((s, r) => s + +r.crude_disp_mb_month, 0);
+        const yoy        = ytdMbPrev > 0 ? ((ytdMb / ytdMbPrev) - 1) * 100 : null;
+
+        const valEl  = document.getElementById('kpi-ev-ytd');
+        const yoyEl  = document.getElementById('kpi-ev-ytd-yoy');
+        if (valEl) valEl.textContent = Math.round(ytdMb) + ' mb';
+        if (yoyEl && yoy !== null) {
+          yoyEl.textContent = (yoy >= 0 ? '▲ +' : '▼ ') + yoy.toFixed(1) + '% YoY';
+          yoyEl.className = 'kpi-delta ' + (yoy >= 0 ? 'pos' : 'neg');
+        }
       }
 
       /* ── Chart 1: Monthly oil displacement ── */
