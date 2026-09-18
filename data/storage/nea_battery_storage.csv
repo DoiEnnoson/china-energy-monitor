@@ -1,0 +1,7 @@
+period,period_type,cumulative_gw,cumulative_gwh,duration_h,yoy_gw_pct,yoy_gwh_pct,source_note
+202112,year-end,5.8,11.2,1.93,,,derived: 2022 cumulative minus 2022 CNESA net additions
+202212,year-end,13.1,27.1,2.07,126.0,142.0,CNESA 2022 confirmed
+202312,year-end,34.6,73.7,2.13,164.1,171.9,derived: 2022 year-end plus 2023 CNESA net additions
+202412,year-end,73.8,168.0,2.28,113.3,127.9,NEA confirmed; duration NEA year-end review
+202512,year-end,136.0,351.0,2.58,84.3,108.9,NEA press conference Jan 2026
+202606,H1,168.3,448.7,2.67,,,CNESA H1 2026 report; YoY not shown
