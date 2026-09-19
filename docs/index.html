@@ -1807,8 +1807,12 @@
       /* ── Chart 4: Wind & Solar Capacity Factor ── */
       const ecMap = {};
       ec.forEach(r => { ecMap[r.period] = r; });
+      /* Ember capacity lags 1 month — fall back to the last available row */
+      const ecFallback = [...ec].sort((a, b) => a.period.localeCompare(b.period)).at(-1);
 
-      const cfRows     = ep.filter(r => ecMap[r.period] && +ecMap[r.period].wind_gw > 1);
+      function ecFor(period) { return ecMap[period] || ecFallback; }
+
+      const cfRows     = ep.filter(r => ecFor(r.period) && +ecFor(r.period).wind_gw > 1);
       const CF_LABELS  = cfRows.map(r => periodToLabel(r.period));
       const CF_YR_SET  = new Set(CF_LABELS.filter(l => l.endsWith('-01')));
 
@@ -1817,11 +1821,11 @@
       }
 
       const WIND_CF = cfRows.map(r => {
-        const cap = +ecMap[r.period].wind_gw;
+        const cap = +ecFor(r.period).wind_gw;
         return +((+r.wind_twh * 1000 / (cap * daysInPeriod(r.period) * 24)) * 100).toFixed(1);
       });
       const SOLAR_CF = cfRows.map(r => {
-        const cap = +ecMap[r.period].solar_gw;
+        const cap = +ecFor(r.period).solar_gw;
         if (!cap || cap < 1) return null;
         return +((+r.solar_twh * 1000 / (cap * daysInPeriod(r.period) * 24)) * 100).toFixed(1);
       });
