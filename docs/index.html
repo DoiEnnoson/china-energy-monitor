@@ -16,6 +16,43 @@
   <link rel="apple-touch-icon" href="favicon/a/icon-180.png">
   <link rel="icon" href="favicon/a/icon-512.png" sizes="512x512" type="image/png">
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "China Energy Monitor",
+    "description": "Monthly data on China's energy system: electricity generation by source, fossil fuel imports and domestic production, installed capacity additions, and a unified energy balance. Data from NBS, GACC, Ember and CREA, updated monthly.",
+    "url": "https://china-energy-monitor.com",
+    "creator": {
+      "@type": "Person",
+      "name": "Dói Ennoson",
+      "url": "https://chinabusinessspotlight.substack.com"
+    },
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "keywords": [
+      "China energy", "China electricity generation", "China coal imports",
+      "China oil imports", "China gas imports", "China renewable energy",
+      "China power generation", "China energy balance", "China capacity additions"
+    ],
+    "temporalCoverage": "2016-01/..",
+    "spatialCoverage": { "@type": "Place", "name": "China" },
+    "variableMeasured": [
+      "Electricity demand (TWh)", "Power generation by source (TWh)",
+      "Coal imports (Mt, USD)", "Crude oil imports (Mt, USD)", "Gas imports (Mt, USD)",
+      "Domestic coal production (Mt)", "Domestic crude oil production (Mt)",
+      "Domestic gas production (BCM)", "Installed wind capacity (GW)",
+      "Installed solar capacity (GW)", "Monthly capacity additions by source (GW)"
+    ],
+    "isAccessibleForFree": true,
+    "distribution": {
+      "@type": "DataDownload",
+      "encodingFormat": "text/csv",
+      "contentUrl": "https://github.com/DoiEnnoson/china-energy-monitor/tree/main/data"
+    },
+    "dateModified": "2026-09-19"
+  }
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
   <style>
