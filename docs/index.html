@@ -234,6 +234,8 @@
     <div class="header-meta">
       <div class="updated">Latest data</div>
       <div class="period" id="header-period">Loading…</div>
+      <div class="updated" style="margin-top:0.55rem;">Next update</div>
+      <div class="period" id="header-next-update" style="color:var(--text2);font-size:0.88rem;">—</div>
     </div>
   </header>
 
@@ -1016,6 +1018,11 @@
 
       /* ── Header period ── */
       document.getElementById('header-period').textContent = periodToMonth(latest.period);
+      const _yr = parseInt(latest.period.slice(0, 4));
+      const _mo = parseInt(latest.period.slice(4, 6)); // human month 1-12
+      const _next = new Date(_yr, _mo + 1, 20);        // +1: JS months are 0-indexed
+      document.getElementById('header-next-update').textContent =
+        '~' + _next.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
       /* ── KPI: Demand ── */
       const demandYoY = ((+latest.demand_twh / +prev12.demand_twh) - 1) * 100;
