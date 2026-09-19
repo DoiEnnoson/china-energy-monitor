@@ -1329,8 +1329,10 @@
           });
         }
 
-        makeCapBar('cap-bar-ytd',   ytdGW, ytdYoY, 80, 20);
-        makeCapBar('cap-bar-month', monGW, monYoY, 15,  5);
+        const ytdMax  = Math.ceil(Math.max(...ytdGW) * 1.2 / 20) * 20;
+        const monMax  = Math.ceil(Math.max(...monGW) * 1.2 /  5) *  5;
+        makeCapBar('cap-bar-ytd',   ytdGW, ytdYoY, ytdMax, 20);
+        makeCapBar('cap-bar-month', monGW, monYoY, monMax,  5);
 
         /* Donut helper */
         function makeDonut(id, labels, data, colors) {
