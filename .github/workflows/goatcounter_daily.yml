@@ -30,6 +30,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/traffic_log.csv
+          git add data/traffic_log.csv data/traffic_monthly.csv
           git diff --staged --quiet || git commit -m "traffic: $(date +%Y-%m-%d)"
           git push
