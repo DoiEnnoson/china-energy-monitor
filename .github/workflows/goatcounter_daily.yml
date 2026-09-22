@@ -1,0 +1,35 @@
+name: GoatCounter Daily
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # täglich 06:00 UTC = 08:00 Berlin (CEST)
+  workflow_dispatch:        # manuell auslösbar für Tests
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch GoatCounter data
+        env:
+          GOATCOUNTER: ${{ secrets.GOATCOUNTER }}
+          GMAIL_CONFIG: ${{ secrets.GMAIL_CONFIG }}
+        run: python scripts/goatcounter_report.py
+
+      - name: Commit CSV update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/traffic_log.csv
+          git diff --staged --quiet || git commit -m "traffic: $(date +%Y-%m-%d)"
+          git push
