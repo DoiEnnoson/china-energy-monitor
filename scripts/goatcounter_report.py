@@ -280,7 +280,10 @@ def main():
     if today.weekday() == 0:  # Montag
         week_end = yesterday
         week_start = week_end - timedelta(days=6)
-        send_weekly_email(week_start, week_end, today, gmail_user, gmail_password)
+        try:
+            send_weekly_email(week_start, week_end, today, gmail_user, gmail_password)
+        except Exception as e:
+            print(f"Warning: weekly email failed ({e}). Data logged successfully.")
 
 
 if __name__ == "__main__":
