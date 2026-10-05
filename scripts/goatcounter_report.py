@@ -254,8 +254,7 @@ def send_weekly_email(week_start: date, week_end: date, today: date, user: str, 
     msg["To"] = user
     msg.attach(MIMEText(html, "html"))
 
-    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-        smtp.starttls()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login(user, password)
         smtp.sendmail(user, user, msg.as_string())
     print(f"Email sent: {subject}")
