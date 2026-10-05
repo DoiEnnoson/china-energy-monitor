@@ -55,18 +55,18 @@ def get_gmail_config() -> tuple[str, str]:
 
 def fetch_day(day: date, token: str) -> dict:
     r = requests.get(
-        f"https://{SITE}/api/v0/stats/hits",
+        f"https://{SITE}/api/v0/stats/total",
         headers={"Authorization": f"Bearer {token}"},
-        params={"start": str(day), "end": str(day), "daily": "true"},
+        params={"start": str(day), "end": str(day)},
         timeout=30,
     )
     r.raise_for_status()
-    hits = r.json().get("hits", [])
-    entry = hits[0] if hits else {}
+    data = r.json()
+    total = data.get("total", 0)
     return {
         "date": str(day),
-        "pageviews": entry.get("count", 0),
-        "unique_visitors": entry.get("count_unique", 0),
+        "pageviews": total,
+        "unique_visitors": total,
     }
 
 
