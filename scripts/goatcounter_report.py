@@ -55,7 +55,7 @@ def get_gmail_config() -> tuple[str, str]:
 
 def fetch_day(day: date, token: str) -> dict:
     r = requests.get(
-        f"https://{SITE}/api/v0/stats/total",
+        f"https://{SITE}/api/v0/stats/totals",
         headers={"Authorization": f"Bearer {token}"},
         params={"start": str(day), "end": str(day)},
         timeout=30,
