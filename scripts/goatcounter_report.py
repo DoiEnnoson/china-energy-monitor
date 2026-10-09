@@ -43,12 +43,15 @@ def get_token() -> str:
     return token
 
 
-def get_gmail_config() -> tuple[str, str]:
+def get_gmail_config() -> tuple[str, str, str]:
     cfg = os.environ.get("GMAIL_CONFIG", "")
-    if not cfg or ":" not in cfg:
-        sys.exit("GMAIL_CONFIG not set or malformed (expected user@gmail.com:password)")
-    user, password = cfg.split(":", 1)
-    return user.strip(), password.strip()
+    parts = cfg.split(":")
+    if len(parts) < 3:
+        sys.exit("GMAIL_CONFIG malformed (expected user@gmail.com:app_password:recipient@gmail.com)")
+    user = parts[0].strip()
+    password = parts[1].strip()
+    recipient = parts[2].strip()
+    return user, password, recipient
 
 
 # ── GoatCounter API ───────────────────────────────────────────────────────────
@@ -156,7 +159,7 @@ def month_label(ym: str) -> str:
 
 # ── Email ─────────────────────────────────────────────────────────────────────
 
-def send_weekly_email(week_start: date, week_end: date, today: date, user: str, password: str):
+def send_weekly_email(week_start: date, week_end: date, today: date, user: str, password: str, recipient: str):
     week_rows = read_range(week_start, week_end)
     prev_week_rows = read_range(week_start - timedelta(days=7), week_end - timedelta(days=7))
     monthly_rows = read_monthly()
@@ -251,13 +254,12 @@ def send_weekly_email(week_start: date, week_end: date, today: date, user: str, 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = user
-    msg["To"] = user
+    msg["To"] = recipient
     msg.attach(MIMEText(html, "html"))
 
-    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-        smtp.starttls()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login(user, password)
-        smtp.sendmail(user, user, msg.as_string())
+        smtp.sendmail(user, recipient, msg.as_string())
     print(f"Email sent: {subject}")
 
 
@@ -265,7 +267,7 @@ def send_weekly_email(week_start: date, week_end: date, today: date, user: str, 
 
 def main():
     token = get_token()
-    gmail_user, gmail_password = get_gmail_config()
+    gmail_user, gmail_password, gmail_recipient = get_gmail_config()
 
     today = date.today()
     yesterday = today - timedelta(days=1)
@@ -281,7 +283,10 @@ def main():
     if today.weekday() == 0:  # Montag
         week_end = yesterday
         week_start = week_end - timedelta(days=6)
-        send_weekly_email(week_start, week_end, today, gmail_user, gmail_password)
+        try:
+            send_weekly_email(week_start, week_end, today, gmail_user, gmail_password, gmail_recipient)
+        except Exception as e:
+            print(f"Warning: weekly email failed ({e}). Data logged successfully.")
 
 
 if __name__ == "__main__":
