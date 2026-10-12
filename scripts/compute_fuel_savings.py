@@ -11,7 +11,10 @@ Sources / calibration:
   IEA GEO 2026: China 1.0 mb/d crude oil displacement for full-year 2025
   JEC WTW v5 COG1: WTT factor 1.24 for petrol
   Zheng et al. 2019 / Liu et al. 2025: Weibull k=2.5, λ=14.9 yr
-  IEA GEO 2026 (China): 11,000 km/yr ICE; MDPI empirical: 12,500 km/yr BEV
+  Ma et al. 2022 (MDPI Atmosphere, 500M inspection records): 10,000 km/yr ICE
+  Ge et al. 2026 (arXiv 2605.29266, Shanghai insurance data): 14,000 km/yr BEV
+  OIES NEV Update Mar 2026 (EVCIPA public charging floor): >12,840 km/yr BEV
+  Prev. calibration (IEA GEO 2026): KM_ICE=11,000, KM_BEV=12,500 — updated Sep 2026
 """
 
 import math
@@ -24,8 +27,8 @@ import pandas as pd
 LHV_B     = 8.92     # kWh/L  lower heating value, petrol
 WTT_B     = 1.24     # well-to-tank factor, petrol (JEC WTW v5 COG1)
 Y_B       = 0.43     # refinery yield: litres petrol per litre crude processed
-KM_ICE    = 11_000   # annual km, displaced ICE (IEA GEO 2026, China)
-KM_BEV    = 12_500   # annual km, electric vehicle (MDPI empirical, China)
+KM_ICE    = 10_000   # annual km, displaced ICE (Ma et al. 2022 national avg 2019; IEA GEO 2026 was 11,000)
+KM_BEV    = 14_000   # annual km, electric vehicle (Ge et al. 2026 Shanghai; OIES 2026 floor 12,840 km public-only; prev. 12,500)
 ETA       = 0.95     # vehicle availability factor
 F_ICE     = 6.2      # L/100 km, ICE fuel consumption
 E_BEV     = 16.0     # kWh/100 km, EV electricity consumption
