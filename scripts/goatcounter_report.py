@@ -58,7 +58,7 @@ def fetch_day(day: date, token: str) -> dict:
     r = requests.get(
         f"https://{SITE}/api/v0/stats/totals",
         headers={"Authorization": f"Bearer {token}"},
-        params={"start": str(day), "end": str(day)},
+        params={"start": f"{day}T00:00:00Z", "end": f"{day}T23:59:59Z"},
         timeout=30,
     )
     if not r.ok:
