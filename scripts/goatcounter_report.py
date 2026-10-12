@@ -43,15 +43,13 @@ def get_token() -> str:
     return token
 
 
-def get_gmail_config() -> tuple[str, str, str]:
+def get_gmail_config() -> tuple[str, str, str] | None:
     cfg = os.environ.get("GMAIL_CONFIG", "")
     parts = cfg.split(":")
     if len(parts) < 3:
-        sys.exit("GMAIL_CONFIG malformed (expected user@gmail.com:app_password:recipient@gmail.com)")
-    user = parts[0].strip()
-    password = parts[1].strip()
-    recipient = parts[2].strip()
-    return user, password, recipient
+        print("Warning: GMAIL_CONFIG not set or malformed — skipping email.")
+        return None
+    return parts[0].strip(), parts[1].strip(), parts[2].strip()
 
 
 # ── GoatCounter API ───────────────────────────────────────────────────────────
@@ -63,7 +61,9 @@ def fetch_day(day: date, token: str) -> dict:
         params={"start": str(day), "end": str(day)},
         timeout=30,
     )
-    r.raise_for_status()
+    if not r.ok:
+        print(f"  API error {r.status_code} for {day}: {r.text[:500]}")
+        r.raise_for_status()
     data = r.json()
     total = data.get("total", 0)
     return {
@@ -267,26 +267,41 @@ def send_weekly_email(week_start: date, week_end: date, today: date, user: str, 
 
 def main():
     token = get_token()
-    gmail_user, gmail_password, gmail_recipient = get_gmail_config()
 
     today = date.today()
     yesterday = today - timedelta(days=1)
 
-    if already_logged(yesterday):
-        print(f"{yesterday} already in CSV, skipping fetch.")
+    # Fill any gaps in the last 60 days, not just yesterday
+    if CSV_DAILY.exists():
+        with open(CSV_DAILY, newline="") as f:
+            logged = {row["date"] for row in csv.DictReader(f)}
     else:
-        row = fetch_day(yesterday, token)
-        append_daily(row)
+        logged = set()
+
+    start = today - timedelta(days=60)
+    d = start
+    while d <= yesterday:
+        if str(d) not in logged:
+            print(f"Gap detected: fetching {d}")
+            try:
+                row = fetch_day(d, token)
+                append_daily(row)
+            except Exception as exc:
+                print(f"  Skipping {d}: {exc}")
+        d += timedelta(days=1)
 
     update_monthly_csv()
 
     if today.weekday() == 0:  # Montag
-        week_end = yesterday
-        week_start = week_end - timedelta(days=6)
-        try:
-            send_weekly_email(week_start, week_end, today, gmail_user, gmail_password, gmail_recipient)
-        except Exception as e:
-            print(f"Warning: weekly email failed ({e}). Data logged successfully.")
+        gmail = get_gmail_config()
+        if gmail:
+            gmail_user, gmail_password, gmail_recipient = gmail
+            week_end = yesterday
+            week_start = week_end - timedelta(days=6)
+            try:
+                send_weekly_email(week_start, week_end, today, gmail_user, gmail_password, gmail_recipient)
+            except Exception as e:
+                print(f"Warning: weekly email failed ({e}). Data logged successfully.")
 
 
 if __name__ == "__main__":
