@@ -96,6 +96,7 @@ data/
     comtrade_lng.csv            — LNG imports by country of origin (ComTrade, 2020–)
     comtrade_pipeline_gas.csv   — Pipeline gas imports by country of origin (ComTrade, 2020–)
     gacc_imports.csv            — Total imports coal/crude oil/gas (GACC, May 2026–)
+    gacc_imports_manual.csv     — GACC fallback for months the pipeline lags (via /handelsbilanz)
     gacc_coal.csv               — Coal imports by country of origin (GACC, Jan 2025–)
     gacc_crude_oil.csv          — Crude oil imports by country of origin (GACC, Jan 2025–)
     gacc_lng.csv                — LNG imports by country of origin (GACC, Jan 2025–)
@@ -193,6 +194,14 @@ One row per month. Total imports across all countries of origin (GACC aggregate)
 | gas_usd_bn | USD bn | Gas imports (value) |
 | gas_usd_bn_yoy_pct | Pct | YoY change in value |
 | gas_usd_per_mt | USD/t | Gas price per tonne |
+
+### `data/fuel-imports/gacc_imports_manual.csv`
+
+Fallback layer for `gacc_imports.csv`, same columns. The energy balance pipeline (which produces `gacc_imports.csv`) depends on Ember/CREA/NBS inputs that arrive several days to weeks after the GACC customs release. This file carries the GACC import figures (coal, crude oil, gas: volume, value, price per tonne, and monthly YoY) for the months the pipeline has not produced yet, extracted directly from the GACC monthly release by the `/handelsbilanz` workflow.
+
+The dashboard merges it at load with `mergeByPeriod(gacc_imports, gacc_imports_manual)`: **pipeline primary, manual fallback** — a manual row is used only for a month absent from `gacc_imports.csv`, and is automatically shadowed once the pipeline produces that month. This lets *This Month At A Glance*, *Fossil Fuel Imports* and *Import Price Benchmarks* show the latest GACC month without hardcoding figures into the page or editing the pipeline-owned `gacc_imports.csv`, which `build_supply.py` would overwrite.
+
+Monthly YoY for the manual row is derived as the GACC single-month value against the same month a year earlier, with the prior-year month reconstructed from cumulative year-to-date figures (current year-to-date minus the previous month's year-to-date) across the two GACC releases.
 
 ### `data/power/ember_power.csv`
 
