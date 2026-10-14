@@ -950,6 +950,13 @@
     const MONTHS_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+    /* ── Merge primär + Fallback per period (primär gewinnt, sonst Fallback) ── */
+    function mergeByPeriod(primary, fallback) {
+      const have = new Set((primary || []).map(r => String(r.period)));
+      const extra = (fallback || []).filter(r => r && r.period && !have.has(String(r.period)));
+      return [...(primary || []), ...extra].sort((a, b) => String(a.period).localeCompare(String(b.period)));
+    }
+
     /* ── CSV parser ── */
     function parseCSV(text) {
       const lines = text.trim().split('\n');
@@ -1004,7 +1011,11 @@
       fetchCSV('data/transport/china_car_sales_retail.csv'),
       fetchCSV('data/transport/china_car_sales_projection.csv'),
       fetchCSV('data/transport/fuel_savings.csv'),
-    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal, carRetail, carProj, fuelSavings]) => {
+      fetchCSV('data/fuel-imports/gacc_imports_manual.csv').catch(() => []),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal, carRetail, carProj, fuelSavings, gcManual]) => {
+      // GACC-Importe: CEM-Pipeline primär, GACC-Handelsbilanz-Fallback für
+      // Monate, die die Energiebilanz-Pipeline noch nicht erzeugt hat.
+      gc = mergeByPeriod(gc, gcManual);
       buildDashboard(ep, cap, ec, fs, gc);
       buildSupplySection(fs, gc, eb);
       buildGenerationDetail(ep, ec);
