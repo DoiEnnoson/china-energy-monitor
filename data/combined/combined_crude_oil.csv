@@ -1823,563 +1823,564 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd,source
 202412,Thailand,0.0226,0.0395,572.06,comtrade
 202412,Niger,0.0,0.0,843.37,comtrade
 202412,India,0.0,0.0,7696.63,comtrade
-202501,Russian Federation,4.2334,,,gacc
-202501,Saudi Arabia,3.2239,,,gacc
-202501,Iraq,2.98,,,gacc
-202501,Malaysia,1.9281,,,gacc
-202501,United Arab Emirates,1.6546,,,gacc
-202501,Brazil,1.4073,,,gacc
-202501,Oman,1.3514,,,gacc
-202501,Angola,1.1171,,,gacc
-202501,Kuwait,0.8402,,,gacc
-202501,Canada,0.6448,,,gacc
-202501,Qatar,0.4783,,,gacc
-202501,USA,0.4615,,,gacc
-202501,Gabon,0.366,,,gacc
-202501,Congo,0.3239,,,gacc
-202501,United Kingdom,0.3218,,,gacc
-202501,Ecuador,0.2639,,,gacc
-202501,Colombia,0.1991,,,gacc
-202501,Libya,0.1922,,,gacc
-202501,Venezuela,0.094,,,gacc
-202501,Equatorial Guinea,0.0824,,,gacc
-202501,Chad,0.0759,,,gacc
-202501,Ghana,0.0746,,,gacc
-202501,Mexico,0.0706,,,gacc
-202501,Nigeria,0.064,,,gacc
-202501,Kazakhstan,0.0471,,,gacc
-202501,New Zealand,0.0216,,,gacc
-202501,Mozambique,0.0197,,,gacc
-202501,Mongolia,0.0189,,,gacc
-202501,Indonesia,0.0113,,,gacc
-202501,Cuba,0.0,,,gacc
-202502,Russian Federation,4.255,,,gacc
-202502,Saudi Arabia,3.5337,,,gacc
-202502,Malaysia,3.431,,,gacc
-202502,Iraq,2.6109,,,gacc
-202502,Oman,2.1997,,,gacc
-202502,Brazil,1.6795,,,gacc
-202502,United Arab Emirates,1.4992,,,gacc
-202502,Angola,1.1939,,,gacc
-202502,Qatar,0.7413,,,gacc
-202502,Kuwait,0.692,,,gacc
-202502,Ecuador,0.4943,,,gacc
-202502,Canada,0.3877,,,gacc
-202502,Congo,0.3635,,,gacc
-202502,Senegal,0.2314,,,gacc
-202502,Colombia,0.2225,,,gacc
-202502,USA,0.1624,,,gacc
-202502,Mexico,0.1331,,,gacc
-202502,Ghana,0.0765,,,gacc
-202502,Gabon,0.0722,,,gacc
-202502,Australia,0.0503,,,gacc
-202502,Kazakhstan,0.0487,,,gacc
-202502,Libya,0.0463,,,gacc
-202502,Mongolia,0.0278,,,gacc
-202502,Nigeria,0.0243,,,gacc
-202503,Saudi Arabia,4.9682,,,gacc
-202503,Russian Federation,4.7125,,,gacc
-202503,Malaysia,4.3958,,,gacc
-202503,Iraq,4.1921,,,gacc
-202503,United Arab Emirates,1.5821,,,gacc
-202503,Oman,1.5049,,,gacc
-202503,Angola,1.4389,,,gacc
-202503,Brazil,1.0807,,,gacc
-202503,Kuwait,0.721,,,gacc
-202503,Canada,0.628,,,gacc
-202503,Colombia,0.4106,,,gacc
-202503,Ecuador,0.3279,,,gacc
-202503,USA,0.3262,,,gacc
-202503,Congo,0.278,,,gacc
-202503,Qatar,0.2415,,,gacc
-202503,Gabon,0.222,,,gacc
-202503,Ghana,0.1489,,,gacc
-202503,Senegal,0.1479,,,gacc
-202503,Trinidad and Tobago,0.1252,,,gacc
-202503,Equatorial Guinea,0.1122,,,gacc
-202503,Australia,0.0896,,,gacc
-202503,South Sudan,0.08,,,gacc
-202503,Niger,0.0776,,,gacc
-202503,Chad,0.0721,,,gacc
-202503,Venezuela,0.0692,,,gacc
-202503,Cameroon,0.0675,,,gacc
-202503,Dem. Rep. of the Congo,0.0657,,,gacc
-202503,Mexico,0.0651,,,gacc
-202503,Brunei Darussalam,0.0504,,,gacc
-202503,Togo,0.0468,,,gacc
-202503,Kazakhstan,0.0375,,,gacc
-202503,Indonesia,0.0298,,,gacc
-202503,Mongolia,0.0148,,,gacc
-202503,United Kingdom,0.0,,,gacc
-202504,Russian Federation,4.0276,,,gacc
-202504,Malaysia,3.8227,,,gacc
-202504,Saudi Arabia,3.0784,,,gacc
-202504,Iraq,2.484,,,gacc
-202504,Brazil,1.9695,,,gacc
-202504,United Arab Emirates,1.8172,,,gacc
-202504,Angola,1.6022,,,gacc
-202504,Oman,1.5537,,,gacc
-202504,Kuwait,0.9634,,,gacc
-202504,Canada,0.5383,,,gacc
-202504,Kazakhstan,0.501,,,gacc
-202504,Qatar,0.407,,,gacc
-202504,Congo,0.3545,,,gacc
-202504,United Kingdom,0.3173,,,gacc
-202504,USA,0.3029,,,gacc
-202504,Ecuador,0.2677,,,gacc
-202504,Colombia,0.1769,,,gacc
-202504,Norway,0.1516,,,gacc
-202504,Ghana,0.1375,,,gacc
-202504,Senegal,0.1344,,,gacc
-202504,Trinidad and Tobago,0.123,,,gacc
-202504,Togo,0.1183,,,gacc
-202504,Guyana,0.076,,,gacc
-202504,Mexico,0.0757,,,gacc
-202504,Libya,0.0755,,,gacc
-202504,Argentina,0.072,,,gacc
-202504,Niger,0.0718,,,gacc
-202504,Gabon,0.0684,,,gacc
-202504,Papua New Guinea,0.0466,,,gacc
-202504,Indonesia,0.0264,,,gacc
-202504,Mongolia,0.0217,,,gacc
-202504,Viet Nam,0.0148,,,gacc
-202504,Albania,0.0,,,gacc
-202505,Russian Federation,3.9688,,,gacc
-202505,Saudi Arabia,2.8355,,,gacc
-202505,Iraq,2.6955,,,gacc
-202505,Brazil,2.3604,,,gacc
-202505,Malaysia,2.2557,,,gacc
-202505,Oman,1.9522,,,gacc
-202505,Angola,1.3865,,,gacc
-202505,United Arab Emirates,1.1983,,,gacc
-202505,Canada,0.6435,,,gacc
-202505,Kuwait,0.637,,,gacc
-202505,Congo,0.532,,,gacc
-202505,Colombia,0.4071,,,gacc
-202505,Indonesia,0.362,,,gacc
-202505,Qatar,0.3433,,,gacc
-202505,Kazakhstan,0.2592,,,gacc
-202505,Ecuador,0.2479,,,gacc
-202505,Gabon,0.2023,,,gacc
-202505,Equatorial Guinea,0.1659,,,gacc
-202505,Norway,0.1567,,,gacc
-202505,United Kingdom,0.1507,,,gacc
-202505,Australia,0.0886,,,gacc
-202505,Mexico,0.0759,,,gacc
-202505,USA,0.0733,,,gacc
-202505,Nigeria,0.0711,,,gacc
-202505,Togo,0.0652,,,gacc
-202505,Cameroon,0.0651,,,gacc
-202505,Chad,0.0649,,,gacc
-202505,Brunei Darussalam,0.0217,,,gacc
-202505,Mongolia,0.0188,,,gacc
-202505,Mozambique,0.0176,,,gacc
-202506,Russian Federation,4.0719,,,gacc
-202506,Saudi Arabia,3.8955,,,gacc
-202506,Malaysia,3.4461,,,gacc
-202506,Iraq,2.4792,,,gacc
-202506,Brazil,1.9262,,,gacc
-202506,Oman,1.5415,,,gacc
-202506,United Arab Emirates,1.4066,,,gacc
-202506,Angola,1.0214,,,gacc
-202506,Kuwait,0.7323,,,gacc
-202506,Canada,0.6943,,,gacc
-202506,Congo,0.4569,,,gacc
-202506,Indonesia,0.3681,,,gacc
-202506,Ecuador,0.3516,,,gacc
-202506,Colombia,0.3087,,,gacc
-202506,Togo,0.2983,,,gacc
-202506,Kazakhstan,0.2924,,,gacc
-202506,Norway,0.2091,,,gacc
-202506,Qatar,0.2074,,,gacc
-202506,Ghana,0.2051,,,gacc
-202506,United Kingdom,0.14,,,gacc
-202506,Gabon,0.1277,,,gacc
-202506,Trinidad and Tobago,0.1178,,,gacc
-202506,Australia,0.0768,,,gacc
-202506,Nigeria,0.0729,,,gacc
-202506,Equatorial Guinea,0.0675,,,gacc
-202506,Mongolia,0.0169,,,gacc
-202506,Albania,0.0,,,gacc
-202507,Russian Federation,4.3796,,,gacc
-202507,Saudi Arabia,3.8967,,,gacc
-202507,Iraq,2.4261,,,gacc
-202507,Malaysia,2.1125,,,gacc
-202507,Brazil,1.8899,,,gacc
-202507,United Arab Emirates,1.5636,,,gacc
-202507,Oman,1.3432,,,gacc
-202507,Indonesia,0.9825,,,gacc
-202507,Kuwait,0.8343,,,gacc
-202507,Angola,0.7164,,,gacc
-202507,Canada,0.5188,,,gacc
-202507,Qatar,0.4811,,,gacc
-202507,Congo,0.471,,,gacc
-202507,Ecuador,0.4353,,,gacc
-202507,Gabon,0.397,,,gacc
-202507,Guyana,0.2773,,,gacc
-202507,Colombia,0.2209,,,gacc
-202507,Norway,0.2132,,,gacc
-202507,Ghana,0.1963,,,gacc
-202507,Kazakhstan,0.1826,,,gacc
-202507,United Kingdom,0.1534,,,gacc
-202507,Nigeria,0.1506,,,gacc
-202507,Libya,0.0802,,,gacc
-202507,Trinidad and Tobago,0.0551,,,gacc
-202507,Togo,0.0262,,,gacc
-202507,Mongolia,0.0177,,,gacc
-202507,Türkiye,0.0,,,gacc
-202508,Russian Federation,3.9666,,,gacc
-202508,Saudi Arabia,3.2164,,,gacc
-202508,Iraq,2.9203,,,gacc
-202508,Brazil,2.6937,,,gacc
-202508,Malaysia,2.1969,,,gacc
-202508,Angola,1.7739,,,gacc
-202508,Oman,1.7207,,,gacc
-202508,United Arab Emirates,1.6567,,,gacc
-202508,Indonesia,1.2143,,,gacc
-202508,Kuwait,1.0051,,,gacc
-202508,Canada,0.4766,,,gacc
-202508,Congo,0.3315,,,gacc
-202508,Ecuador,0.2958,,,gacc
-202508,Colombia,0.2746,,,gacc
-202508,Guyana,0.2388,,,gacc
-202508,Qatar,0.238,,,gacc
-202508,Gabon,0.1969,,,gacc
-202508,Kazakhstan,0.1329,,,gacc
-202508,Trinidad and Tobago,0.1172,,,gacc
-202508,Libya,0.076,,,gacc
-202508,Togo,0.0613,,,gacc
-202508,Algeria,0.0514,,,gacc
-202508,Ghana,0.0506,,,gacc
-202508,Brunei Darussalam,0.047,,,gacc
-202508,Australia,0.0469,,,gacc
-202508,Mongolia,0.0234,,,gacc
-202508,Niger,0.0,,,gacc
-202509,Russian Federation,4.1199,,,gacc
-202509,Saudi Arabia,3.8034,,,gacc
-202509,Iraq,3.0225,,,gacc
-202509,Brazil,2.098,,,gacc
-202509,Malaysia,1.8375,,,gacc
-202509,United Arab Emirates,1.5801,,,gacc
-202509,Oman,1.452,,,gacc
-202509,Angola,1.1248,,,gacc
-202509,Indonesia,1.068,,,gacc
-202509,Canada,0.6173,,,gacc
-202509,Kuwait,0.4888,,,gacc
-202509,Qatar,0.395,,,gacc
-202509,Congo,0.3295,,,gacc
-202509,Ghana,0.2832,,,gacc
-202509,Colombia,0.2694,,,gacc
-202509,Ecuador,0.2588,,,gacc
-202509,Trinidad and Tobago,0.2367,,,gacc
-202509,United Kingdom,0.1531,,,gacc
-202509,Togo,0.1272,,,gacc
-202509,Kazakhstan,0.1154,,,gacc
-202509,Gabon,0.0907,,,gacc
-202509,Chad,0.09,,,gacc
-202509,Equatorial Guinea,0.0714,,,gacc
-202509,Cameroon,0.0689,,,gacc
-202509,Australia,0.0486,,,gacc
-202509,Mongolia,0.0169,,,gacc
-202509,Timor-Leste,0.0147,,,gacc
-202510,Russian Federation,4.3943,,,gacc
-202510,Saudi Arabia,3.774,,,gacc
-202510,Iraq,2.6021,,,gacc
-202510,United Arab Emirates,2.1445,,,gacc
-202510,Malaysia,2.0671,,,gacc
-202510,Brazil,1.813,,,gacc
-202510,Oman,1.2814,,,gacc
-202510,Kuwait,1.2484,,,gacc
-202510,Angola,1.2083,,,gacc
-202510,Indonesia,0.774,,,gacc
-202510,Canada,0.6136,,,gacc
-202510,Congo,0.3983,,,gacc
-202510,Ecuador,0.3243,,,gacc
-202510,Colombia,0.2646,,,gacc
-202510,Ghana,0.2636,,,gacc
-202510,Kazakhstan,0.2564,,,gacc
-202510,Qatar,0.253,,,gacc
-202510,Gabon,0.2417,,,gacc
-202510,Togo,0.1691,,,gacc
-202510,Nigeria,0.0696,,,gacc
-202510,Chad,0.0657,,,gacc
-202510,Argentina,0.0619,,,gacc
-202510,Mongolia,0.0193,,,gacc
-202510,Niger,0.0,,,gacc
-202510,Albania,0.0,,,gacc
-202511,Saudi Arabia,3.8941,,,gacc
-202511,Russian Federation,3.7788,,,gacc
-202511,Brazil,2.4336,,,gacc
-202511,Iraq,2.1629,,,gacc
-202511,Malaysia,1.8483,,,gacc
-202511,Oman,1.5981,,,gacc
-202511,United Arab Emirates,1.5548,,,gacc
-202511,Angola,1.5413,,,gacc
-202511,Kuwait,1.0908,,,gacc
-202511,Indonesia,1.0766,,,gacc
-202511,Colombia,0.6971,,,gacc
-202511,Canada,0.6656,,,gacc
-202511,Congo,0.5118,,,gacc
-202511,Ghana,0.2955,,,gacc
-202511,Ecuador,0.2917,,,gacc
-202511,Guyana,0.1928,,,gacc
-202511,Chad,0.1764,,,gacc
-202511,Kazakhstan,0.1062,,,gacc
-202511,Togo,0.0991,,,gacc
-202511,South Sudan,0.0827,,,gacc
-202511,Norway,0.0721,,,gacc
-202511,Qatar,0.0711,,,gacc
-202511,Equatorial Guinea,0.0686,,,gacc
-202511,Gabon,0.059,,,gacc
-202511,Algeria,0.0534,,,gacc
-202511,Libya,0.041,,,gacc
-202511,Azerbaijan,0.0301,,,gacc
-202511,Mongolia,0.0155,,,gacc
-202511,Cuba,0.0,,,gacc
-202512,Russian Federation,3.9994,,,gacc
-202512,Saudi Arabia,3.3403,,,gacc
-202512,United Arab Emirates,3.3326,,,gacc
-202512,Iraq,2.7953,,,gacc
-202512,Brazil,2.732,,,gacc
-202512,Oman,1.9723,,,gacc
-202512,Malaysia,1.6939,,,gacc
-202512,Angola,1.5534,,,gacc
-202512,Canada,1.0057,,,gacc
-202512,Indonesia,0.8891,,,gacc
-202512,Kuwait,0.8141,,,gacc
-202512,Congo,0.3677,,,gacc
-202512,Colombia,0.2856,,,gacc
-202512,Libya,0.2722,,,gacc
-202512,Ecuador,0.259,,,gacc
-202512,Gabon,0.2542,,,gacc
-202512,Ghana,0.1529,,,gacc
-202512,United Kingdom,0.1457,,,gacc
-202512,Qatar,0.1438,,,gacc
-202512,South Sudan,0.143,,,gacc
-202512,Norway,0.1419,,,gacc
-202512,Nigeria,0.1362,,,gacc
-202512,Kazakhstan,0.1075,,,gacc
-202512,Guyana,0.1024,,,gacc
-202512,Equatorial Guinea,0.0666,,,gacc
-202512,Argentina,0.0543,,,gacc
-202512,Mongolia,0.0162,,,gacc
-202601,Russian Federation,4.8453,,,gacc
-202601,Saudi Arabia,2.6785,,,gacc
-202601,Brazil,2.5379,,,gacc
-202601,Iraq,2.2225,,,gacc
-202601,United Arab Emirates,1.5367,,,gacc
-202601,Oman,1.3585,,,gacc
-202601,Malaysia,1.2539,,,gacc
-202601,Indonesia,1.0244,,,gacc
-202601,Angola,0.9449,,,gacc
-202601,Kuwait,0.7148,,,gacc
-202601,Canada,0.6927,,,gacc
-202601,Qatar,0.6612,,,gacc
-202601,Colombia,0.5266,,,gacc
-202601,Guyana,0.326,,,gacc
-202601,Congo,0.3036,,,gacc
-202601,Kazakhstan,0.208,,,gacc
-202601,Ghana,0.196,,,gacc
-202601,Gabon,0.1209,,,gacc
-202601,Ecuador,0.1071,,,gacc
-202601,Libya,0.0872,,,gacc
-202601,Chad,0.0861,,,gacc
-202601,South Sudan,0.0781,,,gacc
-202601,Togo,0.0562,,,gacc
-202601,Brunei Darussalam,0.0415,,,gacc
-202601,Mongolia,0.0183,,,gacc
-202602,Russian Federation,4.6488,,,gacc
-202602,Saudi Arabia,3.1054,,,gacc
-202602,Brazil,2.3464,,,gacc
-202602,Malaysia,2.1395,,,gacc
-202602,United Arab Emirates,1.7284,,,gacc
-202602,Iraq,1.6013,,,gacc
-202602,Indonesia,1.5709,,,gacc
-202602,Oman,1.1899,,,gacc
-202602,Angola,0.9337,,,gacc
-202602,Congo,0.6376,,,gacc
-202602,Canada,0.449,,,gacc
-202602,Kuwait,0.4012,,,gacc
-202602,Gabon,0.317,,,gacc
-202602,Colombia,0.2692,,,gacc
-202602,Ecuador,0.2649,,,gacc
-202602,Libya,0.2198,,,gacc
-202602,Chad,0.1507,,,gacc
-202602,Kazakhstan,0.1425,,,gacc
-202602,United Kingdom,0.1404,,,gacc
-202602,Ghana,0.1228,,,gacc
-202602,Guyana,0.1215,,,gacc
-202602,Senegal,0.0712,,,gacc
-202602,Qatar,0.0654,,,gacc
-202602,Equatorial Guinea,0.0642,,,gacc
-202602,Australia,0.0469,,,gacc
-202602,Argentina,0.0407,,,gacc
-202602,Togo,0.0336,,,gacc
-202602,Mongolia,0.0127,,,gacc
-202602,South Sudan,0.0,,,gacc
-202603,Russian Federation,5.6075,,,gacc
-202603,Indonesia,3.835,,,gacc
-202603,Malaysia,3.1006,,,gacc
-202603,Saudi Arabia,2.9787,,,gacc
-202603,Brazil,2.6842,,,gacc
-202603,Oman,2.0226,,,gacc
-202603,Iraq,1.9043,,,gacc
-202603,United Arab Emirates,1.4798,,,gacc
-202603,Angola,1.2228,,,gacc
-202603,Canada,0.7402,,,gacc
-202603,Ecuador,0.3686,,,gacc
-202603,Congo,0.331,,,gacc
-202603,Kuwait,0.2993,,,gacc
-202603,Colombia,0.2864,,,gacc
-202603,Gabon,0.2025,,,gacc
-202603,South Sudan,0.1912,,,gacc
-202603,Libya,0.1732,,,gacc
-202603,Algeria,0.0833,,,gacc
-202603,Chad,0.0807,,,gacc
-202603,Nigeria,0.0732,,,gacc
-202603,Qatar,0.0671,,,gacc
-202603,Guyana,0.0613,,,gacc
-202603,Ghana,0.0516,,,gacc
-202603,Kazakhstan,0.0485,,,gacc
-202603,Mongolia,0.0279,,,gacc
-202604,Russian Federation,6.3892,,,gacc
-202604,Saudi Arabia,4.6608,,,gacc
-202604,Brazil,4.2605,,,gacc
-202604,Malaysia,3.1673,,,gacc
-202604,Indonesia,2.5314,,,gacc
-202604,Oman,1.9929,,,gacc
-202604,Angola,1.8044,,,gacc
-202604,Canada,0.8977,,,gacc
-202604,United Arab Emirates,0.499,,,gacc
-202604,Colombia,0.3533,,,gacc
-202604,Congo,0.3229,,,gacc
-202604,Chad,0.2929,,,gacc
-202604,Iraq,0.2413,,,gacc
-202604,Kuwait,0.2126,,,gacc
-202604,South Sudan,0.1818,,,gacc
-202604,Ecuador,0.1455,,,gacc
-202604,Libya,0.1166,,,gacc
-202604,Qatar,0.1056,,,gacc
-202604,Gabon,0.1001,,,gacc
-202604,Nigeria,0.0989,,,gacc
-202604,Equatorial Guinea,0.0985,,,gacc
-202604,Cameroon,0.0773,,,gacc
-202604,Kazakhstan,0.0665,,,gacc
-202604,Argentina,0.0561,,,gacc
-202604,Ghana,0.0485,,,gacc
-202604,Mongolia,0.0298,,,gacc
-202605,Russian Federation,5.947,,,gacc
-202605,Saudi Arabia,4.9365,,,gacc
-202605,Brazil,4.5897,,,gacc
-202605,Indonesia,2.5619,,,gacc
-202605,Oman,1.6552,,,gacc
-202605,Angola,1.6082,,,gacc
-202605,Malaysia,1.169,,,gacc
-202605,Canada,1.0005,,,gacc
-202605,Colombia,0.5912,,,gacc
-202605,Congo,0.4802,,,gacc
-202605,South Sudan,0.4676,,,gacc
-202605,Kazakhstan,0.2821,,,gacc
-202605,Ecuador,0.2793,,,gacc
-202605,United Arab Emirates,0.2721,,,gacc
-202605,Chad,0.2636,,,gacc
-202605,Iraq,0.1674,,,gacc
-202605,Gabon,0.1231,,,gacc
-202605,Republic of Korea,0.1191,,,gacc
-202605,Algeria,0.0946,,,gacc
-202605,Ghana,0.0755,,,gacc
-202605,Mongolia,0.0314,,,gacc
-202606,Russian Federation,5.7042,,,gacc
-202606,Brazil,3.6924,,,gacc
-202606,Saudi Arabia,2.9725,,,gacc
-202606,Angola,1.6926,,,gacc
-202606,Indonesia,1.5783,,,gacc
-202606,Canada,1.0985,,,gacc
-202606,Malaysia,0.8279,,,gacc
-202606,Congo,0.6674,,,gacc
-202606,Ecuador,0.5764,,,gacc
-202606,Iraq,0.4563,,,gacc
-202606,Kazakhstan,0.4453,,,gacc
-202606,Guyana,0.372,,,gacc
-202606,Colombia,0.3383,,,gacc
-202606,Ghana,0.2488,,,gacc
-202606,Gabon,0.2445,,,gacc
-202606,South Sudan,0.2373,,,gacc
-202606,Kuwait,0.2027,,,gacc
-202606,Argentina,0.1905,,,gacc
-202606,United Kingdom,0.1483,,,gacc
-202606,Niger,0.136,,,gacc
-202606,Equatorial Guinea,0.1252,,,gacc
-202606,Chad,0.1156,,,gacc
-202606,Oman,0.1083,,,gacc
-202606,Qatar,0.0711,,,gacc
-202606,United Arab Emirates,0.0324,,,gacc
-202606,Mongolia,0.023,,,gacc
-202607,Russian Federation,5.0369,,,gacc
-202607,Brazil,3.6404,,,gacc
-202607,Saudi Arabia,3.2377,,,gacc
-202607,Indonesia,1.9032,,,gacc
-202607,Angola,1.8225,,,gacc
-202607,United Arab Emirates,1.7063,,,gacc
-202607,Malaysia,0.9551,,,gacc
-202607,Canada,0.7097,,,gacc
-202607,Kuwait,0.6332,,,gacc
-202607,Colombia,0.6182,,,gacc
-202607,Qatar,0.5038,,,gacc
-202607,Guyana,0.429,,,gacc
-202607,Ecuador,0.3208,,,gacc
-202607,Congo,0.2555,,,gacc
-202607,Chad,0.2189,,,gacc
-202607,South Sudan,0.1708,,,gacc
-202607,Ghana,0.1248,,,gacc
-202607,Libya,0.1026,,,gacc
-202607,Gabon,0.091,,,gacc
-202607,Argentina,0.0859,,,gacc
-202607,Cameroon,0.0809,,,gacc
-202607,Iraq,0.0727,,,gacc
-202607,Kazakhstan,0.046,,,gacc
-202607,Mongolia,0.0163,,,gacc
-202607,Albania,0.0,,,gacc
-202608,Russian Federation,6.4737,,,gacc
-202608,Brazil,2.3226,,,gacc
-202608,Saudi Arabia,1.9103,,,gacc
-202608,Indonesia,1.8616,,,gacc
-202608,United Arab Emirates,1.7989,,,gacc
-202608,Malaysia,1.638,,,gacc
-202608,Angola,1.1037,,,gacc
-202608,Kuwait,0.9417,,,gacc
-202608,Canada,0.7823,,,gacc
-202608,Iraq,0.7627,,,gacc
-202608,Oman,0.6201,,,gacc
-202608,Qatar,0.5829,,,gacc
-202608,Colombia,0.5313,,,gacc
-202608,Congo,0.3893,,,gacc
-202608,Guyana,0.2566,,,gacc
-202608,Kazakhstan,0.2395,,,gacc
-202608,Chad,0.1673,,,gacc
-202608,Equatorial Guinea,0.0784,,,gacc
-202608,Algeria,0.0674,,,gacc
-202608,Norway,0.0619,,,gacc
-202608,Ecuador,0.0608,,,gacc
-202608,Australia,0.0515,,,gacc
-202608,Mongolia,0.0209,,,gacc
-202609,Russian Federation,6.5875,,,gacc
-202609,Iraq,3.3059,,,gacc
-202609,Brazil,3.2275,,,gacc
-202609,United Arab Emirates,2.1153,,,gacc
-202609,Saudi Arabia,1.8456,,,gacc
-202609,Indonesia,1.2131,,,gacc
-202609,Kuwait,1.0832,,,gacc
-202609,Oman,0.854,,,gacc
-202609,Malaysia,0.8245,,,gacc
-202609,Canada,0.806,,,gacc
-202609,Colombia,0.6123,,,gacc
-202609,Angola,0.5883,,,gacc
-202609,Ecuador,0.3617,,,gacc
-202609,Congo,0.3318,,,gacc
-202609,Qatar,0.273,,,gacc
-202609,Kazakhstan,0.263,,,gacc
-202609,South Sudan,0.1679,,,gacc
-202609,Cameroon,0.0856,,,gacc
-202609,Egypt,0.0455,,,gacc
-202609,Mongolia,0.0172,,,gacc
+202501,Russian Federation,4.2334,7.7176,548.54,gacc
+202501,Saudi Arabia,3.2239,5.7122,564.39,gacc
+202501,Iraq,2.98,5.6731,525.29,gacc
+202501,Malaysia,1.9281,3.6105,534.04,gacc
+202501,United Arab Emirates,1.6546,2.8321,584.22,gacc
+202501,Brazil,1.4073,2.6431,532.45,gacc
+202501,Oman,1.3514,2.3768,568.58,gacc
+202501,Angola,1.1171,2.0352,548.88,gacc
+202501,Kuwait,0.8402,1.5092,556.74,gacc
+202501,Canada,0.6448,1.2906,499.63,gacc
+202501,Qatar,0.4783,0.8346,573.16,gacc
+202501,USA,0.4615,0.8103,569.56,gacc
+202501,Gabon,0.366,0.6351,576.29,gacc
+202501,Congo,0.3239,0.5799,558.49,gacc
+202501,United Kingdom,0.3218,0.5325,604.31,gacc
+202501,Ecuador,0.2639,0.5205,506.94,gacc
+202501,Colombia,0.1991,0.4115,483.7,gacc
+202501,Libya,0.1922,0.3236,594.16,gacc
+202501,Venezuela,0.094,0.1895,496.06,gacc
+202501,Equatorial Guinea,0.0824,0.1183,696.78,gacc
+202501,Chad,0.0759,0.1382,549.41,gacc
+202501,Ghana,0.0746,0.1261,591.49,gacc
+202501,Mexico,0.0706,0.1335,528.88,gacc
+202501,Nigeria,0.064,0.0951,673.15,gacc
+202501,Kazakhstan,0.0471,0.0941,499.89,gacc
+202501,New Zealand,0.0216,0.0311,693.44,gacc
+202501,Mozambique,0.0197,0.0308,639.88,gacc
+202501,Mongolia,0.0189,0.0349,541.37,gacc
+202501,Indonesia,0.0113,0.0239,473.62,gacc
+202501,Cuba,0.0,0.0,26640.0,gacc
+202502,Russian Federation,4.255,7.7509,548.97,gacc
+202502,Saudi Arabia,3.5337,5.944,594.51,gacc
+202502,Malaysia,3.431,6.2582,548.25,gacc
+202502,Iraq,2.6109,4.6308,563.8,gacc
+202502,Oman,2.1997,3.6817,597.47,gacc
+202502,Brazil,1.6795,3.0425,552.02,gacc
+202502,United Arab Emirates,1.4992,2.4819,604.04,gacc
+202502,Angola,1.1939,2.1142,564.68,gacc
+202502,Qatar,0.7413,1.2133,610.95,gacc
+202502,Kuwait,0.692,1.1745,589.17,gacc
+202502,Ecuador,0.4943,0.9763,506.31,gacc
+202502,Canada,0.3877,0.7782,498.15,gacc
+202502,Congo,0.3635,0.6476,561.24,gacc
+202502,Senegal,0.2314,0.4003,578.04,gacc
+202502,Colombia,0.2225,0.4528,491.33,gacc
+202502,USA,0.1624,0.2645,613.97,gacc
+202502,Mexico,0.1331,0.2624,507.23,gacc
+202502,Ghana,0.0765,0.1262,605.77,gacc
+202502,Gabon,0.0722,0.127,568.79,gacc
+202502,Australia,0.0503,0.0751,670.45,gacc
+202502,Kazakhstan,0.0487,0.0898,542.42,gacc
+202502,Libya,0.0463,0.0789,586.75,gacc
+202502,Mongolia,0.0278,0.0515,540.88,gacc
+202502,Nigeria,0.0243,0.0355,684.47,gacc
+202503,Saudi Arabia,4.9682,8.4418,588.52,gacc
+202503,Russian Federation,4.7125,8.845,532.79,gacc
+202503,Malaysia,4.3958,8.4689,519.05,gacc
+202503,Iraq,4.1921,7.358,569.73,gacc
+202503,United Arab Emirates,1.5821,2.614,605.25,gacc
+202503,Oman,1.5049,2.5186,597.51,gacc
+202503,Angola,1.4389,2.5657,560.8,gacc
+202503,Brazil,1.0807,1.9762,546.88,gacc
+202503,Kuwait,0.721,1.2484,577.56,gacc
+202503,Canada,0.628,1.2834,489.33,gacc
+202503,Colombia,0.4106,0.8543,480.61,gacc
+202503,Ecuador,0.3279,0.6816,481.04,gacc
+202503,USA,0.3262,0.5419,601.91,gacc
+202503,Congo,0.278,0.5015,554.45,gacc
+202503,Qatar,0.2415,0.4079,592.17,gacc
+202503,Gabon,0.222,0.396,560.64,gacc
+202503,Ghana,0.1489,0.2574,578.5,gacc
+202503,Senegal,0.1479,0.2676,552.67,gacc
+202503,Trinidad and Tobago,0.1252,0.2889,433.36,gacc
+202503,Equatorial Guinea,0.1122,0.1901,590.02,gacc
+202503,Australia,0.0896,0.1373,652.3,gacc
+202503,South Sudan,0.08,0.1418,564.13,gacc
+202503,Niger,0.0776,0.1425,544.3,gacc
+202503,Chad,0.0721,0.1268,568.64,gacc
+202503,Venezuela,0.0692,0.1521,454.71,gacc
+202503,Cameroon,0.0675,0.135,500.0,gacc
+202503,Dem. Rep. of the Congo,0.0657,0.1184,555.02,gacc
+202503,Mexico,0.0651,0.1288,505.66,gacc
+202503,Brunei Darussalam,0.0504,0.083,607.68,gacc
+202503,Togo,0.0468,0.1038,451.06,gacc
+202503,Kazakhstan,0.0375,0.0732,512.79,gacc
+202503,Indonesia,0.0298,0.0453,658.25,gacc
+202503,Mongolia,0.0148,0.0291,509.64,gacc
+202503,United Kingdom,0.0,0.0,6250.0,gacc
+202504,Russian Federation,4.0276,8.0656,499.36,gacc
+202504,Malaysia,3.8227,7.9405,481.42,gacc
+202504,Saudi Arabia,3.0784,5.5243,557.24,gacc
+202504,Iraq,2.484,4.5924,540.88,gacc
+202504,Brazil,1.9695,3.6852,534.44,gacc
+202504,United Arab Emirates,1.8172,3.1369,579.28,gacc
+202504,Angola,1.6022,2.8911,554.18,gacc
+202504,Oman,1.5537,2.7292,569.27,gacc
+202504,Kuwait,0.9634,1.7145,561.91,gacc
+202504,Canada,0.5383,1.1516,467.4,gacc
+202504,Kazakhstan,0.501,0.8679,577.23,gacc
+202504,Qatar,0.407,0.7372,552.06,gacc
+202504,Congo,0.3545,0.6456,549.07,gacc
+202504,United Kingdom,0.3173,0.5316,597.0,gacc
+202504,USA,0.3029,0.5337,567.59,gacc
+202504,Ecuador,0.2677,0.5615,476.71,gacc
+202504,Colombia,0.1769,0.363,487.4,gacc
+202504,Norway,0.1516,0.2741,553.13,gacc
+202504,Ghana,0.1375,0.2406,571.44,gacc
+202504,Senegal,0.1344,0.2558,525.28,gacc
+202504,Trinidad and Tobago,0.123,0.2881,427.07,gacc
+202504,Togo,0.1183,0.2984,396.23,gacc
+202504,Guyana,0.076,0.1324,574.22,gacc
+202504,Mexico,0.0757,0.1365,554.58,gacc
+202504,Libya,0.0755,0.1373,550.34,gacc
+202504,Argentina,0.072,0.1417,508.04,gacc
+202504,Niger,0.0718,0.1437,500.0,gacc
+202504,Gabon,0.0684,0.1266,540.15,gacc
+202504,Papua New Guinea,0.0466,0.079,590.63,gacc
+202504,Indonesia,0.0264,0.0455,579.78,gacc
+202504,Mongolia,0.0217,0.045,483.14,gacc
+202504,Viet Nam,0.0148,0.0246,603.17,gacc
+202504,Albania,0.0,0.0,16096.77,gacc
+202505,Russian Federation,3.9688,8.3757,473.85,gacc
+202505,Saudi Arabia,2.8355,5.4197,523.19,gacc
+202505,Iraq,2.6955,5.3568,503.19,gacc
+202505,Brazil,2.3604,4.765,495.36,gacc
+202505,Malaysia,2.2557,5.0604,445.75,gacc
+202505,Oman,1.9522,3.59,543.78,gacc
+202505,Angola,1.3865,2.6358,526.02,gacc
+202505,United Arab Emirates,1.1983,2.1819,549.22,gacc
+202505,Canada,0.6435,1.4609,440.53,gacc
+202505,Kuwait,0.637,1.2147,524.4,gacc
+202505,Congo,0.532,1.035,514.03,gacc
+202505,Colombia,0.4071,0.8978,453.41,gacc
+202505,Indonesia,0.362,0.6197,584.18,gacc
+202505,Qatar,0.3433,0.6398,536.66,gacc
+202505,Kazakhstan,0.2592,0.4671,554.95,gacc
+202505,Ecuador,0.2479,0.5596,442.93,gacc
+202505,Gabon,0.2023,0.3745,540.19,gacc
+202505,Equatorial Guinea,0.1659,0.2933,565.55,gacc
+202505,Norway,0.1567,0.2777,564.27,gacc
+202505,United Kingdom,0.1507,0.2707,556.56,gacc
+202505,Australia,0.0886,0.1527,580.37,gacc
+202505,Mexico,0.0759,0.1364,556.55,gacc
+202505,USA,0.0733,0.1364,537.28,gacc
+202505,Nigeria,0.0711,0.1239,574.08,gacc
+202505,Togo,0.0652,0.1541,423.01,gacc
+202505,Cameroon,0.0651,0.1288,505.42,gacc
+202505,Chad,0.0649,0.1254,517.66,gacc
+202505,Brunei Darussalam,0.0217,0.0415,522.14,gacc
+202505,Mongolia,0.0188,0.0424,443.95,gacc
+202505,Mozambique,0.0176,0.0314,561.45,gacc
+202506,Russian Federation,4.0719,8.3514,487.57,gacc
+202506,Saudi Arabia,3.8955,7.8969,493.29,gacc
+202506,Malaysia,3.4461,7.0807,486.68,gacc
+202506,Iraq,2.4792,5.16,480.47,gacc
+202506,Brazil,1.9262,3.8856,495.74,gacc
+202506,Oman,1.5415,2.9566,521.39,gacc
+202506,United Arab Emirates,1.4066,2.6846,523.96,gacc
+202506,Angola,1.0214,2.0041,509.65,gacc
+202506,Kuwait,0.7323,1.4853,493.05,gacc
+202506,Canada,0.6943,1.5626,444.31,gacc
+202506,Congo,0.4569,0.902,506.53,gacc
+202506,Indonesia,0.3681,0.6743,545.85,gacc
+202506,Ecuador,0.3516,0.7908,444.63,gacc
+202506,Colombia,0.3087,0.6987,441.79,gacc
+202506,Togo,0.2983,0.7143,417.64,gacc
+202506,Kazakhstan,0.2924,0.576,507.62,gacc
+202506,Norway,0.2091,0.407,513.69,gacc
+202506,Qatar,0.2074,0.4136,501.57,gacc
+202506,Ghana,0.2051,0.3825,536.06,gacc
+202506,United Kingdom,0.14,0.2669,524.53,gacc
+202506,Gabon,0.1277,0.256,498.78,gacc
+202506,Trinidad and Tobago,0.1178,0.2837,415.22,gacc
+202506,Australia,0.0768,0.1246,616.59,gacc
+202506,Nigeria,0.0729,0.1422,512.48,gacc
+202506,Equatorial Guinea,0.0675,0.1404,481.18,gacc
+202506,Mongolia,0.0169,0.0362,466.17,gacc
+202506,Albania,0.0,0.0,12294.12,gacc
+202507,Russian Federation,4.3796,8.7042,503.15,gacc
+202507,Saudi Arabia,3.8967,7.471,521.57,gacc
+202507,Iraq,2.4261,4.8868,496.47,gacc
+202507,Malaysia,2.1125,4.2128,501.45,gacc
+202507,Brazil,1.8899,3.774,500.76,gacc
+202507,United Arab Emirates,1.5636,2.8397,550.63,gacc
+202507,Oman,1.3432,2.4976,537.8,gacc
+202507,Indonesia,0.9825,2.0746,473.58,gacc
+202507,Kuwait,0.8343,1.6111,517.87,gacc
+202507,Angola,0.7164,1.4156,506.12,gacc
+202507,Canada,0.5188,1.1273,460.19,gacc
+202507,Qatar,0.4811,0.9372,513.36,gacc
+202507,Congo,0.471,0.8741,538.84,gacc
+202507,Ecuador,0.4353,0.919,473.65,gacc
+202507,Gabon,0.397,0.7387,537.51,gacc
+202507,Guyana,0.2773,0.5408,512.82,gacc
+202507,Colombia,0.2209,0.467,473.02,gacc
+202507,Norway,0.2132,0.396,538.41,gacc
+202507,Ghana,0.1963,0.4205,466.8,gacc
+202507,Kazakhstan,0.1826,0.3571,511.3,gacc
+202507,United Kingdom,0.1534,0.276,555.75,gacc
+202507,Nigeria,0.1506,0.2553,589.93,gacc
+202507,Libya,0.0802,0.1388,578.18,gacc
+202507,Trinidad and Tobago,0.0551,0.1524,361.59,gacc
+202507,Togo,0.0262,0.0627,418.16,gacc
+202507,Mongolia,0.0177,0.0376,471.39,gacc
+202507,Turkey,0.0,0.0,97000.0,gacc
+202508,Russian Federation,3.9666,7.9399,499.58,gacc
+202508,Saudi Arabia,3.2164,5.9785,537.99,gacc
+202508,Iraq,2.9203,5.6486,516.99,gacc
+202508,Brazil,2.6937,5.1872,519.3,gacc
+202508,Malaysia,2.1969,4.7285,464.6,gacc
+202508,Angola,1.7739,3.4082,520.47,gacc
+202508,Oman,1.7207,3.1921,539.05,gacc
+202508,United Arab Emirates,1.6567,3.0158,549.34,gacc
+202508,Indonesia,1.2143,2.6596,456.57,gacc
+202508,Kuwait,1.0051,1.8981,529.52,gacc
+202508,Canada,0.4766,1.0437,456.65,gacc
+202508,Congo,0.3315,0.627,528.61,gacc
+202508,Ecuador,0.2958,0.6306,469.01,gacc
+202508,Colombia,0.2746,0.5877,467.29,gacc
+202508,Guyana,0.2388,0.5781,413.09,gacc
+202508,Qatar,0.238,0.4301,553.42,gacc
+202508,Gabon,0.1969,0.3738,526.76,gacc
+202508,Kazakhstan,0.1329,0.2531,524.99,gacc
+202508,Trinidad and Tobago,0.1172,0.2997,391.12,gacc
+202508,Libya,0.076,0.1328,572.53,gacc
+202508,Togo,0.0613,0.1502,408.02,gacc
+202508,Algeria,0.0514,0.0875,587.07,gacc
+202508,Ghana,0.0506,0.127,398.28,gacc
+202508,Brunei Darussalam,0.047,0.0787,597.17,gacc
+202508,Australia,0.0469,0.0784,598.48,gacc
+202508,Mongolia,0.0234,0.0501,466.05,gacc
+202508,Niger,0.0,0.0,12181.82,gacc
+202509,Russian Federation,4.1199,8.2828,497.4,gacc
+202509,Saudi Arabia,3.8034,7.1266,533.7,gacc
+202509,Iraq,3.0225,5.9725,506.07,gacc
+202509,Brazil,2.098,4.2624,492.21,gacc
+202509,Malaysia,1.8375,3.8665,475.22,gacc
+202509,United Arab Emirates,1.5801,2.8575,552.98,gacc
+202509,Oman,1.452,2.6818,541.42,gacc
+202509,Angola,1.1248,2.1545,522.1,gacc
+202509,Indonesia,1.068,2.1273,502.03,gacc
+202509,Canada,0.6173,1.3689,450.96,gacc
+202509,Kuwait,0.4888,0.9495,514.77,gacc
+202509,Qatar,0.395,0.7416,532.6,gacc
+202509,Congo,0.3295,0.6382,516.3,gacc
+202509,Ghana,0.2832,0.6105,463.86,gacc
+202509,Colombia,0.2694,0.6087,442.48,gacc
+202509,Ecuador,0.2588,0.567,456.44,gacc
+202509,Trinidad and Tobago,0.2367,0.583,405.97,gacc
+202509,United Kingdom,0.1531,0.2642,579.54,gacc
+202509,Togo,0.1272,0.2984,426.15,gacc
+202509,Kazakhstan,0.1154,0.2246,513.55,gacc
+202509,Gabon,0.0907,0.1738,521.81,gacc
+202509,Chad,0.09,0.1385,650.0,gacc
+202509,Equatorial Guinea,0.0714,0.1306,546.49,gacc
+202509,Cameroon,0.0689,0.1337,515.13,gacc
+202509,Australia,0.0486,0.0748,650.0,gacc
+202509,Mongolia,0.0169,0.0367,461.53,gacc
+202509,Timor-Leste,0.0147,0.0242,605.1,gacc
+202510,Russian Federation,4.3943,9.1039,482.68,gacc
+202510,Saudi Arabia,3.774,7.0203,537.59,gacc
+202510,Iraq,2.6021,5.0522,515.04,gacc
+202510,United Arab Emirates,2.1445,3.8233,560.91,gacc
+202510,Malaysia,2.0671,4.7893,431.6,gacc
+202510,Brazil,1.813,3.5672,508.25,gacc
+202510,Oman,1.2814,2.3327,549.3,gacc
+202510,Kuwait,1.2484,2.361,528.75,gacc
+202510,Angola,1.2083,2.3847,506.67,gacc
+202510,Indonesia,0.774,1.5395,502.73,gacc
+202510,Canada,0.6136,1.3625,450.33,gacc
+202510,Congo,0.3983,0.7797,510.81,gacc
+202510,Ecuador,0.3243,0.7196,450.66,gacc
+202510,Colombia,0.2646,0.6185,427.71,gacc
+202510,Ghana,0.2636,0.6145,429.07,gacc
+202510,Kazakhstan,0.2564,0.4728,542.31,gacc
+202510,Qatar,0.253,0.4871,519.4,gacc
+202510,Gabon,0.2417,0.4608,524.45,gacc
+202510,Togo,0.1691,0.4372,386.73,gacc
+202510,Nigeria,0.0696,0.1281,543.08,gacc
+202510,Chad,0.0657,0.1286,510.77,gacc
+202510,Argentina,0.0619,0.108,573.18,gacc
+202510,Mongolia,0.0193,0.043,449.62,gacc
+202510,Albania,0.0,0.0,5743.24,gacc
+202510,Niger,0.0,0.0,6122.14,gacc
+202511,Saudi Arabia,3.8941,7.5463,516.03,gacc
+202511,Russian Federation,3.7788,8.2468,458.22,gacc
+202511,Brazil,2.4336,4.8852,498.16,gacc
+202511,Iraq,2.1629,4.437,487.47,gacc
+202511,Malaysia,1.8483,4.2598,433.89,gacc
+202511,Oman,1.5981,3.0112,530.71,gacc
+202511,United Arab Emirates,1.5548,2.9431,528.28,gacc
+202511,Angola,1.5413,2.9951,514.63,gacc
+202511,Kuwait,1.0908,2.2062,494.39,gacc
+202511,Indonesia,1.0766,2.5153,428.02,gacc
+202511,Colombia,0.6971,1.6536,421.59,gacc
+202511,Canada,0.6656,1.5653,425.19,gacc
+202511,Congo,0.5118,1.0169,503.27,gacc
+202511,Ghana,0.2955,0.6667,443.25,gacc
+202511,Ecuador,0.2917,0.6626,440.3,gacc
+202511,Guyana,0.1928,0.4492,429.22,gacc
+202511,Chad,0.1764,0.2713,650.0,gacc
+202511,Kazakhstan,0.1062,0.2043,519.73,gacc
+202511,Togo,0.0991,0.2821,351.48,gacc
+202511,South Sudan,0.0827,0.1662,497.6,gacc
+202511,Norway,0.0721,0.1361,530.0,gacc
+202511,Qatar,0.0711,0.1339,530.92,gacc
+202511,Equatorial Guinea,0.0686,0.1309,524.27,gacc
+202511,Gabon,0.059,0.1215,485.84,gacc
+202511,Algeria,0.0534,0.0934,571.96,gacc
+202511,Libya,0.041,0.0761,538.44,gacc
+202511,Azerbaijan,0.0301,0.0611,492.14,gacc
+202511,Mongolia,0.0155,0.0354,438.26,gacc
+202511,Cuba,0.0,0.0,20055.56,gacc
+202512,Russian Federation,3.9994,9.3317,428.58,gacc
+202512,Saudi Arabia,3.3403,6.6602,501.53,gacc
+202512,United Arab Emirates,3.3326,6.0956,546.73,gacc
+202512,Iraq,2.7953,5.8534,477.55,gacc
+202512,Brazil,2.732,5.4003,505.9,gacc
+202512,Oman,1.9723,3.7837,521.25,gacc
+202512,Malaysia,1.6939,4.1348,409.68,gacc
+202512,Angola,1.5534,3.1541,492.51,gacc
+202512,Canada,1.0057,2.333,431.07,gacc
+202512,Indonesia,0.8891,2.1849,406.92,gacc
+202512,Kuwait,0.8141,1.6492,493.65,gacc
+202512,Congo,0.3677,0.7616,482.79,gacc
+202512,Colombia,0.2856,0.6839,417.63,gacc
+202512,Libya,0.2722,0.4975,547.22,gacc
+202512,Ecuador,0.259,0.5811,445.68,gacc
+202512,Gabon,0.2542,0.4966,511.97,gacc
+202512,Ghana,0.1529,0.301,507.94,gacc
+202512,United Kingdom,0.1457,0.2654,548.96,gacc
+202512,Qatar,0.1438,0.2733,526.26,gacc
+202512,South Sudan,0.143,0.3003,476.24,gacc
+202512,Norway,0.1419,0.2616,542.49,gacc
+202512,Nigeria,0.1362,0.2693,505.53,gacc
+202512,Kazakhstan,0.1075,0.2173,494.61,gacc
+202512,Guyana,0.1024,0.2037,502.65,gacc
+202512,Equatorial Guinea,0.0666,0.1249,533.43,gacc
+202512,Argentina,0.0543,0.1046,518.84,gacc
+202512,Mongolia,0.0162,0.0385,420.59,gacc
+202601,Russian Federation,4.8453,11.405,424.84,gacc
+202601,Saudi Arabia,2.6785,5.5384,483.62,gacc
+202601,Brazil,2.5379,5.2067,487.42,gacc
+202601,Iraq,2.2225,4.7905,463.94,gacc
+202601,United Arab Emirates,1.5367,2.9974,512.66,gacc
+202601,Oman,1.3585,2.7292,497.77,gacc
+202601,Malaysia,1.2539,2.9292,428.08,gacc
+202601,Indonesia,1.0244,2.1604,474.16,gacc
+202601,Angola,0.9449,1.9845,476.13,gacc
+202601,Kuwait,0.7148,1.5118,472.79,gacc
+202601,Canada,0.6927,1.6177,428.22,gacc
+202601,Qatar,0.6612,1.3074,505.74,gacc
+202601,Colombia,0.5266,1.2119,434.52,gacc
+202601,Guyana,0.326,0.7586,429.8,gacc
+202601,Congo,0.3036,0.6414,473.37,gacc
+202601,Kazakhstan,0.208,0.4226,492.03,gacc
+202601,Ghana,0.196,0.3768,520.17,gacc
+202601,Gabon,0.1209,0.2416,500.33,gacc
+202601,Ecuador,0.1071,0.245,437.22,gacc
+202601,Libya,0.0872,0.1619,538.79,gacc
+202601,Chad,0.0861,0.1323,651.06,gacc
+202601,South Sudan,0.0781,0.1709,456.77,gacc
+202601,Togo,0.0562,0.1492,376.92,gacc
+202601,Brunei Darussalam,0.0415,0.0796,521.25,gacc
+202601,Mongolia,0.0183,0.0428,426.67,gacc
+202602,Russian Federation,4.6703,10.3849,449.72,gacc
+202602,Saudi Arabia,3.1054,6.5073,477.22,gacc
+202602,Brazil,2.3477,4.7533,493.92,gacc
+202602,Malaysia,2.1395,4.8424,441.81,gacc
+202602,United Arab Emirates,1.7289,3.4624,499.33,gacc
+202602,Iraq,1.6015,3.5409,452.28,gacc
+202602,Indonesia,1.5709,2.9234,537.36,gacc
+202602,Oman,1.1899,2.4087,494.01,gacc
+202602,Angola,0.9338,1.8333,509.35,gacc
+202602,Congo,0.6376,1.1365,560.96,gacc
+202602,Canada,0.4505,1.0107,445.69,gacc
+202602,Kuwait,0.4012,0.8665,463.01,gacc
+202602,Gabon,0.317,0.6323,501.33,gacc
+202602,Ecuador,0.2701,0.632,427.43,gacc
+202602,Colombia,0.2692,0.6283,428.41,gacc
+202602,Libya,0.2198,0.3884,565.86,gacc
+202602,Chad,0.1507,0.2587,582.63,gacc
+202602,Kazakhstan,0.1425,0.293,486.52,gacc
+202602,United Kingdom,0.1405,0.2591,542.27,gacc
+202602,Ghana,0.1228,0.3003,408.85,gacc
+202602,Guyana,0.1215,0.2795,434.86,gacc
+202602,Senegal,0.0712,0.132,539.27,gacc
+202602,Qatar,0.0654,0.1394,469.15,gacc
+202602,Equatorial Guinea,0.0642,0.1241,517.32,gacc
+202602,Australia,0.0469,0.0783,599.55,gacc
+202602,Argentina,0.0407,0.0765,532.69,gacc
+202602,Togo,0.0336,0.1116,300.85,gacc
+202602,Mongolia,0.0127,0.0277,458.42,gacc
+202602,South Sudan,0.0,0.0,15687.5,gacc
+202603,Russian Federation,5.6863,10.0627,565.09,gacc
+202603,Indonesia,3.835,5.5697,688.54,gacc
+202603,Malaysia,3.1006,5.1326,604.09,gacc
+202603,Saudi Arabia,2.9787,5.8552,508.73,gacc
+202603,Brazil,2.6849,5.026,534.19,gacc
+202603,Oman,2.0226,3.6364,556.2,gacc
+202603,Iraq,1.9038,3.969,479.66,gacc
+202603,United Arab Emirates,1.4764,2.6797,550.97,gacc
+202603,Angola,1.2242,2.4053,508.96,gacc
+202603,Canada,0.741,1.3434,551.59,gacc
+202603,Ecuador,0.3686,0.7529,489.61,gacc
+202603,Congo,0.331,0.6385,518.41,gacc
+202603,Colombia,0.3045,0.6256,486.8,gacc
+202603,Kuwait,0.2993,0.5954,502.66,gacc
+202603,Gabon,0.2025,0.3148,643.32,gacc
+202603,South Sudan,0.1912,0.3051,626.63,gacc
+202603,Libya,0.1732,0.2055,842.79,gacc
+202603,Algeria,0.0833,0.0889,936.97,gacc
+202603,Chad,0.0807,0.1242,650.0,gacc
+202603,Nigeria,0.0732,0.1254,583.95,gacc
+202603,Qatar,0.0671,0.1435,467.23,gacc
+202603,Guyana,0.0613,0.1275,480.86,gacc
+202603,Ghana,0.0516,0.0917,562.52,gacc
+202603,Kazakhstan,0.0485,0.0991,489.28,gacc
+202603,Mongolia,0.0279,0.0448,622.91,gacc
+202604,Russian Federation,6.4095,8.9712,714.45,gacc
+202604,Saudi Arabia,4.6608,5.07,919.29,gacc
+202604,Brazil,4.2756,5.9235,721.79,gacc
+202604,Malaysia,3.1673,4.5916,689.8,gacc
+202604,Indonesia,2.529,3.4369,735.83,gacc
+202604,Oman,1.9929,2.2243,895.97,gacc
+202604,Angola,1.8012,2.5346,710.63,gacc
+202604,Canada,0.9024,1.4368,628.06,gacc
+202604,United Arab Emirates,0.4991,0.5849,853.32,gacc
+202604,Colombia,0.3556,0.5545,641.3,gacc
+202604,Congo,0.3229,0.4913,657.17,gacc
+202604,Chad,0.293,0.385,761.07,gacc
+202604,Iraq,0.2413,0.4768,506.14,gacc
+202604,Kuwait,0.2126,0.2515,845.35,gacc
+202604,South Sudan,0.1818,0.2214,821.09,gacc
+202604,Ecuador,0.1509,0.2151,701.68,gacc
+202604,Libya,0.1166,0.1388,840.0,gacc
+202604,Qatar,0.1056,0.109,969.15,gacc
+202604,Gabon,0.1001,0.1829,547.41,gacc
+202604,Nigeria,0.0989,0.1392,710.0,gacc
+202604,Equatorial Guinea,0.0985,0.1314,750.0,gacc
+202604,Cameroon,0.0773,0.0982,786.92,gacc
+202604,Kazakhstan,0.0665,0.0854,778.37,gacc
+202604,Argentina,0.0548,0.0935,586.25,gacc
+202604,Ghana,0.0485,0.07,693.46,gacc
+202604,Mongolia,0.0298,0.0411,726.11,gacc
+202605,Russian Federation,5.9544,8.1555,730.11,gacc
+202605,Saudi Arabia,4.9365,5.5457,890.15,gacc
+202605,Brazil,4.5835,5.3008,864.68,gacc
+202605,Indonesia,2.5619,3.5032,731.3,gacc
+202605,Oman,1.6554,1.9662,841.91,gacc
+202605,Angola,1.6083,1.7387,924.98,gacc
+202605,Malaysia,1.169,1.5636,747.68,gacc
+202605,Canada,1.0005,1.4206,704.28,gacc
+202605,Colombia,0.5912,0.8112,728.78,gacc
+202605,Congo,0.4802,0.503,954.69,gacc
+202605,South Sudan,0.4676,0.5075,921.56,gacc
+202605,Kazakhstan,0.2821,0.2889,976.45,gacc
+202605,Ecuador,0.2793,0.4189,666.72,gacc
+202605,United Arab Emirates,0.2721,0.2833,960.34,gacc
+202605,Chad,0.2636,0.2764,953.73,gacc
+202605,Iraq,0.1674,0.2605,642.58,gacc
+202605,Gabon,0.1231,0.1276,964.96,gacc
+202605,Republic of Korea,0.1191,0.1679,709.12,gacc
+202605,Algeria,0.0946,0.0879,1075.48,gacc
+202605,Ghana,0.0755,0.0916,824.4,gacc
+202605,Mongolia,0.0314,0.0422,744.0,gacc
+202606,Russian Federation,5.6773,8.2981,684.16,gacc
+202606,Brazil,3.6819,4.212,874.15,gacc
+202606,Saudi Arabia,2.9717,3.4197,868.99,gacc
+202606,Angola,1.6925,1.8915,894.8,gacc
+202606,Indonesia,1.5698,2.4924,629.84,gacc
+202606,Canada,1.0837,1.6549,654.86,gacc
+202606,Malaysia,0.8279,1.3438,616.08,gacc
+202606,Congo,0.6672,0.7543,884.52,gacc
+202606,Ecuador,0.5731,0.8132,704.77,gacc
+202606,Iraq,0.457,0.8383,545.12,gacc
+202606,Kazakhstan,0.4451,0.4674,952.39,gacc
+202606,Guyana,0.372,0.4201,885.5,gacc
+202606,Colombia,0.3384,0.4204,805.07,gacc
+202606,Ghana,0.2488,0.2513,989.78,gacc
+202606,Gabon,0.2445,0.2606,938.07,gacc
+202606,South Sudan,0.2373,0.2992,793.2,gacc
+202606,Kuwait,0.203,0.324,626.49,gacc
+202606,Argentina,0.1905,0.1912,996.73,gacc
+202606,United Kingdom,0.1483,0.1398,1060.62,gacc
+202606,Niger,0.136,0.1416,960.37,gacc
+202606,Equatorial Guinea,0.1252,0.1308,957.01,gacc
+202606,Chad,0.1156,0.1306,885.35,gacc
+202606,Oman,0.1083,0.1323,818.13,gacc
+202606,Qatar,0.0718,0.1384,518.58,gacc
+202606,United Arab Emirates,0.0324,0.0612,529.41,gacc
+202606,Mongolia,0.0228,0.0352,646.49,gacc
+202607,Russian Federation,5.184,9.1503,566.54,gacc
+202607,Brazil,3.6646,4.9802,735.84,gacc
+202607,Saudi Arabia,3.355,5.3289,629.58,gacc
+202607,Indonesia,1.9171,3.0596,626.61,gacc
+202607,Angola,1.8226,2.3797,765.89,gacc
+202607,United Arab Emirates,1.7149,2.4261,706.88,gacc
+202607,Malaysia,0.7527,1.2408,606.59,gacc
+202607,Canada,0.7283,1.2466,584.2,gacc
+202607,Kuwait,0.6436,1.1595,555.05,gacc
+202607,Colombia,0.6183,0.8785,703.83,gacc
+202607,Qatar,0.5362,0.8519,629.44,gacc
+202607,Guyana,0.429,0.4665,919.5,gacc
+202607,Ecuador,0.3208,0.4461,719.16,gacc
+202607,Congo,0.2555,0.3816,669.52,gacc
+202607,Chad,0.2189,0.2551,858.11,gacc
+202607,South Sudan,0.1708,0.2822,605.25,gacc
+202607,Ghana,0.1248,0.1273,980.92,gacc
+202607,Libya,0.1026,0.1389,738.92,gacc
+202607,Gabon,0.091,0.1275,713.9,gacc
+202607,Argentina,0.0859,0.0929,924.96,gacc
+202607,Cameroon,0.0809,0.1346,601.47,gacc
+202607,Iraq,0.0727,0.0966,752.54,gacc
+202607,Kazakhstan,0.046,0.083,554.52,gacc
+202607,Mongolia,0.0191,0.0322,592.8,gacc
+202607,Albania,0.0,0.0,51428.57,gacc
+202608,Russian Federation,6.526,11.2187,581.71,gacc
+202608,Brazil,2.3239,3.7453,620.47,gacc
+202608,Saudi Arabia,1.9289,3.1519,611.99,gacc
+202608,Indonesia,1.8903,3.0991,609.96,gacc
+202608,United Arab Emirates,1.8316,2.9071,630.03,gacc
+202608,Malaysia,1.6426,2.6133,628.55,gacc
+202608,Angola,1.1037,1.8251,604.72,gacc
+202608,Kuwait,0.9815,1.6216,605.25,gacc
+202608,Canada,0.7994,1.4093,567.23,gacc
+202608,Iraq,0.7627,1.3896,548.88,gacc
+202608,Oman,0.6229,0.9414,661.75,gacc
+202608,Qatar,0.5856,0.9722,602.34,gacc
+202608,Colombia,0.5353,0.9003,594.61,gacc
+202608,Congo,0.3893,0.6409,607.4,gacc
+202608,Guyana,0.2566,0.3367,762.06,gacc
+202608,Kazakhstan,0.2395,0.3581,668.82,gacc
+202608,Chad,0.1673,0.2638,634.19,gacc
+202608,Equatorial Guinea,0.0784,0.1307,600.0,gacc
+202608,Algeria,0.0674,0.0884,761.8,gacc
+202608,Norway,0.0619,0.0846,732.38,gacc
+202608,Ecuador,0.0608,0.1081,562.89,gacc
+202608,Australia,0.0515,0.0707,728.58,gacc
+202608,Mongolia,0.0239,0.0406,587.98,gacc
+202608,Syria,0.0,0.0,102000.0,gacc
+202609,Russian Federation,6.5875,9.9409,662.67,gacc
+202609,Iraq,3.3059,4.8358,683.62,gacc
+202609,Brazil,3.2275,5.147,627.06,gacc
+202609,United Arab Emirates,2.1153,2.9985,705.47,gacc
+202609,Saudi Arabia,1.8456,2.7003,683.51,gacc
+202609,Indonesia,1.2131,1.7219,704.53,gacc
+202609,Kuwait,1.0832,1.6199,668.69,gacc
+202609,Oman,0.854,1.2239,697.76,gacc
+202609,Malaysia,0.8245,1.1574,712.38,gacc
+202609,Canada,0.806,1.3799,584.11,gacc
+202609,Colombia,0.6123,1.0521,581.96,gacc
+202609,Angola,0.5883,0.9316,631.42,gacc
+202609,Ecuador,0.3617,0.6247,579.03,gacc
+202609,Congo,0.3318,0.5054,656.44,gacc
+202609,Qatar,0.273,0.4237,644.31,gacc
+202609,Kazakhstan,0.263,0.3633,723.93,gacc
+202609,South Sudan,0.1679,0.2278,737.07,gacc
+202609,Cameroon,0.0856,0.1305,655.91,gacc
+202609,Egypt,0.0455,0.0804,566.05,gacc
+202609,Mongolia,0.0172,0.0305,564.49,gacc
