@@ -98,7 +98,7 @@ data/
     gacc_imports.csv            — Total imports coal/crude oil/gas (GACC, May 2026–)
     gacc_imports_manual.csv     — GACC fallback for months the pipeline lags (via /handelsbilanz)
     gacc_coal.csv               — Coal imports by country of origin (GACC, Jan 2025–)
-    gacc_crude_oil.csv          — Crude oil imports by country of origin (GACC, Jan 2025–)
+    gacc_crude_oil.csv          — Crude oil imports by country of origin, value + volume (GACC, Jan 2025–)
     gacc_lng.csv                — LNG imports by country of origin (GACC, Jan 2025–)
     gacc_pipeline_gas.csv       — Pipeline gas imports by country of origin (GACC, Jan 2025–)
   production/
@@ -652,6 +652,8 @@ The script reads the `capacity_additions` block and upserts the row into `data/p
 
 `fetch_history.py` loads the complete ComTrade history 2020–2024 and rewrites the four commodity CSVs. This script was run once via the `fetch_history` workflow and does not need to be repeated unless ComTrade revises historical data retroactively.
 
+**Caution:** a rerun overwrites manual partner-name normalisations with the raw ComTrade names. The rerun on 2026-10-20 turned `Laos` back into `Lao People's Dem. Rep.` in 40 rows of `comtrade_coal.csv`; this was corrected the same day. After any rerun, check partner names against `gacc_*.csv` before the next `build_combined` run.
+
 ```bash
 export COMTRADE_PRIMARY_KEY=<key>
 python scripts/fetch_history.py
@@ -679,7 +681,7 @@ Local: `pip install -r requirements.txt` in a venv. On macOS with an externally 
 
 GACC publishes monthly granular import data by country of origin. The four country-of-origin CSVs (`gacc_coal.csv`, `gacc_crude_oil.csv`, `gacc_lng.csv`, `gacc_pipeline_gas.csv`) fill the ComTrade gap from January 2025 onwards: ComTrade delivers monthly data with an 18–20 month lag and has not yet published 2025 data. GACC data are available with approximately a 6-week lag.
 
-**Schema** (identical for all four files):
+**Schema** (base columns, all four files):
 
 | Column | Unit | Description |
 |---|---|---|
@@ -687,7 +689,25 @@ GACC publishes monthly granular import data by country of origin. The four count
 | partner | Text | Country of origin (ComTrade naming convention) |
 | value_usd_bn | USD bn | Import value |
 
-**Differences from ComTrade:** GACC does not include volume data (`qty_mt`) in its public CSV downloads. The `qty_mt` and `value_per_mt_usd` columns are therefore absent from the GACC country-of-origin CSVs. Volume charts in the dashboard are rendered only for the ComTrade period (2020–2024).
+`gacc_crude_oil.csv` additionally carries the two ComTrade volume columns, so its schema is identical to `comtrade_crude_oil.csv`:
+
+| Column | Unit | Description |
+|---|---|---|
+| qty_mt | Mt | Import volume (net weight) |
+| value_per_mt_usd | USD/t | Import value per tonne |
+
+**Volume data:** The GACC download with quantity (`Quantity` in kg, `Supplementary Quantity` in barrel) is used for crude oil since 2026-10-20. Coal, LNG and pipeline gas are still value-only: their HS codes for the quantity download are being verified first. `build_combined.py` already passes `qty_mt` through when a GACC file has it and leaves it empty otherwise, so a later extension needs only new data, no code change. The dashboard volume charts use every row that has `qty_mt`: crude oil runs 2020–present, the other three fuels stay at ComTrade 2020–2024 until their GACC files get the volume columns.
+
+### Crude oil volume series (rebuild 2026-10-20)
+
+`gacc_crude_oil.csv` was rebuilt in full from two GACC downloads (CN 27090000, crude petroleum oils): Jan–Dec 2025 and Jan–Sep 2026. Value and volume therefore come from the same data release, which keeps `value_per_mt_usd` consistent.
+
+- **Units and rounding** follow `fetch_comtrade.py`: `value_usd_bn = USD / 1e9` (4 decimals), `qty_mt = kg / 1e9` (4 decimals), `value_per_mt_usd = USD / (kg / 1000)` (2 decimals). The barrel column of the download is not stored.
+- **Partner names** are mapped by GACC partner code to the names already used in the repo: 105 Brunei Darussalam, 152 Azerbaijan, 252 Dem. Rep. of the Congo, 344 Russian Federation, 502 USA, 137 Turkey. All other GACC names are taken as delivered.
+- **Revisions:** 2025 values are unchanged against the previous file. Feb–Aug 2026 values differ slightly (GACC revisions in the newer download, e.g. 202607 total +0.17 bn USD, Russia 202607 5.0369 → 5.1840 bn USD). Jan and Sep 2026 are unchanged. 202608 gains one row (Syria, 408 USD).
+- **Jan/Feb:** both downloads deliver January and February as separate months; no split was needed.
+
+Rebuild procedure for future months: download HS 27090000 by month and partner with quantity from GACC, then regenerate the full file from the downloads with the same conversion rules (not row-by-row edits), so revised months are picked up as well.
 
 **HS codes and categorisation:**
 

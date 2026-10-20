@@ -591,9 +591,9 @@
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
-        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <div class="chart-subtitle">Million tonnes · 2020–present</div>
         <canvas id="oil-qty-country"></canvas>
-        <p class="chart-source">Source: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a></p>
+        <p class="chart-source">Sources: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a>, GACC</p>
       </div>
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Value</div>
@@ -2244,9 +2244,10 @@
       /* ── Country pairs ── */
       function buildCountryPair(rows, qtyId, valId, qMax, qStep, vMax, vStep) {
         const top    = top5(rows);
-        const ctRows = rows.filter(r => r.source === 'comtrade');
-        const vPer   = uniqSortedPeriods(rows);
-        const qPer   = uniqSortedPeriods(ctRows);
+        /* Quantity: every row that carries qty_mt (ComTrade, plus GACC once a gacc_*.csv has the column) */
+        const qtyRows = rows.filter(r => r.qty_mt !== '');
+        const vPer    = uniqSortedPeriods(rows);
+        const qPer    = uniqSortedPeriods(qtyRows);
 
         new Chart(document.getElementById(valId), {
           type: 'bar',
@@ -2267,7 +2268,7 @@
             labels: qPer.map(periodToShort),
             datasets: top.map((p, i) => ({
               label: p,
-              data: seriesByPartner(ctRows, p, 'qty_mt', qPer),
+              data: seriesByPartner(qtyRows, p, 'qty_mt', qPer),
               backgroundColor: P5_COLORS[i], borderWidth: 0,
             }))
           },

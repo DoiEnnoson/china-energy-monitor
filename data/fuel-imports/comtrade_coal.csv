@@ -8,7 +8,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202001,United Arab Emirates,0.0033,0.0168,194.7
 202001,Brazil,0.0,0.0,15300.0
 202001,Kenya,0.0,0.0,3000.0
-202001,Lao People's Dem. Rep.,0.0,0.0006,42.68
+202001,Laos,0.0,0.0006,42.68
 202001,United Kingdom,0.0,0.0,784.85
 202001,USA,0.0,0.0,769.43
 202002,Australia,0.7936,7.2554,109.38
@@ -31,7 +31,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202003,Mongolia,0.0122,0.296,41.19
 202003,Mozambique,0.0096,0.077,124.1
 202003,Kazakhstan,0.0049,0.0369,133.92
-202003,Lao People's Dem. Rep.,0.0001,0.0012,43.56
+202003,Laos,0.0001,0.0012,43.56
 202003,Myanmar,0.0,0.0013,17.2
 202003,Germany,0.0,0.0,4091.95
 202003,Nigeria,0.0,0.0,11566.67
@@ -45,7 +45,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202004,Kazakhstan,0.0065,0.048,135.24
 202004,New Zealand,0.0036,0.022,165.03
 202004,Malaysia,0.0004,0.0098,38.01
-202004,Lao People's Dem. Rep.,0.0001,0.0024,42.82
+202004,Laos,0.0001,0.0024,42.82
 202004,Ethiopia,0.0,0.0,30300.0
 202004,Germany,0.0,0.0,5523.81
 202004,Kyrgyzstan,0.0,0.0017,26.03
@@ -66,7 +66,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202006,USA,0.0383,0.3375,113.57
 202006,Colombia,0.0118,0.1643,72.05
 202006,Kazakhstan,0.002,0.0147,133.66
-202006,Lao People's Dem. Rep.,0.0002,0.0036,44.4
+202006,Laos,0.0002,0.0036,44.4
 202006,Myanmar,0.0,0.0002,20.69
 202006,Germany,0.0,0.0,4167.03
 202006,Kyrgyzstan,0.0,0.0001,22.01
@@ -107,7 +107,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202010,Myanmar,0.0,0.0001,26.23
 202010,Germany,0.0,0.0,4301.62
 202010,"China, Hong Kong SAR",0.0,0.0,23120.0
-202010,Lao People's Dem. Rep.,0.0,0.0002,51.02
+202010,Laos,0.0,0.0002,51.02
 202010,USA,0.0,0.0,1182.98
 202011,Mongolia,0.2077,2.9275,70.93
 202011,Russian Federation,0.1795,2.7222,65.93
@@ -135,7 +135,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202101,Canada,0.0562,0.3742,150.33
 202101,USA,0.0428,0.279,153.51
 202101,Mozambique,0.0111,0.0785,141.29
-202101,Lao People's Dem. Rep.,0.0,0.0002,106.41
+202101,Laos,0.0,0.0002,106.41
 202102,Indonesia,0.4516,6.1827,73.04
 202102,Russian Federation,0.1995,2.424,82.3
 202102,Mongolia,0.1744,1.9328,90.25
@@ -144,7 +144,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202102,South Africa,0.0309,0.4924,62.77
 202102,Colombia,0.0104,0.1642,63.53
 202102,Kazakhstan,0.0003,0.0022,135.05
-202102,Lao People's Dem. Rep.,0.0,0.0002,54.09
+202102,Laos,0.0,0.0002,54.09
 202102,India,0.0,0.0,65.16
 202103,Indonesia,0.5518,6.9598,79.29
 202103,Russian Federation,0.4365,4.4247,98.66
@@ -167,7 +167,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202104,Mozambique,0.0354,0.1742,203.34
 202104,Peru,0.0043,0.0349,122.94
 202104,Kazakhstan,0.0023,0.0172,135.06
-202104,Lao People's Dem. Rep.,0.0,0.0,100.0
+202104,Laos,0.0,0.0,100.0
 202104,United Rep. of Tanzania,0.0,,
 202105,Russian Federation,0.512,4.9925,102.55
 202105,Indonesia,0.4274,5.1399,83.15
@@ -233,7 +233,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202110,Colombia,0.0267,0.1171,228.11
 202110,South Africa,0.0157,0.153,102.64
 202110,Kazakhstan,0.0001,0.001,88.0
-202110,Lao People's Dem. Rep.,0.0,0.0001,111.31
+202110,Laos,0.0,0.0001,111.31
 202110,Zambia,0.0,0.0,15000.0
 202111,Indonesia,1.5516,8.8709,174.91
 202111,Russian Federation,1.0834,4.835,224.08
@@ -280,7 +280,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202201,Peru,0.0077,0.0374,207.04
 202201,Kazakhstan,0.0006,0.0026,217.5
 202201,Iran,0.0003,0.0014,200.6
-202201,Lao People's Dem. Rep.,0.0001,0.0006,106.59
+202201,Laos,0.0001,0.0006,106.59
 202202,Russian Federation,0.4811,2.6216,183.5
 202202,Indonesia,0.3303,2.5264,130.73
 202202,USA,0.3029,0.7012,431.98
@@ -317,7 +317,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202205,Canada,0.3475,0.7749,448.43
 202205,USA,0.0527,0.1255,420.07
 202205,Kyrgyzstan,0.0002,0.0055,36.0
-202205,Lao People's Dem. Rep.,0.0002,0.0017,106.04
+202205,Laos,0.0002,0.0017,106.04
 202205,Australia,0.0,0.0,52.74
 202205,New Zealand,0.0,0.0,9040.0
 202205,Peru,0.0,0.0,48750.0
@@ -328,7 +328,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202206,Canada,0.3031,0.6851,442.45
 202206,USA,0.0323,0.0789,410.13
 202206,Peru,0.0081,0.0374,217.05
-202206,Lao People's Dem. Rep.,0.0047,0.0321,145.27
+202206,Laos,0.0047,0.0321,145.27
 202206,Kyrgyzstan,0.0004,0.0111,36.19
 202206,India,0.0,0.0,143.86
 202206,South Africa,0.0,0.0,20600.0
@@ -349,7 +349,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202208,USA,0.1914,0.4936,387.73
 202208,Australia,0.0109,0.087,125.68
 202208,Kyrgyzstan,0.0006,0.0165,36.12
-202208,Lao People's Dem. Rep.,0.0002,0.0016,103.8
+202208,Laos,0.0002,0.0016,103.8
 202208,Viet Nam,0.0001,0.002,70.43
 202208,Malaysia,0.0,0.0,13083.33
 202208,United Kingdom,0.0,0.0,1883.5
@@ -364,7 +364,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202209,Iran,0.0042,0.043,97.52
 202209,Malaysia,0.0035,0.0411,86.14
 202209,Kyrgyzstan,0.0009,0.0239,36.38
-202209,Lao People's Dem. Rep.,0.0006,0.0058,102.3
+202209,Laos,0.0006,0.0058,102.3
 202210,Russian Federation,1.059,6.1042,173.49
 202210,Indonesia,0.8048,6.0971,132.0
 202210,Mongolia,0.5394,3.7927,142.21
@@ -373,7 +373,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202210,Mozambique,0.0153,0.0628,243.69
 202210,Iran,0.0058,0.0445,129.58
 202210,Kyrgyzstan,0.0006,0.0148,39.91
-202210,Lao People's Dem. Rep.,0.0002,0.0023,99.23
+202210,Laos,0.0002,0.0023,99.23
 202211,Russian Federation,1.261,6.9524,181.37
 202211,Indonesia,0.9374,6.2198,150.71
 202211,Mongolia,0.5499,3.749,146.67
@@ -383,7 +383,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202211,Iran,0.0052,0.0402,129.58
 202211,Viet Nam,0.0043,0.0124,344.22
 202211,Malaysia,0.0031,0.0299,102.72
-202211,Lao People's Dem. Rep.,0.0012,0.0123,97.71
+202211,Laos,0.0012,0.0123,97.71
 202211,Kyrgyzstan,0.0003,0.0085,40.36
 202211,United Rep. of Tanzania,0.0,,
 202212,Russian Federation,1.2581,6.8892,182.61
@@ -394,7 +394,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202212,Colombia,0.0329,0.1313,250.83
 202212,Viet Nam,0.0242,0.064,377.6
 202212,Iran,0.011,0.0926,118.67
-202212,Lao People's Dem. Rep.,0.0008,0.0085,97.54
+202212,Laos,0.0008,0.0085,97.54
 202212,Kyrgyzstan,0.0004,0.0098,39.43
 202212,India,0.0,0.0,130.63
 202212,United Rep. of Tanzania,0.0,0.0,50000.0
@@ -405,7 +405,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202301,South Africa,0.0629,0.3076,204.47
 202301,USA,0.0581,0.2002,290.37
 202301,Colombia,0.0172,0.0605,284.26
-202301,Lao People's Dem. Rep.,0.0007,0.0071,99.57
+202301,Laos,0.0007,0.0071,99.57
 202301,Kyrgyzstan,0.0003,0.0081,40.9
 202301,Iran,0.0,0.0,200.0
 202301,Peru,0.0,0.0,88000.0
@@ -418,7 +418,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202302,Australia,0.0419,0.2072,202.05
 202302,South Africa,0.0293,0.1639,179.05
 202302,Iran,0.0107,0.1051,101.87
-202302,Lao People's Dem. Rep.,0.0008,0.0074,103.26
+202302,Laos,0.0008,0.0074,103.26
 202302,Kazakhstan,0.0,0.0001,70.9
 202302,Kyrgyzstan,0.0,0.0009,41.77
 202303,Russian Federation,1.5978,8.8301,180.94
@@ -430,7 +430,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202303,South Africa,0.0217,0.1632,132.69
 202303,Mozambique,0.0206,0.0733,281.52
 202303,Colombia,0.0159,0.0606,262.28
-202303,Lao People's Dem. Rep.,0.0017,0.0169,101.27
+202303,Laos,0.0017,0.0169,101.27
 202303,Kyrgyzstan,0.0002,0.0038,41.44
 202303,Malaysia,0.0,0.0,4647.06
 202303,India,0.0,0.0,22666.67
@@ -442,7 +442,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202304,Canada,0.189,0.6498,290.87
 202304,Colombia,0.0181,0.0714,253.21
 202304,Malaysia,0.0022,0.027,81.64
-202304,Lao People's Dem. Rep.,0.0019,0.0181,102.18
+202304,Laos,0.0019,0.0181,102.18
 202304,Kyrgyzstan,0.0003,0.0083,42.09
 202304,Iran,0.0,0.0,135.0
 202304,Kazakhstan,0.0,0.0005,61.81
@@ -456,7 +456,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202305,Colombia,0.0406,0.2378,170.61
 202305,Kazakhstan,0.0178,0.1143,155.82
 202305,Iran,0.0062,0.065,95.32
-202305,Lao People's Dem. Rep.,0.0006,0.0062,101.2
+202305,Laos,0.0006,0.0062,101.2
 202305,Kyrgyzstan,0.0,0.0006,43.67
 202305,United Rep. of Tanzania,0.0,0.0,3571.43
 202305,Zambia,0.0,0.0,47.06
@@ -469,7 +469,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202306,Colombia,0.0308,0.2305,133.46
 202306,South Africa,0.0278,0.1794,155.2
 202306,Kazakhstan,0.0143,0.1173,121.65
-202306,Lao People's Dem. Rep.,0.0002,0.0025,95.0
+202306,Laos,0.0002,0.0025,95.0
 202306,Kyrgyzstan,0.0,0.0004,62.21
 202306,India,0.0,0.0,30000.0
 202306,United Kingdom,0.0,0.0,2434.2
@@ -483,7 +483,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202307,Colombia,0.0485,0.3964,122.4
 202307,Kazakhstan,0.0248,0.171,145.17
 202307,United Rep. of Tanzania,0.0052,0.0546,95.19
-202307,Lao People's Dem. Rep.,0.0005,0.0055,95.32
+202307,Laos,0.0005,0.0055,95.32
 202307,Kyrgyzstan,0.0,0.0008,57.46
 202307,United Kingdom,0.0,,
 202308,Russian Federation,1.0715,9.9641,107.53
@@ -497,7 +497,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202308,Kazakhstan,0.0115,0.0864,133.25
 202308,South Africa,0.0103,0.0821,125.15
 202308,New Zealand,0.0067,0.0321,210.07
-202308,Lao People's Dem. Rep.,0.0003,0.0036,96.6
+202308,Laos,0.0003,0.0036,96.6
 202308,Kyrgyzstan,0.0001,0.0019,39.33
 202308,Myanmar,0.0,0.0,56.09
 202308,India,0.0,0.0,17500.0
@@ -513,7 +513,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202309,Viet Nam,0.0127,0.0458,276.72
 202309,Ukraine,0.01,0.0482,207.0
 202309,Kazakhstan,0.0005,0.0039,123.87
-202309,Lao People's Dem. Rep.,0.0003,0.0028,97.48
+202309,Laos,0.0003,0.0028,97.48
 202309,Kyrgyzstan,0.0001,0.004,33.73
 202309,India,0.0,0.0,75.5
 202310,Russian Federation,0.9271,7.6281,121.54
@@ -528,7 +528,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202310,Colombia,0.0105,0.055,190.05
 202310,Malaysia,0.0076,0.1083,70.04
 202310,Kazakhstan,0.0021,0.0224,95.72
-202310,Lao People's Dem. Rep.,0.0005,0.0054,92.48
+202310,Laos,0.0005,0.0054,92.48
 202310,Kyrgyzstan,0.0004,0.0074,50.3
 202310,Belgium,0.0,0.0,22448.6
 202310,Rep. of Korea,0.0,0.0,21285.71
@@ -547,7 +547,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202311,Kazakhstan,0.0073,0.0579,125.2
 202311,Oman,0.0031,0.0325,95.0
 202311,Kyrgyzstan,0.0005,0.0108,48.58
-202311,Lao People's Dem. Rep.,0.0004,0.0039,94.99
+202311,Laos,0.0004,0.0039,94.99
 202311,Myanmar,0.0,0.0001,55.71
 202311,Rep. of Korea,0.0,0.0,81000.0
 202312,Russian Federation,1.0425,7.5918,137.32
@@ -561,7 +561,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202312,Viet Nam,0.0194,0.0682,284.5
 202312,Kazakhstan,0.0019,0.0169,109.84
 202312,Kyrgyzstan,0.0006,0.0138,46.33
-202312,Lao People's Dem. Rep.,0.0006,0.0064,97.38
+202312,Laos,0.0006,0.0064,97.38
 202312,Zimbabwe,0.0,0.0,10185.57
 202401,Russian Federation,0.8333,6.0924,136.78
 202401,Australia,0.746,5.753,129.67
@@ -577,7 +577,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202401,Peru,0.0049,0.0336,145.13
 202401,Kazakhstan,0.0015,0.0142,108.32
 202401,Kyrgyzstan,0.0007,0.0146,45.53
-202401,Lao People's Dem. Rep.,0.0006,0.0061,99.51
+202401,Laos,0.0006,0.0061,99.51
 202401,Myanmar,0.0,0.001,40.94
 202401,India,0.0,0.0,83333.33
 202401,Zimbabwe,0.0,0.0,8000.0
@@ -592,7 +592,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202402,South Africa,0.0083,0.0792,104.46
 202402,Malaysia,0.0018,0.0231,78.56
 202402,Kazakhstan,0.0007,0.0076,98.53
-202402,Lao People's Dem. Rep.,0.0004,0.0043,90.46
+202402,Laos,0.0004,0.0043,90.46
 202402,Kyrgyzstan,0.0002,0.004,43.25
 202402,Myanmar,0.0,0.0005,40.94
 202402,Iran,0.0,0.0001,157.13
@@ -608,7 +608,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202403,New Zealand,0.0083,0.055,150.03
 202403,Malaysia,0.0046,0.055,83.5
 202403,Kazakhstan,0.0029,0.0306,96.03
-202403,Lao People's Dem. Rep.,0.001,0.0104,91.17
+202403,Laos,0.001,0.0104,91.17
 202403,Kyrgyzstan,0.0004,0.0097,43.35
 202403,Myanmar,0.0003,0.0071,40.82
 202404,Russian Federation,0.9747,8.3105,117.28
@@ -619,7 +619,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202404,USA,0.1476,0.827,178.51
 202404,Colombia,0.137,1.2785,107.15
 202404,Kazakhstan,0.0233,0.2036,114.54
-202404,Lao People's Dem. Rep.,0.001,0.0104,98.62
+202404,Laos,0.001,0.0104,98.62
 202404,Myanmar,0.0006,0.0147,40.87
 202404,Kyrgyzstan,0.0004,0.0101,44.61
 202404,India,0.0,0.0,81.67
@@ -637,7 +637,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202405,South Africa,0.0201,0.16,125.88
 202405,New Zealand,0.0065,0.055,118.59
 202405,Malaysia,0.0031,0.05,62.06
-202405,Lao People's Dem. Rep.,0.0016,0.0167,98.54
+202405,Laos,0.0016,0.0167,98.54
 202405,Kazakhstan,0.0008,0.0075,107.51
 202405,Myanmar,0.0006,0.0135,40.84
 202405,Kyrgyzstan,0.0004,0.0086,42.74
@@ -651,7 +651,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202406,United Rep. of Tanzania,0.0054,0.0544,98.67
 202406,Kazakhstan,0.0021,0.0212,98.72
 202406,Kyrgyzstan,0.0006,0.014,40.09
-202406,Lao People's Dem. Rep.,0.0006,0.0057,98.49
+202406,Laos,0.0006,0.0057,98.49
 202406,South Africa,0.0006,0.005,126.49
 202407,Russian Federation,0.8843,7.5271,117.49
 202407,Australia,0.8825,7.1714,123.05
@@ -683,7 +683,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202408,New Zealand,0.0028,0.0182,154.04
 202408,Kazakhstan,0.0007,0.0103,68.5
 202408,Kyrgyzstan,0.0003,0.0056,49.57
-202408,Lao People's Dem. Rep.,0.0001,0.0006,98.11
+202408,Laos,0.0001,0.0006,98.11
 202408,Peru,0.0,0.0,15902.44
 202408,United Kingdom,0.0,0.0,1154.96
 202408,United Rep. of Tanzania,0.0,0.0,16816.67
@@ -697,7 +697,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202409,Colombia,0.0435,0.396,109.81
 202409,Kyrgyzstan,0.0006,0.0124,50.59
 202409,Kazakhstan,0.0002,0.0033,67.23
-202409,Lao People's Dem. Rep.,0.0002,0.0019,98.21
+202409,Laos,0.0002,0.0019,98.21
 202409,Pakistan,0.0,0.0,9940.0
 202410,Russian Federation,0.857,7.6211,112.45
 202410,Australia,0.8088,7.036,114.95
@@ -711,7 +711,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202410,Malaysia,0.0026,0.0437,60.32
 202410,Kyrgyzstan,0.0008,0.0153,51.31
 202410,Kazakhstan,0.0005,0.0049,102.42
-202410,Lao People's Dem. Rep.,0.0005,0.0051,99.89
+202410,Laos,0.0005,0.0051,99.89
 202410,Uzbekistan,0.0,0.0,5092.59
 202411,Australia,1.0783,9.3035,115.91
 202411,Russian Federation,0.8992,7.9063,113.74
@@ -724,7 +724,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202411,Colombia,0.0111,0.0615,180.04
 202411,South Africa,0.0089,0.0658,134.7
 202411,New Zealand,0.0075,0.055,137.03
-202411,Lao People's Dem. Rep.,0.0013,0.0135,96.11
+202411,Laos,0.0013,0.0135,96.11
 202411,Kyrgyzstan,0.0009,0.0174,50.61
 202411,Peru,0.0,0.0,25125.0
 202411,India,0.0,0.0,7680.0
@@ -736,7 +736,7 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd
 202412,USA,0.1593,1.0372,153.6
 202412,Mozambique,0.0323,0.1758,183.52
 202412,Colombia,0.0091,0.055,165.05
-202412,Lao People's Dem. Rep.,0.0022,0.0228,94.73
+202412,Laos,0.0022,0.0228,94.73
 202412,Kyrgyzstan,0.0008,0.0138,55.52
 202412,Kazakhstan,0.0005,0.0052,97.7
 202412,Ethiopia,0.0,0.0,404.63
