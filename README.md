@@ -49,7 +49,7 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 | 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail, fuel_savings | 6 KPI cards (energy + BEV share + EV oil displacement YTD) |
 | 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Fossil Supply (Butterfly + YoY); Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
 | 3 | Capacity Added | capacity_additions, ember_capacity, nea_battery_storage | 2 bar charts (YTD + monthly), 4 donuts, prose, Installed Capacity Growth (Wind + Solar line chart), Battery Storage Growth (annual GW / GWh / Duration) |
-| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, YTD butterfly + YoY bars, Import Dependency line chart |
+| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, YTD butterfly + YoY bars, YTD supply change in TWh (Fossil: Coal · Oil · Gas · total, split production/imports; Total: Fossil · Clean power · Total), Import Dependency line chart |
 | 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh stacked, share stacked, Coal dual-axis, Wind + Solar capacity factor, CO₂ intensity, Hydro seasonal (6 vintages) |
 | 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 overview charts + 4 × 2 country-of-origin charts: Crude Oil → LNG → Coal → Pipeline Gas |
 | 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 charts (2×2): GACC VpU all fuels (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
@@ -270,6 +270,8 @@ One row per month. Chinese domestic production per NBS.
 ### `data/combined/fossil_supply.csv`
 
 Auto-generated from `gacc_imports.csv` + `nbs_production.csv`. One row per month. Per fuel: imports, domestic production, total supply, YoY for each component and the aggregate, plus cumulative year-to-date supply (YTD) with YTD YoY.
+
+**Jan-Feb merge:** `gacc_imports.csv` stores January and February as separate rows, `nbs_production.csv` only as one combined row (`YYYY01`). Before the merge, `build_supply.py` sums the GACC rows `YYYY01` + `YYYY02` into `YYYY01` (quantities summed; both rows carry the same combined Jan-Feb YoY, which is kept). Until 2026-10-21 the February GACC row was dropped by the merge, so all YTD imports from 2026 onwards lacked February (Jan–Sep 2026: −933 TWh fossil supply; fossil YTD YoY −4.8 % instead of −4.5 %).
 
 **Gas unit:** All gas figures in BCM. GACC imports (Mt) are converted using the following factor:
 
