@@ -114,8 +114,8 @@ data/
     gacc_imports_manual.csv     — GACC fallback for months the pipeline lags (via /handelsbilanz)
     gacc_coal.csv               — Coal imports by country of origin, value + volume (GACC, Jan 2025–)
     gacc_crude_oil.csv          — Crude oil imports by country of origin, value + volume (GACC, Jan 2025–)
-    gacc_lng.csv                — LNG imports by country of origin (GACC, Jan 2025–)
-    gacc_pipeline_gas.csv       — Pipeline gas imports by country of origin (GACC, Jan 2025–)
+    gacc_lng.csv                — LNG imports by country of origin, value + volume (GACC, Jan 2025–)
+    gacc_pipeline_gas.csv       — Pipeline gas imports by country of origin, value only (GACC, Jan 2025–)
   production/
     nbs_production.csv          — Domestic production coal/crude oil/gas (NBS, May 2026–)
   power/
@@ -706,14 +706,14 @@ GACC publishes monthly granular import data by country of origin. The four count
 | partner | Text | Country of origin (ComTrade naming convention) |
 | value_usd_bn | USD bn | Import value |
 
-`gacc_crude_oil.csv` and `gacc_coal.csv` additionally carry the two ComTrade volume columns, so their schema is identical to the matching `comtrade_*.csv`:
+`gacc_crude_oil.csv`, `gacc_coal.csv` and `gacc_lng.csv` additionally carry the two ComTrade volume columns, so their schema is identical to the matching `comtrade_*.csv`:
 
 | Column | Unit | Description |
 |---|---|---|
 | qty_mt | Mt | Import volume (net weight) |
 | value_per_mt_usd | USD/t | Import value per tonne |
 
-**Volume data:** The GACC download with quantity (`Quantity` in kg, `Supplementary Quantity` in barrel) is used for crude oil since 2026-10-20 and for coal since 2026-10-21. LNG and pipeline gas are still value-only: their HS codes for the quantity download are being verified first. `build_combined.py` already passes `qty_mt` through when a GACC file has it and leaves it empty otherwise, so a later extension needs only new data, no code change. The dashboard volume charts use every row that has `qty_mt`: crude oil and coal run 2020–present, LNG and pipeline gas stay at ComTrade 2020–2024 until their GACC files get the volume columns.
+**Volume data:** The GACC download with quantity (`Quantity` in kg, `Supplementary Quantity` in barrel) is used for crude oil since 2026-10-20 and for coal and LNG since 2026-10-21. Pipeline gas stays value-only: GACC has not published quantities for CN 27112100 since 2022 (the download says so in its remarks column and leaves quantity empty), so no volume series by country of origin can be built from GACC. `build_combined.py` already passes `qty_mt` through when a GACC file has it and leaves it empty otherwise, so a later extension needs only new data, no code change. The dashboard volume charts use every row that has `qty_mt`: crude oil, coal and LNG run 2020–present; pipeline gas stays at ComTrade 2020–2024.
 
 ### Crude oil volume series (rebuild 2026-10-20)
 
@@ -734,6 +734,14 @@ Rebuild procedure for future months: download HS 27090000 by month and partner w
 - **Units, rounding and partner names** as for crude oil (see above); additional codes: 119 Laos, 701 Areas NES.
 - **Revisions:** 2025 values are unchanged against the previous file. Feb–Aug 2026 differ slightly (GACC revisions; largest 202607 +0.05 bn USD). Jan and Sep 2026 are unchanged.
 - **Continuity check:** ComTrade 2701 volumes in H2 2024 were 28–35 Mt per month, GACC 2025 21–36 Mt; no level break at the source change.
+
+### LNG volume series and pipeline gas (rebuild 2026-10-21)
+
+`gacc_lng.csv` and `gacc_pipeline_gas.csv` were rebuilt in full from two GACC 8-digit downloads (Jan–Dec 2025, Jan–Sep 2026).
+
+- **LNG:** CN 27111100, with `qty_mt` and `value_per_mt_usd` (units, rounding and partner names as for crude oil). 2025 values unchanged; 2026 revisions in May–Aug (+0.012, +0.035, −0.020, +0.052 bn USD), other months unchanged. Continuity: ComTrade LNG H2 2024 5.8–7.1 Mt per month, GACC 2025 4.5–7.4 Mt.
+- **Pipeline gas:** CN 27112100, value only, three columns as before. Values identical to the previous file (only the row order within 202608/202609 changed to the value-descending order used everywhere). GACC publishes no quantity for this code since 2022, so the pipeline gas volume chart remains ComTrade 2020–2024. An aggregate pipeline mass could be derived as `gacc_imports.gas_mt` minus LNG volume (e.g. 202609: 10.86 − 5.61 = 5.25 Mt), but not by country of origin; it is not used.
+- **Cross-check:** LNG + pipeline gas value per month matches `gacc_imports.gas_usd_bn` within 0.05 bn USD for 2026 (202609: 6.35 vs. 6.35).
 
 **HS codes and categorisation:**
 
