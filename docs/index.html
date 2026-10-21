@@ -347,6 +347,12 @@
         <p class="chart-source">Source: GACC</p>
       </div>
     </div>
+    <div class="chart-box full" style="margin-top: var(--gap);">
+      <div class="chart-title">Total Supply Change Year-on-Year</div>
+      <div class="chart-subtitle" id="supply-yoy-twh-subtitle">TWh · Production + Imports</div>
+      <div style="position: relative; height: 260px;"><canvas id="supply-yoy-twh"></canvas></div>
+      <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
+    </div>
 
     <p class="section-label">Power Generation Mix 2016 – present</p>
     <div class="chart-box full">
@@ -1537,6 +1543,59 @@
           },
           scales: {
             x: { stacked: true, grid: { color: '#1e1a3a' }, ticks: { callback: v => Math.abs(+v).toFixed(0) } },
+            y: { stacked: true, grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } }
+          }
+        }
+      });
+
+      /* ── Month YoY in TWh: production + imports change vs. same month last year ── */
+      /* Prior-year values are back-calculated from the stored YoY percentages (same method as build_supply.py) */
+      function deltaTwh(cur, yoyPct, f) {
+        const v = +cur, p = +yoyPct;
+        if (isNaN(v) || isNaN(p)) return null;
+        return (v - v / (1 + p / 100)) * f;
+      }
+      const prodD = [
+        deltaTwh(latestFs.coal_prod_mt,      latestFs.coal_prod_yoy_pct,        COAL_F),
+        deltaTwh(latestFs.crude_oil_prod_mt, latestFs.crude_oil_prod_yoy_pct,   OIL_F),
+        deltaTwh(latestFs.gas_prod_bcm,      latestFs.gas_prod_yoy_pct,         GAS_F)
+      ];
+      const imptD = [
+        deltaTwh(latestFs.coal_import_mt,      latestFs.coal_import_yoy_pct,      COAL_F),
+        deltaTwh(latestFs.crude_oil_import_mt, latestFs.crude_oil_import_yoy_pct, OIL_F),
+        deltaTwh(latestFs.gas_import_bcm,      latestFs.gas_import_yoy_pct,       GAS_F)
+      ];
+      const sumOrNull = a => a.some(v => v === null) ? null : a.reduce((s, v) => s + v, 0);
+      prodD.push(sumOrNull(prodD));
+      imptD.push(sumOrNull(imptD));
+      const netD = prodD.map((p, i) => p === null || imptD[i] === null ? null : p + imptD[i]);
+
+      const prevLbl = periodToShort(String(+latestFs.period - 100));
+      document.getElementById('supply-yoy-twh-subtitle').textContent =
+        lastLbl + ' vs. ' + prevLbl + ' · TWh · Production + Imports · net change below each carrier';
+
+      const fmtTwh = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(0);
+      /* Net change goes into the category label so it stays readable at any width */
+      const carriers = ['Coal', 'Oil', 'Gas', 'Fossil total'];
+      const yLabels  = carriers.map((c, i) => netD[i] === null ? c : [c, fmtTwh(netD[i]) + ' TWh']);
+
+      new Chart(document.getElementById('supply-yoy-twh'), {
+        type: 'bar',
+        data: {
+          labels: yLabels,
+          datasets: [
+            { label: 'Production', data: prodD, backgroundColor: TEAL,   borderWidth: 0, borderRadius: 2 },
+            { label: 'Imports',    data: imptD, backgroundColor: ORANGE, borderWidth: 0, borderRadius: 2 }
+          ]
+        },
+        options: {
+          indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+            tooltip: { callbacks: { label: ctx => ctx.raw === null ? 'n/a' : `${ctx.dataset.label}: ${fmtTwh(ctx.raw)} TWh` } }
+          },
+          scales: {
+            x: { stacked: true, grid: { color: '#1e1a3a' }, ticks: { callback: v => fmtTwh(v) } },
             y: { stacked: true, grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } }
           }
         }
