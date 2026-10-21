@@ -58,6 +58,19 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 | 10 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
 | 11 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation, gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay, EV S-curve parameters, oil displacement model |
 
+### YTD supply change in TWh (section 4, added 2026-10-21)
+
+Two charts in *Year-to-date Supply* answer whether total supply grew or shrank, not where the change came from:
+
+- **Fossil Supply Change Year-to-Date:** Coal · Oil · Gas · Fossil total.
+- **Total Energy Supply Change Year-to-Date:** Fossil · Clean power · Total.
+
+Each bar is the net change (production + imports) from January to the latest month against the same period a year earlier, in TWh. Green = supply grew, red = supply shrank; the value is printed under each carrier name.
+
+**Method:** computed in the browser from `fossil_supply.csv` (current-year rows) and `energy_balance.csv` (latest row). Prior-year values are back-calculated row by row from the stored YoY percentages, the same way `build_supply.py` does it, and converted with the dashboard factors (coal 8.14, crude oil 11.63 TWh/Mt; gas 10.55 TWh/BCM). Clean power uses `clean_power_ytd_twh` and `clean_power_ytd_yoy_pct`. Because the YoY percentages are rounded to one decimal, the TWh deltas carry an uncertainty of roughly ±10 TWh. No new data files or pipeline columns are involved.
+
+These charts rely on the Jan-Feb merge fix in `build_supply.py` (see `fossil_supply.csv` below); without it, February imports were missing from every YTD figure.
+
 ### Updating data
 
 Once a new month is pushed to any of the eleven CSVs, the dashboard automatically shows the updated numbers on the next page load. No deployment or HTML edit required.
