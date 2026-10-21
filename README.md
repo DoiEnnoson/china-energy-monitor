@@ -49,7 +49,7 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 | 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail, fuel_savings | 6 KPI cards (energy + BEV share + EV oil displacement YTD) |
 | 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
 | 3 | Capacity Added | capacity_additions, ember_capacity, nea_battery_storage | 2 bar charts (YTD + monthly), 4 donuts, prose, Installed Capacity Growth (Wind + Solar line chart), Battery Storage Growth (annual GW / GWh / Duration) |
-| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, Fossil Supply latest month (butterfly + import YoY bars; moved here from section 2 on 2026-10-21), YTD butterfly + YoY bars, YTD supply change in TWh, net of production + imports, green = growth / red = decline (Fossil: Coal · Oil · Gas · total; Total: Fossil · Clean power · Total), Import Dependency line chart |
+| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, Fossil Supply latest month (butterfly + import YoY bars; moved here from section 2 on 2026-10-21; section intro rewritten accordingly), YTD butterfly + YoY bars, YTD supply change in TWh, net of production + imports, green = growth / red = decline (Fossil: Coal · Oil · Gas · total; Total: Fossil · Clean power · Total), Import Dependency line chart |
 | 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh stacked, share stacked, Coal dual-axis, Wind + Solar capacity factor, CO₂ intensity, Hydro seasonal (6 vintages) |
 | 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 overview charts + 4 × 2 country-of-origin charts: Crude Oil → LNG → Coal → Pipeline Gas |
 | 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 charts (2×2): GACC VpU all fuels (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
@@ -57,6 +57,8 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 | 9 | Oil Displacement & Energy Balance | fuel_savings | 2 KPI tiles (full-year 2026 crude mb + net TWh); Crude Oil Displaced (bar + projection line, mb/d); Primary Energy Balance (stacked area: fuel savings vs. grid cost, TWh/month) |
 | 10 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
 | 11 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation, gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay, EV S-curve parameters, oil displacement model |
+
+**KPI delta colours:** negative changes in KPI cards use `--neg: #E5574B` (contrast 5.3:1 against the card background, matching `--pos` at 5.5:1). Until 2026-10-21 it was `#7A0404` (1.7:1), which was barely readable.
 
 ### YTD supply change in TWh (section 4, added 2026-10-21)
 
