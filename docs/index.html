@@ -437,17 +437,17 @@
     <p class="section-label-h1" id="total-energy">Total Energy System</p>
 
     <div class="summary-box">
-      <p>This section shows China's total energy supply, combining domestic fossil fuel production with imports of coal, crude oil, and natural gas, plus clean power generation from wind, solar, hydro, and nuclear. All values are converted to energy equivalent in terawatt-hours (TWh). The carrier charts break this total down by energy source. The Fossil Supply blocks below focus on coal, crude oil and natural gas, for the latest month and year-to-date: domestic production versus imports, and the change against the same period of the prior year. For more details, refer to the <a href="#methodology">Methodology</a> section.</p>
+      <p>This section shows China's total energy supply, combining domestic fossil fuel production with imports of coal, crude oil, and natural gas, plus clean power generation from wind, solar, hydro, and nuclear. All values are converted to energy equivalent in terawatt-hours (TWh). The figures measure supply, not consumption: changes in coal, oil and gas stockpiles are not published monthly and are therefore not included, so a fall in supply can also mean that stocks were drawn down. The carrier charts break this total down by energy source. The Fossil Supply blocks below focus on coal, crude oil and natural gas, for the latest month and year-to-date: domestic production versus imports, and the change against the same period of the prior year. For more details, refer to the <a href="#methodology">Methodology</a> section.</p>
     </div>
 
     <div class="kpi-grid" style="grid-template-columns: repeat(2, 1fr);">
       <div class="kpi-box">
-        <div class="kpi-label" id="sys-month-kpi-label">Total Primary Energy</div>
+        <div class="kpi-label" id="sys-month-kpi-label">Total Primary Energy Supply</div>
         <div class="kpi-value" id="sys-month-kpi-twh">—</div>
         <div class="kpi-delta" id="sys-month-kpi-delta">—</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-label" id="sys-ytd-kpi-label">Total Primary Energy YTD</div>
+        <div class="kpi-label" id="sys-ytd-kpi-label">Total Primary Energy Supply YTD</div>
         <div class="kpi-value" id="sys-ytd-kpi-twh">—</div>
         <div class="kpi-delta" id="sys-ytd-kpi-delta">—</div>
       </div>
@@ -1684,20 +1684,20 @@
         return ebYear.reduce((s, r) => s + (+r[field] || 0), 0);
       }
 
-      /* ── KPI boxes: Total Primary Energy — Month + YTD ── */
+      /* ── KPI boxes: Total Primary Energy Supply — Month + YTD ── */
       const monthTotal    = +latestEb.total_twh          || 0;
       const monthYoY      = +latestEb.total_yoy_pct;
       const totalYtd      = +latestEb.total_ytd_twh      || 0;
       const totalYtdYoY   = +latestEb.total_ytd_yoy_pct;
       const monthLabel    = periodToShort(latestEb.period);
 
-      document.getElementById('sys-month-kpi-label').textContent = 'Total Primary Energy — ' + monthLabel;
+      document.getElementById('sys-month-kpi-label').textContent = 'Total Primary Energy Supply — ' + monthLabel;
       document.getElementById('sys-month-kpi-twh').textContent   = Math.round(monthTotal).toLocaleString('de-DE') + ' TWh';
       const mDeltaEl = document.getElementById('sys-month-kpi-delta');
       mDeltaEl.textContent = (monthYoY >= 0 ? '+' : '') + monthYoY.toFixed(1) + '% vs. prior year';
       mDeltaEl.className   = 'kpi-delta ' + (monthYoY >= 0 ? 'pos' : 'neg');
 
-      document.getElementById('sys-ytd-kpi-label').textContent = 'Total Primary Energy — ' + ytdRange;
+      document.getElementById('sys-ytd-kpi-label').textContent = 'Total Primary Energy Supply — ' + ytdRange;
       document.getElementById('sys-ytd-kpi-twh').textContent   = Math.round(totalYtd).toLocaleString('de-DE') + ' TWh';
       const yDeltaEl = document.getElementById('sys-ytd-kpi-delta');
       yDeltaEl.textContent = (totalYtdYoY >= 0 ? '+' : '') + totalYtdYoY.toFixed(1) + '% vs. prior year';
