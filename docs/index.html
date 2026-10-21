@@ -1639,52 +1639,43 @@
         ytdDeltaTwh('crude_oil_import_mt', 'crude_oil_import_yoy_pct', OIL_F),
         ytdDeltaTwh('gas_import_bcm',      'gas_import_yoy_pct',       GAS_F)
       ];
-      const fossilProdD = sumOrNull(prodYtdD);
-      const fossilImptD = sumOrNull(imptYtdD);
       const cleanYtd    = +latestEb.clean_power_ytd_twh, cleanYtdYoY = +latestEb.clean_power_ytd_yoy_pct;
       const cleanD      = isNaN(cleanYtd) || isNaN(cleanYtdYoY) ? null : cleanYtd - cleanYtd / (1 + cleanYtdYoY / 100);
 
-      /* Net change goes into the category label so it stays readable at any width */
-      function deltaLabels(names, datasets) {
-        return names.map((n, i) => {
-          const net = sumOrNull(datasets.map(d => d[i] === undefined ? 0 : d[i]));
-          return net === null ? n : [n, fmtTwh(net) + ' TWh'];
-        });
-      }
-      function deltaChart(id, names, sets) {
+      const fossilD = [0, 1, 2].map(i => prodYtdD[i] === null || imptYtdD[i] === null ? null : prodYtdD[i] + imptYtdD[i]);
+      const fossilTotalD = sumOrNull(fossilD);
+      const totalD       = fossilTotalD === null || cleanD === null ? null : fossilTotalD + cleanD;
+
+      /* Net change only: green = supply grew, red = supply shrank. Value goes into the category label (readable at any width) */
+      function deltaChart(id, names, values) {
         new Chart(document.getElementById(id), {
           type: 'bar',
           data: {
-            labels: deltaLabels(names, sets.map(s => s.data)),
-            datasets: sets.map(s => ({ ...s, borderWidth: 0, borderRadius: 2 }))
+            labels: names.map((n, i) => values[i] === null ? n : [n, fmtTwh(values[i]) + ' TWh']),
+            datasets: [{ label: 'Net change', data: values,
+              backgroundColor: values.map(v => v === null ? '#444' : v >= 0 ? TEAL : RED),
+              borderWidth: 0, borderRadius: 2 }]
           },
           options: {
             indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
             plugins: {
-              legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
-              tooltip: { callbacks: { label: ctx => ctx.raw === null ? 'n/a' : `${ctx.dataset.label}: ${fmtTwh(ctx.raw)} TWh` } }
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => ctx.raw === null ? 'n/a' : `Net change: ${fmtTwh(ctx.raw)} TWh` } }
             },
             scales: {
-              x: { stacked: true, grid: { color: '#1e1a3a' }, ticks: { callback: v => fmtTwh(v) } },
-              y: { stacked: true, grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } }
+              x: { grid: { color: '#1e1a3a' }, ticks: { callback: v => fmtTwh(v) } },
+              y: { grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } }
             }
           }
         });
       }
 
-      const ytdVs = ytdRange + ' vs. same period ' + (+curYr - 1) + ' · TWh · net change below each carrier';
+      const ytdVs = ytdRange + ' vs. same period ' + (+curYr - 1) + ' · TWh · net change (production + imports)';
       document.getElementById('supply-ytd-twh-fossil-subtitle').textContent = ytdVs;
-      document.getElementById('supply-ytd-twh-total-subtitle').textContent  = ytdVs;
+      document.getElementById('supply-ytd-twh-total-subtitle').textContent  = ytdRange + ' vs. same period ' + (+curYr - 1) + ' · TWh · net change';
 
-      deltaChart('supply-ytd-twh-fossil', ['Coal', 'Oil', 'Gas', 'Fossil total'], [
-        { label: 'Production', data: [...prodYtdD, fossilProdD], backgroundColor: TEAL },
-        { label: 'Imports',    data: [...imptYtdD, fossilImptD], backgroundColor: ORANGE }
-      ]);
-      deltaChart('supply-ytd-twh-total', ['Fossil', 'Clean power', 'Total'], [
-        { label: 'Fossil production', data: [fossilProdD, 0, fossilProdD], backgroundColor: TEAL },
-        { label: 'Fossil imports',    data: [fossilImptD, 0, fossilImptD], backgroundColor: ORANGE },
-        { label: 'Clean power',       data: [0, cleanD, cleanD],           backgroundColor: GOLD }
-      ]);
+      deltaChart('supply-ytd-twh-fossil', ['Coal', 'Oil', 'Gas', 'Fossil total'], [...fossilD, fossilTotalD]);
+      deltaChart('supply-ytd-twh-total',  ['Fossil', 'Clean power', 'Total'],     [fossilTotalD, cleanD, totalD]);
 
       function ebSumYr(field) {
         return ebYear.reduce((s, r) => s + (+r[field] || 0), 0);
