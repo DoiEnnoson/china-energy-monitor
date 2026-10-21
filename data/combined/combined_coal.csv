@@ -740,276 +740,283 @@ period,partner,value_usd_bn,qty_mt,value_per_mt_usd,source
 202412,Kyrgyzstan,0.0008,0.0138,55.52,comtrade
 202412,Kazakhstan,0.0005,0.0052,97.7,comtrade
 202412,Ethiopia,0.0,0.0,404.63,comtrade
-202501,Australia,0.8365,,,gacc
-202501,Russian Federation,0.6891,,,gacc
-202501,Indonesia,0.485,,,gacc
-202501,Mongolia,0.4085,,,gacc
-202501,Canada,0.1809,,,gacc
-202501,USA,0.1785,,,gacc
-202501,Mozambique,0.0142,,,gacc
-202501,Kazakhstan,0.0101,,,gacc
-202501,Laos,0.0016,,,gacc
-202501,Kyrgyzstan,0.0004,,,gacc
-202501,Peru,0.0,,,gacc
-202501,Brazil,0.0,,,gacc
-202502,Russian Federation,0.6635,,,gacc
-202502,Australia,0.4169,,,gacc
-202502,Mongolia,0.3676,,,gacc
-202502,Indonesia,0.2416,,,gacc
-202502,Canada,0.2041,,,gacc
-202502,USA,0.1728,,,gacc
-202502,Colombia,0.0083,,,gacc
-202502,Tanzania,0.0053,,,gacc
-202502,Laos,0.0001,,,gacc
-202502,Kazakhstan,0.0001,,,gacc
-202502,India,0.0,,,gacc
-202502,Kyrgyzstan,0.0,,,gacc
-202502,Mozambique,0.0,,,gacc
-202502,Croatia,0.0,,,gacc
-202502,South Africa,0.0,,,gacc
-202502,Zimbabwe,0.0,,,gacc
-202503,Russian Federation,0.7176,,,gacc
-202503,Mongolia,0.4495,,,gacc
-202503,Australia,0.3906,,,gacc
-202503,Indonesia,0.212,,,gacc
-202503,Canada,0.1402,,,gacc
-202503,USA,0.0308,,,gacc
-202503,New Zealand,0.0109,,,gacc
-202503,Laos,0.0012,,,gacc
-202503,Kyrgyzstan,0.0002,,,gacc
-202503,Kazakhstan,0.0002,,,gacc
-202503,Tanzania,0.0,,,gacc
-202504,Russian Federation,0.6186,,,gacc
-202504,Australia,0.6114,,,gacc
-202504,Mongolia,0.4417,,,gacc
-202504,Indonesia,0.1759,,,gacc
-202504,Canada,0.1332,,,gacc
-202504,Colombia,0.0134,,,gacc
-202504,USA,0.009,,,gacc
-202504,New Zealand,0.0089,,,gacc
-202504,South Africa,0.0086,,,gacc
-202504,Laos,0.0005,,,gacc
-202504,Kazakhstan,0.0002,,,gacc
-202504,Kyrgyzstan,0.0,,,gacc
-202504,India,0.0,,,gacc
-202504,Tajikistan,0.0,,,gacc
-202505,Australia,0.6435,,,gacc
-202505,Russian Federation,0.5837,,,gacc
-202505,Mongolia,0.3706,,,gacc
-202505,Indonesia,0.1796,,,gacc
-202505,Canada,0.1008,,,gacc
-202505,Colombia,0.0126,,,gacc
-202505,Kazakhstan,0.008,,,gacc
-202505,New Zealand,0.0062,,,gacc
-202505,Laos,0.0006,,,gacc
-202505,Kyrgyzstan,0.0001,,,gacc
-202505,South Africa,0.0,,,gacc
-202505,Tanzania,0.0,,,gacc
-202505,USA,0.0,,,gacc
-202506,Russian Federation,0.5472,,,gacc
-202506,Australia,0.5028,,,gacc
-202506,Mongolia,0.3898,,,gacc
-202506,Indonesia,0.2319,,,gacc
-202506,Canada,0.1598,,,gacc
-202506,New Zealand,0.006,,,gacc
-202506,Laos,0.0004,,,gacc
-202506,Kazakhstan,0.0001,,,gacc
-202506,Kyrgyzstan,0.0001,,,gacc
-202506,Türkiye,0.0,,,gacc
-202506,Colombia,0.0,,,gacc
-202506,USA,0.0,,,gacc
-202506,Areas NES,0.0,,,gacc
-202507,Russian Federation,0.5462,,,gacc
-202507,Australia,0.5134,,,gacc
-202507,Mongolia,0.3563,,,gacc
-202507,Indonesia,0.2113,,,gacc
-202507,Canada,0.1157,,,gacc
-202507,South Africa,0.0155,,,gacc
-202507,Kyrgyzstan,0.0003,,,gacc
-202507,Laos,0.0001,,,gacc
-202507,Malaysia,0.0,,,gacc
-202507,Mozambique,0.0,,,gacc
-202507,USA,0.0,,,gacc
-202507,Türkiye,0.0,,,gacc
-202508,Russian Federation,0.6288,,,gacc
-202508,Australia,0.5384,,,gacc
-202508,Mongolia,0.4502,,,gacc
-202508,Indonesia,0.316,,,gacc
-202508,Canada,0.1647,,,gacc
-202508,Kazakhstan,0.0167,,,gacc
-202508,Colombia,0.0041,,,gacc
-202508,Kyrgyzstan,0.0002,,,gacc
-202508,Swaziland,0.0,,,gacc
-202508,India,0.0,,,gacc
-202508,Malaysia,0.0,,,gacc
-202508,USA,0.0,,,gacc
-202509,Russian Federation,0.583,,,gacc
-202509,Australia,0.5366,,,gacc
-202509,Mongolia,0.5261,,,gacc
-202509,Indonesia,0.4341,,,gacc
-202509,Canada,0.1969,,,gacc
-202509,Kazakhstan,0.0331,,,gacc
-202509,Mozambique,0.0123,,,gacc
-202509,Viet Nam,0.0065,,,gacc
-202509,Kyrgyzstan,0.0005,,,gacc
-202509,USA,0.0,,,gacc
-202509,Tajikistan,0.0,,,gacc
-202510,Australia,0.6651,,,gacc
-202510,Russian Federation,0.5757,,,gacc
-202510,Mongolia,0.4382,,,gacc
-202510,Indonesia,0.396,,,gacc
-202510,Canada,0.1748,,,gacc
-202510,South Africa,0.008,,,gacc
-202510,Kyrgyzstan,0.0007,,,gacc
-202510,Laos,0.0001,,,gacc
-202510,Kazakhstan,0.0001,,,gacc
-202510,Ireland,0.0,,,gacc
-202510,USA,0.0,,,gacc
-202510,Areas NES,0.0,,,gacc
-202511,Russian Federation,0.7326,,,gacc
-202511,Australia,0.6059,,,gacc
-202511,Mongolia,0.5663,,,gacc
-202511,Indonesia,0.3603,,,gacc
-202511,Canada,0.1093,,,gacc
-202511,Kyrgyzstan,0.0006,,,gacc
-202511,Laos,0.0001,,,gacc
-202511,Malaysia,0.0,,,gacc
-202511,Ethiopia,0.0,,,gacc
-202511,Colombia,0.0,,,gacc
-202511,USA,0.0,,,gacc
-202511,Panama,0.0,,,gacc
-202512,Australia,0.9845,,,gacc
-202512,Russian Federation,0.8673,,,gacc
-202512,Mongolia,0.6209,,,gacc
-202512,Indonesia,0.5904,,,gacc
-202512,Canada,0.2294,,,gacc
-202512,Kazakhstan,0.0336,,,gacc
-202512,South Africa,0.0245,,,gacc
-202512,New Zealand,0.0143,,,gacc
-202512,Kyrgyzstan,0.0007,,,gacc
-202512,Laos,0.0005,,,gacc
-202512,Malaysia,0.0,,,gacc
-202512,Colombia,0.0,,,gacc
-202512,Areas NES,0.0,,,gacc
-202512,Tanzania,0.0,,,gacc
-202601,Australia,0.8345,,,gacc
-202601,Russian Federation,0.6424,,,gacc
-202601,Mongolia,0.6064,,,gacc
-202601,Indonesia,0.3641,,,gacc
-202601,Canada,0.1512,,,gacc
-202601,Colombia,0.0209,,,gacc
-202601,South Africa,0.0046,,,gacc
-202601,Venezuela,0.0025,,,gacc
-202601,Laos,0.0009,,,gacc
-202601,Kyrgyzstan,0.0002,,,gacc
-202601,Mozambique,0.0,,,gacc
-202601,USA,0.0,,,gacc
-202602,Russian Federation,0.4838,,,gacc
-202602,Australia,0.4777,,,gacc
-202602,Mongolia,0.4278,,,gacc
-202602,Indonesia,0.1928,,,gacc
-202602,Canada,0.0502,,,gacc
-202602,South Africa,0.0036,,,gacc
-202602,Laos,0.0002,,,gacc
-202602,Kazakhstan,0.0002,,,gacc
-202602,Kyrgyzstan,0.0002,,,gacc
-202602,Zambia,0.0,,,gacc
-202602,Latvia,0.0,,,gacc
-202602,USA,0.0,,,gacc
-202602,New Zealand,0.0,,,gacc
-202603,Mongolia,0.7245,,,gacc
-202603,Russian Federation,0.6808,,,gacc
-202603,Australia,0.4165,,,gacc
-202603,Indonesia,0.1893,,,gacc
-202603,Canada,0.1744,,,gacc
-202603,Colombia,0.009,,,gacc
-202603,Venezuela,0.0045,,,gacc
-202603,Laos,0.0007,,,gacc
-202603,Kyrgyzstan,0.0004,,,gacc
-202603,Japan,0.0,,,gacc
-202603,USA,0.0,,,gacc
-202603,India,0.0,,,gacc
-202604,Mongolia,0.7275,,,gacc
-202604,Russian Federation,0.5642,,,gacc
-202604,Australia,0.4672,,,gacc
-202604,Indonesia,0.1539,,,gacc
-202604,Canada,0.084,,,gacc
-202604,Venezuela,0.0071,,,gacc
-202604,Laos,0.001,,,gacc
-202604,Kazakhstan,0.0006,,,gacc
-202604,Kyrgyzstan,0.0005,,,gacc
-202604,Malaysia,0.0,,,gacc
-202604,China,0.0,,,gacc
-202604,Georgia,0.0,,,gacc
-202604,Egypt,0.0,,,gacc
-202604,Latvia,0.0,,,gacc
-202604,Lithuania,0.0,,,gacc
-202604,USA,0.0,,,gacc
-202605,Mongolia,0.6963,,,gacc
-202605,Russian Federation,0.5932,,,gacc
-202605,Australia,0.4771,,,gacc
-202605,Canada,0.1448,,,gacc
-202605,Indonesia,0.1195,,,gacc
-202605,Kazakhstan,0.0194,,,gacc
-202605,Colombia,0.0132,,,gacc
-202605,New Zealand,0.0109,,,gacc
-202605,USA,0.004,,,gacc
-202605,Venezuela,0.0039,,,gacc
-202605,Laos,0.001,,,gacc
-202605,Kyrgyzstan,0.0005,,,gacc
-202606,Australia,0.9435,,,gacc
-202606,Russian Federation,0.7548,,,gacc
-202606,Mongolia,0.746,,,gacc
-202606,Indonesia,0.2615,,,gacc
-202606,Canada,0.0432,,,gacc
-202606,South Africa,0.0304,,,gacc
-202606,Kazakhstan,0.0113,,,gacc
-202606,Malaysia,0.0017,,,gacc
-202606,Laos,0.0006,,,gacc
-202606,Kyrgyzstan,0.0004,,,gacc
-202606,Pakistan,0.0,,,gacc
-202606,USA,0.0,,,gacc
-202606,Zambia,0.0,,,gacc
-202607,Australia,1.189,,,gacc
-202607,Russian Federation,0.9892,,,gacc
-202607,Mongolia,0.6789,,,gacc
-202607,Indonesia,0.2861,,,gacc
-202607,Canada,0.11,,,gacc
-202607,Colombia,0.0196,,,gacc
-202607,Kazakhstan,0.0045,,,gacc
-202607,Laos,0.0006,,,gacc
-202607,Kyrgyzstan,0.0005,,,gacc
-202607,China,0.0,,,gacc
-202607,Peru,0.0,,,gacc
-202607,Republic of Korea,0.0,,,gacc
-202607,USA,0.0,,,gacc
-202607,Egypt,0.0,,,gacc
-202607,Zambia,0.0,,,gacc
-202607,Mexico,0.0,,,gacc
-202608,Russian Federation,1.0537,,,gacc
-202608,Australia,0.9704,,,gacc
-202608,Mongolia,0.6876,,,gacc
-202608,Indonesia,0.2615,,,gacc
-202608,Canada,0.1729,,,gacc
-202608,Colombia,0.0424,,,gacc
-202608,South Africa,0.0373,,,gacc
-202608,Kazakhstan,0.0251,,,gacc
-202608,New Zealand,0.0072,,,gacc
-202608,Malaysia,0.002,,,gacc
-202608,Kyrgyzstan,0.0006,,,gacc
-202608,Laos,0.0002,,,gacc
-202609,Australia,1.3512,,,gacc
-202609,Russian Federation,1.1816,,,gacc
-202609,Mongolia,0.6879,,,gacc
-202609,Indonesia,0.2738,,,gacc
-202609,Canada,0.1237,,,gacc
-202609,Colombia,0.0365,,,gacc
-202609,New Zealand,0.0114,,,gacc
-202609,South Africa,0.0091,,,gacc
-202609,Malaysia,0.0021,,,gacc
-202609,Kazakhstan,0.0017,,,gacc
-202609,Kyrgyzstan,0.0006,,,gacc
-202609,Laos,0.0,,,gacc
-202609,Turkey,0.0,,,gacc
-202609,USA,0.0,,,gacc
-202609,Zambia,0.0,,,gacc
+202501,Australia,0.8365,7.6716,109.03,gacc
+202501,Russian Federation,0.6891,6.2469,110.31,gacc
+202501,Indonesia,0.485,5.2328,92.68,gacc
+202501,Mongolia,0.4085,5.108,79.98,gacc
+202501,Canada,0.1809,0.944,191.57,gacc
+202501,USA,0.1785,1.3574,131.47,gacc
+202501,Mozambique,0.0142,0.0789,180.5,gacc
+202501,Kazakhstan,0.0101,0.0833,121.89,gacc
+202501,Laos,0.0016,0.017,96.43,gacc
+202501,Kyrgyzstan,0.0004,0.0046,80.47,gacc
+202501,Brazil,0.0,0.0,165.26,gacc
+202501,Peru,0.0,0.0,24000.0,gacc
+202502,Russian Federation,0.6635,6.2252,106.59,gacc
+202502,Australia,0.4169,4.3762,95.26,gacc
+202502,Mongolia,0.3676,4.6902,78.37,gacc
+202502,Indonesia,0.2416,2.9187,82.79,gacc
+202502,Canada,0.2041,1.1566,176.49,gacc
+202502,USA,0.1728,1.2635,136.75,gacc
+202502,Colombia,0.0083,0.0535,156.02,gacc
+202502,Tanzania,0.0053,0.059,89.97,gacc
+202502,Kazakhstan,0.0001,0.0006,80.63,gacc
+202502,Laos,0.0001,0.0012,97.45,gacc
+202502,Croatia,0.0,0.0,40500.0,gacc
+202502,India,0.0,0.0,178.67,gacc
+202502,Kyrgyzstan,0.0,0.0003,66.16,gacc
+202502,Mozambique,0.0,0.0,2892.0,gacc
+202502,South Africa,0.0,0.0,166.67,gacc
+202502,Zimbabwe,0.0,0.0,13733.33,gacc
+202503,Russian Federation,0.7176,7.1392,100.51,gacc
+202503,Mongolia,0.4495,6.2096,72.38,gacc
+202503,Australia,0.3906,4.4021,88.73,gacc
+202503,Indonesia,0.212,2.5792,82.21,gacc
+202503,Canada,0.1402,0.8281,169.28,gacc
+202503,USA,0.0308,0.2077,148.31,gacc
+202503,New Zealand,0.0109,0.0932,117.15,gacc
+202503,Laos,0.0012,0.0124,97.52,gacc
+202503,Kazakhstan,0.0002,0.004,58.54,gacc
+202503,Kyrgyzstan,0.0002,0.0038,65.08,gacc
+202503,Tanzania,0.0,0.0,5844.44,gacc
+202504,Russian Federation,0.6186,6.4543,95.85,gacc
+202504,Australia,0.6114,6.9694,87.72,gacc
+202504,Mongolia,0.4417,6.5513,67.43,gacc
+202504,Indonesia,0.1759,2.1112,83.3,gacc
+202504,Canada,0.1332,0.8166,163.08,gacc
+202504,Colombia,0.0134,0.1644,81.47,gacc
+202504,USA,0.009,0.0762,118.36,gacc
+202504,New Zealand,0.0089,0.066,134.1,gacc
+202504,South Africa,0.0086,0.0729,118.02,gacc
+202504,Laos,0.0005,0.0053,97.52,gacc
+202504,Kazakhstan,0.0002,0.0033,50.47,gacc
+202504,India,0.0,0.0,,gacc
+202504,Kyrgyzstan,0.0,0.0008,49.86,gacc
+202504,Tajikistan,0.0,0.0,140.0,gacc
+202505,Australia,0.6435,7.4627,86.22,gacc
+202505,Russian Federation,0.5837,6.5031,89.76,gacc
+202505,Mongolia,0.3706,5.9557,62.22,gacc
+202505,Indonesia,0.1796,2.3065,77.88,gacc
+202505,Canada,0.1008,0.6296,160.06,gacc
+202505,Colombia,0.0126,0.1606,78.54,gacc
+202505,Kazakhstan,0.008,0.0729,109.27,gacc
+202505,New Zealand,0.0062,0.055,113.03,gacc
+202505,Laos,0.0006,0.0058,97.26,gacc
+202505,Kyrgyzstan,0.0001,0.0041,33.38,gacc
+202505,South Africa,0.0,0.0,32550.0,gacc
+202505,Tanzania,0.0,0.0,5820.0,gacc
+202505,USA,0.0,0.0,12045.45,gacc
+202506,Russian Federation,0.5472,6.3948,85.56,gacc
+202506,Australia,0.5028,5.261,95.58,gacc
+202506,Mongolia,0.3898,6.2248,62.62,gacc
+202506,Indonesia,0.2319,3.2778,70.74,gacc
+202506,Canada,0.1598,1.0699,149.34,gacc
+202506,New Zealand,0.006,0.065,92.38,gacc
+202506,Laos,0.0004,0.0041,97.37,gacc
+202506,Kazakhstan,0.0001,0.0014,52.35,gacc
+202506,Kyrgyzstan,0.0001,0.0022,38.04,gacc
+202506,Areas NES,0.0,0.0,76.92,gacc
+202506,Colombia,0.0,0.0,48125.0,gacc
+202506,Turkey,0.0,0.0,8750.0,gacc
+202506,USA,0.0,0.0,14588.24,gacc
+202507,Russian Federation,0.5462,6.3483,86.04,gacc
+202507,Australia,0.5134,6.0402,84.99,gacc
+202507,Mongolia,0.3563,6.6259,53.78,gacc
+202507,Indonesia,0.2113,3.1077,68.0,gacc
+202507,Canada,0.1157,0.7831,147.81,gacc
+202507,South Africa,0.0155,0.1491,104.11,gacc
+202507,Kyrgyzstan,0.0003,0.0083,35.62,gacc
+202507,Laos,0.0001,0.0009,97.78,gacc
+202507,Malaysia,0.0,0.0,9566.67,gacc
+202507,Mozambique,0.0,0.0,100.39,gacc
+202507,Turkey,0.0,0.0,,gacc
+202507,USA,0.0,0.0,14529.41,gacc
+202508,Russian Federation,0.6288,7.1875,87.49,gacc
+202508,Australia,0.5384,6.6915,80.47,gacc
+202508,Mongolia,0.4502,7.8611,57.27,gacc
+202508,Indonesia,0.316,4.5646,69.22,gacc
+202508,Canada,0.1647,1.0275,160.32,gacc
+202508,Kazakhstan,0.0167,0.1667,100.16,gacc
+202508,Colombia,0.0041,0.0257,160.85,gacc
+202508,Kyrgyzstan,0.0002,0.005,49.02,gacc
+202508,India,0.0,0.0,4403.11,gacc
+202508,Malaysia,0.0,0.0,,gacc
+202508,Swaziland,0.0,0.0,24354.17,gacc
+202508,USA,0.0,0.0,15983.87,gacc
+202509,Russian Federation,0.583,6.394,91.18,gacc
+202509,Australia,0.5366,6.2865,85.36,gacc
+202509,Mongolia,0.5261,8.6725,60.66,gacc
+202509,Indonesia,0.4341,6.0641,71.58,gacc
+202509,Canada,0.1969,1.1774,167.25,gacc
+202509,Kazakhstan,0.0331,0.3313,99.94,gacc
+202509,Mozambique,0.0123,0.0817,150.03,gacc
+202509,Viet Nam,0.0065,0.0267,242.18,gacc
+202509,Kyrgyzstan,0.0005,0.0116,45.75,gacc
+202509,Tajikistan,0.0,0.0,920.83,gacc
+202509,USA,0.0,0.0,15500.0,gacc
+202510,Australia,0.6651,7.079,93.95,gacc
+202510,Russian Federation,0.5757,6.2572,92.01,gacc
+202510,Mongolia,0.4382,7.3611,59.53,gacc
+202510,Indonesia,0.396,5.0218,78.85,gacc
+202510,Canada,0.1748,0.9806,178.28,gacc
+202510,South Africa,0.008,0.0792,100.44,gacc
+202510,Kyrgyzstan,0.0007,0.0158,46.93,gacc
+202510,Kazakhstan,0.0001,0.0021,48.86,gacc
+202510,Laos,0.0001,0.0015,98.51,gacc
+202510,Areas NES,0.0,0.0,40300.0,gacc
+202510,Ireland,0.0,0.0,294.74,gacc
+202510,USA,0.0,0.0,13000.0,gacc
+202511,Russian Federation,0.7326,7.2227,101.43,gacc
+202511,Australia,0.6059,6.2046,97.66,gacc
+202511,Mongolia,0.5663,8.7563,64.68,gacc
+202511,Indonesia,0.3603,4.519,79.73,gacc
+202511,Canada,0.1093,0.6118,178.61,gacc
+202511,Kyrgyzstan,0.0006,0.0142,41.84,gacc
+202511,Laos,0.0001,0.0018,70.54,gacc
+202511,Colombia,0.0,0.0,37523.81,gacc
+202511,Ethiopia,0.0,0.0,2509.09,gacc
+202511,Malaysia,0.0,0.0,21545.45,gacc
+202511,Panama,0.0,0.0,66333.33,gacc
+202511,USA,0.0,0.0,328.91,gacc
+202512,Australia,0.9845,9.0086,109.29,gacc
+202512,Russian Federation,0.8673,8.4102,103.13,gacc
+202512,Mongolia,0.6209,9.4092,65.99,gacc
+202512,Indonesia,0.5904,7.0536,83.7,gacc
+202512,Canada,0.2294,1.2663,181.15,gacc
+202512,Kazakhstan,0.0336,0.3295,101.99,gacc
+202512,South Africa,0.0245,0.2264,108.26,gacc
+202512,New Zealand,0.0143,0.1085,132.11,gacc
+202512,Kyrgyzstan,0.0007,0.0182,40.81,gacc
+202512,Laos,0.0005,0.0071,70.63,gacc
+202512,Areas NES,0.0,0.0,17987.18,gacc
+202512,Colombia,0.0,0.0,13020.0,gacc
+202512,Malaysia,0.0,0.0,8928.57,gacc
+202512,Tanzania,0.0,0.0,36865.0,gacc
+202601,Australia,0.8345,8.2443,101.22,gacc
+202601,Russian Federation,0.6424,6.0183,106.75,gacc
+202601,Mongolia,0.6064,9.5513,63.49,gacc
+202601,Indonesia,0.3641,4.4897,81.11,gacc
+202601,Canada,0.1512,0.8099,186.71,gacc
+202601,Colombia,0.0209,0.1362,153.77,gacc
+202601,South Africa,0.0046,0.044,104.37,gacc
+202601,Venezuela,0.0025,0.0265,95.0,gacc
+202601,Laos,0.0009,0.0121,71.06,gacc
+202601,Kyrgyzstan,0.0002,0.0051,44.1,gacc
+202601,Mozambique,0.0,0.0,36300.0,gacc
+202601,USA,0.0,0.0,13111.11,gacc
+202602,Russian Federation,0.4842,4.6012,105.24,gacc
+202602,Australia,0.4792,4.3323,110.61,gacc
+202602,Mongolia,0.4278,6.6334,64.49,gacc
+202602,Indonesia,0.1928,2.5371,76.01,gacc
+202602,Canada,0.0502,0.267,188.07,gacc
+202602,South Africa,0.0036,0.0345,103.06,gacc
+202602,Kazakhstan,0.0002,0.0032,59.38,gacc
+202602,Kyrgyzstan,0.0002,0.0078,30.69,gacc
+202602,Laos,0.0002,0.0025,77.39,gacc
+202602,Latvia,0.0,0.0,115800.0,gacc
+202602,New Zealand,0.0,0.0,92.67,gacc
+202602,USA,0.0,0.0,13000.0,gacc
+202602,Zambia,0.0,0.0,154000.0,gacc
+202603,Mongolia,0.7245,10.6337,68.13,gacc
+202603,Russian Federation,0.6822,6.4065,106.49,gacc
+202603,Australia,0.4188,4.19,99.95,gacc
+202603,Indonesia,0.1894,2.4892,76.11,gacc
+202603,Canada,0.1741,0.8627,201.77,gacc
+202603,Colombia,0.009,0.0559,162.03,gacc
+202603,Venezuela,0.0045,0.0379,120.0,gacc
+202603,Laos,0.0007,0.01,73.52,gacc
+202603,Kyrgyzstan,0.0004,0.0169,26.55,gacc
+202603,India,0.0,0.0,,gacc
+202603,Japan,0.0,0.0,1416.67,gacc
+202603,USA,0.0,0.0,13052.63,gacc
+202604,Mongolia,0.7275,10.8569,67.01,gacc
+202604,Russian Federation,0.5659,5.0493,112.06,gacc
+202604,Australia,0.4685,4.2227,110.95,gacc
+202604,Indonesia,0.1541,1.7155,89.81,gacc
+202604,Canada,0.084,0.5053,166.13,gacc
+202604,Venezuela,0.0071,0.0591,120.0,gacc
+202604,Laos,0.001,0.0142,73.93,gacc
+202604,Kazakhstan,0.0006,0.0061,96.66,gacc
+202604,Kyrgyzstan,0.0005,0.0182,29.19,gacc
+202604,China,0.0,0.0,150000.0,gacc
+202604,Egypt,0.0,0.0,34875.0,gacc
+202604,Georgia,0.0,0.0,47200.0,gacc
+202604,Latvia,0.0,0.0,17700.0,gacc
+202604,Lithuania,0.0,0.0,21687.5,gacc
+202604,Malaysia,0.0,0.0,30600.0,gacc
+202604,USA,0.0,0.0,13631.58,gacc
+202605,Mongolia,0.6963,9.5616,72.83,gacc
+202605,Russian Federation,0.596,4.9524,120.34,gacc
+202605,Australia,0.4788,4.0296,118.82,gacc
+202605,Canada,0.1452,0.771,188.33,gacc
+202605,Indonesia,0.1195,1.2289,97.21,gacc
+202605,Kazakhstan,0.0194,0.168,115.66,gacc
+202605,Colombia,0.0132,0.0774,171.02,gacc
+202605,New Zealand,0.0109,0.0648,168.03,gacc
+202605,USA,0.004,0.0297,134.93,gacc
+202605,Venezuela,0.0039,0.0319,122.0,gacc
+202605,Laos,0.001,0.013,74.97,gacc
+202605,Kyrgyzstan,0.0005,0.0166,31.8,gacc
+202606,Australia,0.947,7.7057,122.9,gacc
+202606,Russian Federation,0.7693,6.2159,123.76,gacc
+202606,Mongolia,0.746,10.082,73.99,gacc
+202606,Indonesia,0.2622,2.4432,107.33,gacc
+202606,Canada,0.0446,0.205,217.6,gacc
+202606,South Africa,0.0304,0.2472,122.99,gacc
+202606,Kazakhstan,0.0113,0.0865,130.95,gacc
+202606,Malaysia,0.0017,0.024,72.6,gacc
+202606,Laos,0.0006,0.0077,73.34,gacc
+202606,Kyrgyzstan,0.0004,0.0143,28.95,gacc
+202606,Pakistan,0.0,0.0,62000.0,gacc
+202606,USA,0.0,0.0,13750.0,gacc
+202606,Zambia,0.0,0.0,17742.42,gacc
+202607,Australia,1.1929,8.3298,143.21,gacc
+202607,Russian Federation,1.0324,8.0439,128.35,gacc
+202607,Mongolia,0.678,8.4621,80.13,gacc
+202607,Indonesia,0.2872,2.4168,118.82,gacc
+202607,Canada,0.1144,0.5421,211.0,gacc
+202607,Colombia,0.0196,0.137,143.3,gacc
+202607,Kazakhstan,0.0045,0.0278,161.64,gacc
+202607,Laos,0.0006,0.0073,76.05,gacc
+202607,Kyrgyzstan,0.0005,0.0145,34.74,gacc
+202607,China,0.0,0.0,46000.0,gacc
+202607,Egypt,0.0,0.0,45500.0,gacc
+202607,Mexico,0.0,0.0,55285.71,gacc
+202607,Peru,0.0,0.0,96.01,gacc
+202607,Republic of Korea,0.0,0.0,26666.67,gacc
+202607,USA,0.0,0.0,12941.18,gacc
+202607,Zambia,0.0,0.0,1401.41,gacc
+202608,Russian Federation,1.0583,8.5637,123.58,gacc
+202608,Australia,0.9684,7.0176,138.0,gacc
+202608,Mongolia,0.6876,9.134,75.28,gacc
+202608,Indonesia,0.2618,2.2564,116.02,gacc
+202608,Canada,0.1761,0.7783,226.24,gacc
+202608,Colombia,0.0424,0.2671,158.6,gacc
+202608,South Africa,0.0373,0.3116,119.81,gacc
+202608,Kazakhstan,0.0251,0.1855,135.45,gacc
+202608,New Zealand,0.0072,0.0554,130.48,gacc
+202608,Malaysia,0.002,0.024,85.19,gacc
+202608,Kyrgyzstan,0.0006,0.0157,40.82,gacc
+202608,Laos,0.0002,0.0019,87.19,gacc
+202608,India,0.0,0.0,10250.0,gacc
+202608,Iran,0.0,0.0,147.28,gacc
+202608,Mexico,0.0,0.0,2000.0,gacc
+202608,Mozambique,0.0,0.0,20264.0,gacc
+202608,USA,0.0,0.0,13000.0,gacc
+202608,Zambia,0.0,0.0,1400.0,gacc
+202608,Zimbabwe,0.0,0.0,170.02,gacc
+202609,Australia,1.3512,9.8126,137.7,gacc
+202609,Russian Federation,1.1816,9.2176,128.19,gacc
+202609,Mongolia,0.6879,7.9181,86.88,gacc
+202609,Indonesia,0.2738,2.757,99.31,gacc
+202609,Canada,0.1237,0.5644,219.23,gacc
+202609,Colombia,0.0365,0.1831,199.16,gacc
+202609,New Zealand,0.0114,0.0652,175.03,gacc
+202609,South Africa,0.0091,0.0795,114.0,gacc
+202609,Malaysia,0.0021,0.024,85.51,gacc
+202609,Kazakhstan,0.0017,0.0107,161.78,gacc
+202609,Kyrgyzstan,0.0006,0.015,43.38,gacc
+202609,Laos,0.0,0.0005,73.72,gacc
+202609,Turkey,0.0,0.0,1800.0,gacc
+202609,USA,0.0,0.0,15800.0,gacc
+202609,Zambia,0.0,0.0,1399.58,gacc
