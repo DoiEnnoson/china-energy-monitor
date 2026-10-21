@@ -657,6 +657,9 @@
     </div>
 
     <p class="section-label">Pipeline Gas Imports by Country</p>
+    <div class="summary-box">
+      <p>Volume data for China's pipeline gas imports by country of origin end in December 2024. The General Administration of Customs of China (GACC) still publishes monthly pipeline gas imports by supplier country, but only in US dollars: since 2022, the customs database no longer reports quantities for natural gas in gaseous state (HS 2711.21). The quantity chart therefore relies on UN ComTrade data up to 2024, while the value chart continues with GACC figures to the latest month. Total gas import volumes, pipeline gas and LNG combined, remain available in GACC's aggregate statistics and feed the <a href="#total-energy">Total Energy System</a> section.</p>
+    </div>
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
@@ -2353,10 +2356,10 @@
       }
 
       //                               qMax qStep  vMax vStep
-      buildCountryPair(coal,     'coal-qty-country', 'coal-val-country',  35, 10,   4,  1);
+      buildCountryPair(coal,     'coal-qty-country', 'coal-val-country',  40, 10,   4,  1);
       buildCountryPair(crudeoil, 'oil-qty-country',  'oil-val-country',   35, 10,  30, 10);
       buildCountryPair(lng,      'lng-qty-country',  'lng-val-country',    8,  2,   8,  2);
-      buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country',   6,  1,   2,  0.5);
+      buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country',   6,  1, 2.5,  0.5);
 
     } /* end buildImportsSection */
 
