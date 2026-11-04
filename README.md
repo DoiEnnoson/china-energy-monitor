@@ -66,6 +66,8 @@ Monthly email update on Substack (`chinaenergymonitor.substack.com`), one email 
 
 Below *This Month At A Glance* the page has its own signup box in the dashboard's style (`#newsletter`): an email field whose form posts to `https://chinaenergymonitor.substack.com/api/v1/free?nojs=true`; Substack's confirmation page opens in a new tab, so the dashboard stays open. This endpoint is widely used but not officially documented by Substack; if it stops working, the box also links to `https://chinaenergymonitor.substack.com/subscribe`, and Substack's own embed (`/embed`, light background only) is the fallback.
 
+**Signup tracking:** every submit of the box sends a GoatCounter event (`newsletter-subscribe`). `scripts/goatcounter_report.py` (workflow *GoatCounter Daily*) fetches the daily event count via `/api/v0/stats/hits`, stores it in `data/newsletter_log.csv` (`date,subscribe_clicks`, from 2026-11-04) and adds a *Newsletter* table to the Monday traffic email: this week, previous week, month to date, total since start. These are clicks on *Subscribe*, not confirmed subscriptions; Substack offers no public API for subscriber counts, confirmed subscribers are in the Substack dashboard under *Subscribers*.
+
 A first attempt with the Ghost(Pro) site `equity.yuansignals.com` (live 2026-11-04, removed the same day) was dropped: Ghost sends signup and sign-in emails and redirects in the name of the site (*Yuan Signal | Equity*), not of the newsletter, and the *Subscribe new members on signup* switches apply site-wide, so CEM signups also received the Equity newsletter. A separate Ghost site for CEM would fix this but costs a second subscription.
 
 ### YTD supply change in TWh (section 4, added 2026-10-21)

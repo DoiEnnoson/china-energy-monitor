@@ -329,7 +329,8 @@
         <strong>Get the monthly update by email</strong>
         One email per month when the new data are in: China's energy supply, imports, power generation and EV transition, with the key findings.
       </div>
-      <form class="newsletter-form" action="https://chinaenergymonitor.substack.com/api/v1/free?nojs=true" method="post" target="_blank">
+      <form class="newsletter-form" action="https://chinaenergymonitor.substack.com/api/v1/free?nojs=true" method="post" target="_blank"
+            onsubmit="if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'newsletter-subscribe', title: 'Newsletter subscribe click', event: true });">
         <input type="email" name="email" placeholder="Your email address" aria-label="Email address" required>
         <button type="submit">Subscribe</button>
       </form>
