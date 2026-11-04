@@ -46,7 +46,7 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 
 | # | Section | Data source | Content |
 |---|---|---|---|
-| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail, fuel_savings | 6 KPI cards (energy + BEV share + EV oil displacement YTD); below them the newsletter signup form (see *Newsletter*) |
+| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail, fuel_savings | 6 KPI cards (energy + BEV share + EV oil displacement YTD) |
 | 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
 | 3 | Capacity Added | capacity_additions, ember_capacity, nea_battery_storage | 2 bar charts (YTD + monthly), 4 donuts, prose, Installed Capacity Growth (Wind + Solar line chart), Battery Storage Growth (annual GW / GWh / Duration) |
 | 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards "Total Primary Energy Supply" (month + YTD; renamed from "Total Primary Energy" on 2026-10-21, since the figures are supply = production + imports without stock changes, not consumption), 2 carrier bars, Fossil Supply latest month (butterfly + import YoY bars; moved here from section 2 on 2026-10-21; section intro rewritten accordingly), YTD butterfly + YoY bars, YTD supply change in TWh, net of production + imports, green = growth / red = decline (Fossil: Coal · Oil · Gas · total; Total: Fossil · Clean power · Total), Import Dependency line chart |
@@ -60,13 +60,11 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 
 **KPI delta colours:** negative changes in KPI cards use `--neg: #E5574B` (contrast 5.3:1 against the card background, matching `--pos` at 5.5:1). Until 2026-10-21 it was `#7A0404` (1.7:1), which was barely readable.
 
-### Newsletter (added 2026-11-04)
+### Newsletter (planned)
 
-Below *This Month At A Glance* the page embeds Ghost's signup form (`cdn.jsdelivr.net/ghost/signup-form@~0.4`). Signups go to the Ghost(Pro) site `equity.yuansignals.com`, which hosts two newsletters: *China Energy Monitor* and *Yuan Signal | Equity*. The form only asks for an email address; every signup gets the label `cem`.
+A monthly email update is planned on Substack (`chinaenergymonitor.substack.com`), one email per month once the month's data (GACC, NBS, CREA, Ember) are complete, with a signup form embedded on the page.
 
-The form cannot choose a newsletter. Which newsletters a new member receives is decided in Ghost by the switch *Subscribe new members on signup* in each newsletter's settings. To be verified with a test signup: whether CEM signups receive only the CEM newsletter or both. The signup page for the Equity newsletter on `equity.yuansignals.com` is not affected by this embed.
-
-Planned cadence: one email per month once the month's data (GACC, NBS, CREA, Ember) are complete.
+A first attempt with the Ghost(Pro) site `equity.yuansignals.com` (live 2026-11-04, removed the same day) was dropped: Ghost sends signup and sign-in emails and redirects in the name of the site (*Yuan Signal | Equity*), not of the newsletter, and the *Subscribe new members on signup* switches apply site-wide, so CEM signups also received the Equity newsletter. A separate Ghost site for CEM would fix this but costs a second subscription.
 
 ### YTD supply change in TWh (section 4, added 2026-10-21)
 
