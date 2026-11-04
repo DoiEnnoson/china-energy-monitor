@@ -155,6 +155,23 @@
     .article-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
     .article-card .card-title { font-size: 0.78rem; color: var(--text); padding: 0.6rem 0.7rem 0.7rem; line-height: 1.4; }
 
+    .newsletter-box {
+      margin-top: var(--gap); background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--teal); border-radius: 4px; padding: 1rem 1.2rem;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.5rem;
+    }
+    .newsletter-text { flex: 1 1 240px; font-size: 0.85rem; line-height: 1.5; color: var(--text); }
+    .newsletter-text strong { display: block; font-size: 0.92rem; margin-bottom: 0.15rem; }
+    .newsletter-form { flex: 1 1 240px; min-width: 0; max-width: 100%; display: flex; gap: 0.5rem; }
+    .newsletter-form input[type="email"] {
+      flex: 1; min-width: 0; padding: 0.55rem 0.7rem; font: inherit; font-size: 0.85rem;
+      color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+    }
+    .newsletter-form button {
+      padding: 0.55rem 1rem; font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      color: #fff; background: var(--teal); border: 0; border-radius: 4px; white-space: nowrap;
+    }
+    .newsletter-alt { flex-basis: 100%; font-size: 0.7rem; color: var(--text2); }
     .chart-row       { display: grid; grid-template-columns: 58fr 38fr; gap: var(--gap); }
     .chart-row-equal { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
     .chart-box {
@@ -304,6 +321,19 @@
         <div class="kpi-value" id="kpi-ev-ytd">—</div>
         <div class="kpi-delta" id="kpi-ev-ytd-yoy">—</div>
       </div>
+    </div>
+
+    <!-- Newsletter signup: posts the address to Substack (chinaenergymonitor.substack.com); confirmation opens in a new tab -->
+    <div class="newsletter-box" id="newsletter">
+      <div class="newsletter-text">
+        <strong>Get the monthly update by email</strong>
+        One email per month when the new data are in: China's energy supply, imports, power generation and EV transition, with the key findings.
+      </div>
+      <form class="newsletter-form" action="https://chinaenergymonitor.substack.com/api/v1/free?nojs=true" method="post" target="_blank">
+        <input type="email" name="email" placeholder="Your email address" aria-label="Email address" required>
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="newsletter-alt">Free · via Substack · unsubscribe anytime · or <a href="https://chinaenergymonitor.substack.com/subscribe" target="_blank" rel="noopener">subscribe on Substack directly</a></div>
     </div>
 
     <p class="section-label-h1">Monthly Summary</p>
