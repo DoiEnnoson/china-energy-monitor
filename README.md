@@ -744,6 +744,7 @@ Rebuild procedure for future months: download HS 27090000 by month and partner w
 - **Units, rounding and partner names** as for crude oil (see above); additional codes: 119 Laos, 701 Areas NES.
 - **Revisions:** 2025 values are unchanged against the previous file. Feb–Aug 2026 differ slightly (GACC revisions; largest 202607 +0.05 bn USD). Jan and Sep 2026 are unchanged.
 - **Continuity check:** ComTrade 2701 volumes in H2 2024 were 28–35 Mt per month, GACC 2025 21–36 Mt; no level break at the source change.
+- **TODO — lignite gap:** The sum of all partners in `gacc_coal.csv` (HS 2701, no lignite) runs roughly 10–15 Mt/month below the `gacc_imports.csv` coal aggregate (which includes lignite HS 2702). Month-to-month YoY comparisons using `gacc_coal.csv` partner totals are therefore **not comparable** with `gacc_imports.csv` totals and will produce systematically distorted figures. Fix: either add a separate `gacc_lignite.csv` (HS 27021000) and merge it into `gacc_coal.csv`, or document the gap as a hard limit and always route coal total-volume YoY comparisons through `gacc_imports.csv`.
 
 ### LNG volume series and pipeline gas (rebuild 2026-10-21)
 
