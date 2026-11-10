@@ -2463,19 +2463,19 @@
         ds('GACC VpU (÷7.33)', vpuCrudeBbl, ORANGE),
         ds('Brent',            wbBrent,     GOLD,  [4, 3]),
         ds('Dubai',            wbDubai,     TEAL,  [4, 3]),
-      ], 'USD / bbl', 0, 150, 50);
+      ], 'USD / bbl', 0);
 
       /* Chart 3 — Gas vs LNG Japan */
       mkLine('bench-gas', [
         ds('GACC VpU (÷52)',  vpuGasMmbtu, TEAL),
         ds('LNG Japan',       wbLngJp,     ORANGE, [4, 3]),
-      ], 'USD / MMBtu', 0, 20, 5);
+      ], 'USD / MMBtu', 0);
 
       /* Chart 4 — Coal vs Australian Coal */
       mkLine('bench-coal', [
         ds('GACC VpU',         vpuCoal,  RED),
         ds('Coal Australia',   wbCoalAu, ORANGE, [4, 3]),
-      ], 'USD / t', 0, 200, 50);
+      ], 'USD / t', 0);
 
     } /* end buildBenchmarkSection */
 
