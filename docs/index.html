@@ -1097,10 +1097,12 @@
       const latest   = ep[ep.length - 1];
       const prev12   = ep.length > 12 ? ep[ep.length - 13] : ep[0];
 
-      /* ── Header period ── */
-      document.getElementById('header-period').textContent = periodToMonth(latest.period);
-      const _yr = parseInt(latest.period.slice(0, 4));
-      const _mo = parseInt(latest.period.slice(4, 6)); // human month 1-12
+      /* ── Header period: minimum of power and capacity (capacity lags by ~1 month) ── */
+      const capLatestPeriod = ec.length ? ec[ec.length - 1].period : latest.period;
+      const headerPeriod = latest.period <= capLatestPeriod ? latest.period : capLatestPeriod;
+      document.getElementById('header-period').textContent = periodToMonth(headerPeriod);
+      const _yr = parseInt(headerPeriod.slice(0, 4));
+      const _mo = parseInt(headerPeriod.slice(4, 6)); // human month 1-12
       const _next = new Date(_yr, _mo + 1, 20);        // +1: JS months are 0-indexed
       document.getElementById('header-next-update').textContent =
         '~' + _next.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });

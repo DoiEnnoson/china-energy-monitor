@@ -58,7 +58,11 @@ def main():
     if new_latest <= old_latest:
         print("\n  No new data. Exiting.")
         github_output("new_data", "false")
-        github_output("new_period", new_latest)
+        github_output("power_period", new_latest)
+        # Report current capacity period even when skipping
+        if CAPACITY_FILE.exists():
+            cap_existing = pd.read_csv(CAPACITY_FILE, dtype=str)
+            github_output("capacity_period", cap_existing["period"].max() if not cap_existing.empty else "none")
         return
 
     # New period found — write both CSVs
@@ -68,11 +72,22 @@ def main():
 
     new_cap = build_capacity()
     if not new_cap.empty:
+        cap_latest = str(new_cap["period"].max())
         new_cap.to_csv(CAPACITY_FILE, index=False)
-        print(f"  Written: {CAPACITY_FILE.name} ({len(new_cap)} rows)")
+        print(f"  Written: {CAPACITY_FILE.name} ({len(new_cap)} rows, latest: {cap_latest})")
+        if cap_latest < new_latest:
+            print(f"  ⚠ Capacity lags power: capacity={cap_latest}, power={new_latest}")
+        github_output("capacity_period", cap_latest)
+    else:
+        print(f"  ⚠ Capacity fetch returned empty — {CAPACITY_FILE.name} not updated")
+        if CAPACITY_FILE.exists():
+            cap_existing = pd.read_csv(CAPACITY_FILE, dtype=str)
+            github_output("capacity_period", cap_existing["period"].max() if not cap_existing.empty else "none")
+        else:
+            github_output("capacity_period", "none")
 
     github_output("new_data", "true")
-    github_output("new_period", new_latest)
+    github_output("power_period", new_latest)
     print(f"\n[{datetime.now():%Y-%m-%d %H:%M}] Done.")
 
 
