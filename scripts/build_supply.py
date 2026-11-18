@@ -78,6 +78,18 @@ def main():
         "gas_bcm_yoy_pct":      "gas_prod_yoy_pct",
     })
 
+    # ── Jan-Feb: NBS has one combined row (YYYY01), GACC separate Jan + Feb rows ─
+    # Sum the GACC rows into YYYY01 so the merge keeps February imports.
+    # Both GACC rows carry the same combined Jan-Feb YoY, so the first is kept.
+    jan_feb = imp["period"] % 100 <= 2
+    imp.loc[jan_feb, "period"] = imp.loc[jan_feb, "period"] // 100 * 100 + 1
+    qty_cols = ["coal_import_mt", "crude_oil_import_mt", "gas_import_mt"]
+    imp = imp.groupby("period", as_index=False).agg(
+        {c: "sum" for c in qty_cols} |
+        {c: "first" for c in imp.columns if c.endswith("_yoy_pct")}
+    )
+    imp[qty_cols] = imp[qty_cols].round(2)
+
     df = imp.merge(prod, on="period").sort_values("period").reset_index(drop=True)
 
     # ── Gas: convert imports Mt → BCM ─────────────────────────────────────────

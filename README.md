@@ -46,10 +46,10 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 
 | # | Section | Data source | Content |
 |---|---|---|---|
-| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail, fuel_savings | 6 KPI cards (energy + BEV share + EV oil displacement YTD) |
-| 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Fossil Supply (Butterfly + YoY); Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
+| 1 | This Month At A Glance | ember_power, gacc_imports, capacity_additions, china_car_sales_retail, fuel_savings | 6 KPI cards (energy + BEV share + EV oil displacement YTD); below them the newsletter signup (see *Newsletter*) |
+| 2 | Monthly Summary | ember_power, gacc_imports, fossil_supply | Dynamic prose; Power Generation Mix (stacked area); Electricity Demand vs. Generation (line chart) |
 | 3 | Capacity Added | capacity_additions, ember_capacity, nea_battery_storage | 2 bar charts (YTD + monthly), 4 donuts, prose, Installed Capacity Growth (Wind + Solar line chart), Battery Storage Growth (annual GW / GWh / Duration) |
-| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards (month + YTD), 2 carrier bars, YTD butterfly + YoY bars, Import Dependency line chart |
+| 4 | Total Energy System | energy_balance, fossil_supply | 2 KPI cards "Total Primary Energy Supply" (month + YTD; renamed from "Total Primary Energy" on 2026-10-21, since the figures are supply = production + imports without stock changes, not consumption), 2 carrier bars, Fossil Supply latest month (butterfly + import YoY bars; moved here from section 2 on 2026-10-21; section intro rewritten accordingly), YTD butterfly + YoY bars, YTD supply change in TWh, net of production + imports, green = growth / red = decline (Fossil: Coal · Oil · Gas · total; Total: Fossil · Clean power · Total), Import Dependency line chart |
 | 5 | Power Generation — Source Breakdown | ember_power, ember_capacity | TWh stacked, share stacked, Coal dual-axis, Wind + Solar capacity factor, CO₂ intensity, Hydro seasonal (6 vintages) |
 | 6 | Fossil Fuel Imports | combined_*.csv (ComTrade + GACC), gacc_imports | 2 overview charts + 4 × 2 country-of-origin charts: Crude Oil → LNG → Coal → Pipeline Gas |
 | 7 | Import Price Benchmarks | gacc_imports, wb_reference_prices | 4 charts (2×2): GACC VpU all fuels (USD/t); Crude Oil GACC vs. Brent + Dubai (USD/bbl); Gas GACC vs. LNG Japan (USD/MMBtu); Coal GACC vs. Australian Benchmark (USD/t) |
@@ -57,6 +57,31 @@ All text, KPI values, chart titles, and summary paragraphs are generated from th
 | 9 | Oil Displacement & Energy Balance | fuel_savings | 2 KPI tiles (full-year 2026 crude mb + net TWh); Crude Oil Displaced (bar + projection line, mb/d); Primary Energy Balance (stacked area: fuel savings vs. grid cost, TWh/month) |
 | 10 | About | — | Donation (Stripe), project description, data sources, raw data request (mailto), feedback link |
 | 11 | Methodology | — | Source table with links, TWh conversion factors, VpU explanation, gas BCM conversion, ComTrade/GACC merge logic, Jan/Feb reporting, CREA delay, EV S-curve parameters, oil displacement model |
+
+**KPI delta colours:** negative changes in KPI cards use `--neg: #E5574B` (contrast 5.3:1 against the card background, matching `--pos` at 5.5:1). Until 2026-10-21 it was `#7A0404` (1.7:1), which was barely readable.
+
+### Newsletter (added 2026-11-04)
+
+Monthly email update on Substack (`chinaenergymonitor.substack.com`), one email per month once the month's data (GACC, NBS, CREA, Ember) are complete.
+
+Below *This Month At A Glance* the page has its own signup box in the dashboard's style (`#newsletter`): an email field whose form posts to `https://chinaenergymonitor.substack.com/api/v1/free?nojs=true`; Substack's confirmation page opens in a new tab, so the dashboard stays open. This endpoint is widely used but not officially documented by Substack; if it stops working, the box also links to `https://chinaenergymonitor.substack.com/subscribe`, and Substack's own embed (`/embed`, light background only) is the fallback.
+
+**Signup tracking:** every submit of the box sends a GoatCounter event (`newsletter-subscribe`). `scripts/goatcounter_report.py` (workflow *GoatCounter Daily*) fetches the daily event count via `/api/v0/stats/hits`, stores it in `data/newsletter_log.csv` (`date,subscribe_clicks`, from 2026-11-04) and adds a *Newsletter* table to the Monday traffic email: this week, previous week, month to date, total since start. These are clicks on *Subscribe*, not confirmed subscriptions; Substack offers no public API for subscriber counts, confirmed subscribers are in the Substack dashboard under *Subscribers*.
+
+A first attempt with the Ghost(Pro) site `equity.yuansignals.com` (live 2026-11-04, removed the same day) was dropped: Ghost sends signup and sign-in emails and redirects in the name of the site (*Yuan Signal | Equity*), not of the newsletter, and the *Subscribe new members on signup* switches apply site-wide, so CEM signups also received the Equity newsletter. A separate Ghost site for CEM would fix this but costs a second subscription.
+
+### YTD supply change in TWh (section 4, added 2026-10-21)
+
+Two charts in *Year-to-date Supply* answer whether total supply grew or shrank, not where the change came from:
+
+- **Fossil Supply Change Year-to-Date:** Coal · Oil · Gas · Fossil total.
+- **Total Energy Supply Change Year-to-Date:** Fossil · Clean power · Total.
+
+Each bar is the net change (production + imports) from January to the latest month against the same period a year earlier, in TWh. Green = supply grew, red = supply shrank; the value is printed under each carrier name.
+
+**Method:** computed in the browser from `fossil_supply.csv` (current-year rows) and `energy_balance.csv` (latest row). Prior-year values are back-calculated row by row from the stored YoY percentages, the same way `build_supply.py` does it, and converted with the dashboard factors (coal 8.14, crude oil 11.63 TWh/Mt; gas 10.55 TWh/BCM). Clean power uses `clean_power_ytd_twh` and `clean_power_ytd_yoy_pct`. Because the YoY percentages are rounded to one decimal, the TWh deltas carry an uncertainty of roughly ±10 TWh. No new data files or pipeline columns are involved.
+
+These charts rely on the Jan-Feb merge fix in `build_supply.py` (see `fossil_supply.csv` below); without it, February imports were missing from every YTD figure.
 
 ### Updating data
 
@@ -96,10 +121,11 @@ data/
     comtrade_lng.csv            — LNG imports by country of origin (ComTrade, 2020–)
     comtrade_pipeline_gas.csv   — Pipeline gas imports by country of origin (ComTrade, 2020–)
     gacc_imports.csv            — Total imports coal/crude oil/gas (GACC, May 2026–)
-    gacc_coal.csv               — Coal imports by country of origin (GACC, Jan 2025–)
-    gacc_crude_oil.csv          — Crude oil imports by country of origin (GACC, Jan 2025–)
-    gacc_lng.csv                — LNG imports by country of origin (GACC, Jan 2025–)
-    gacc_pipeline_gas.csv       — Pipeline gas imports by country of origin (GACC, Jan 2025–)
+    gacc_imports_manual.csv     — GACC fallback for months the pipeline lags (via /handelsbilanz)
+    gacc_coal.csv               — Coal imports by country of origin, value + volume (GACC, Jan 2025–)
+    gacc_crude_oil.csv          — Crude oil imports by country of origin, value + volume (GACC, Jan 2025–)
+    gacc_lng.csv                — LNG imports by country of origin, value + volume (GACC, Jan 2025–)
+    gacc_pipeline_gas.csv       — Pipeline gas imports by country of origin, value only (GACC, Jan 2025–)
   production/
     nbs_production.csv          — Domestic production coal/crude oil/gas (NBS, May 2026–)
   power/
@@ -194,6 +220,14 @@ One row per month. Total imports across all countries of origin (GACC aggregate)
 | gas_usd_bn_yoy_pct | Pct | YoY change in value |
 | gas_usd_per_mt | USD/t | Gas price per tonne |
 
+### `data/fuel-imports/gacc_imports_manual.csv`
+
+Fallback layer for `gacc_imports.csv`, same columns. The energy balance pipeline (which produces `gacc_imports.csv`) depends on Ember/CREA/NBS inputs that arrive several days to weeks after the GACC customs release. This file carries the GACC import figures (coal, crude oil, gas: volume, value, price per tonne, and monthly YoY) for the months the pipeline has not produced yet, extracted directly from the GACC monthly release by the `/handelsbilanz` workflow.
+
+The dashboard merges it at load with `mergeByPeriod(gacc_imports, gacc_imports_manual)`: **pipeline primary, manual fallback** — a manual row is used only for a month absent from `gacc_imports.csv`, and is automatically shadowed once the pipeline produces that month. This lets *This Month At A Glance*, *Fossil Fuel Imports* and *Import Price Benchmarks* show the latest GACC month without hardcoding figures into the page or editing the pipeline-owned `gacc_imports.csv`, which `build_supply.py` would overwrite.
+
+Monthly YoY for the manual row is derived as the GACC single-month value against the same month a year earlier, with the prior-year month reconstructed from cumulative year-to-date figures (current year-to-date minus the previous month's year-to-date) across the two GACC releases.
+
 ### `data/power/ember_power.csv`
 
 One row per month. Power generation by source, total demand, and CO₂ intensity for China.
@@ -261,6 +295,8 @@ One row per month. Chinese domestic production per NBS.
 ### `data/combined/fossil_supply.csv`
 
 Auto-generated from `gacc_imports.csv` + `nbs_production.csv`. One row per month. Per fuel: imports, domestic production, total supply, YoY for each component and the aggregate, plus cumulative year-to-date supply (YTD) with YTD YoY.
+
+**Jan-Feb merge:** `gacc_imports.csv` stores January and February as separate rows, `nbs_production.csv` only as one combined row (`YYYY01`). Before the merge, `build_supply.py` sums the GACC rows `YYYY01` + `YYYY02` into `YYYY01` (quantities summed; both rows carry the same combined Jan-Feb YoY, which is kept). Until 2026-10-21 the February GACC row was dropped by the merge, so all YTD imports from 2026 onwards lacked February (Jan–Sep 2026: −933 TWh fossil supply; fossil YTD YoY −4.8 % instead of −4.5 %).
 
 **Gas unit:** All gas figures in BCM. GACC imports (Mt) are converted using the following factor:
 
@@ -643,6 +679,8 @@ The script reads the `capacity_additions` block and upserts the row into `data/p
 
 `fetch_history.py` loads the complete ComTrade history 2020–2024 and rewrites the four commodity CSVs. This script was run once via the `fetch_history` workflow and does not need to be repeated unless ComTrade revises historical data retroactively.
 
+**Caution:** a rerun overwrites manual partner-name normalisations with the raw ComTrade names. The rerun on 2026-10-20 turned `Laos` back into `Lao People's Dem. Rep.` in 40 rows of `comtrade_coal.csv`; this was corrected the same day. After any rerun, check partner names against `gacc_*.csv` before the next `build_combined` run.
+
 ```bash
 export COMTRADE_PRIMARY_KEY=<key>
 python scripts/fetch_history.py
@@ -670,7 +708,7 @@ Local: `pip install -r requirements.txt` in a venv. On macOS with an externally 
 
 GACC publishes monthly granular import data by country of origin. The four country-of-origin CSVs (`gacc_coal.csv`, `gacc_crude_oil.csv`, `gacc_lng.csv`, `gacc_pipeline_gas.csv`) fill the ComTrade gap from January 2025 onwards: ComTrade delivers monthly data with an 18–20 month lag and has not yet published 2025 data. GACC data are available with approximately a 6-week lag.
 
-**Schema** (identical for all four files):
+**Schema** (base columns, all four files):
 
 | Column | Unit | Description |
 |---|---|---|
@@ -678,7 +716,43 @@ GACC publishes monthly granular import data by country of origin. The four count
 | partner | Text | Country of origin (ComTrade naming convention) |
 | value_usd_bn | USD bn | Import value |
 
-**Differences from ComTrade:** GACC does not include volume data (`qty_mt`) in its public CSV downloads. The `qty_mt` and `value_per_mt_usd` columns are therefore absent from the GACC country-of-origin CSVs. Volume charts in the dashboard are rendered only for the ComTrade period (2020–2024).
+`gacc_crude_oil.csv`, `gacc_coal.csv` and `gacc_lng.csv` additionally carry the two ComTrade volume columns, so their schema is identical to the matching `comtrade_*.csv`:
+
+| Column | Unit | Description |
+|---|---|---|
+| qty_mt | Mt | Import volume (net weight) |
+| value_per_mt_usd | USD/t | Import value per tonne |
+
+**Volume data:** The GACC download with quantity (`Quantity` in kg, `Supplementary Quantity` in barrel) is used for crude oil since 2026-10-20 and for coal and LNG since 2026-10-21. Pipeline gas stays value-only: GACC has not published quantities for CN 27112100 since 2022 (the download says so in its remarks column and leaves quantity empty), so no volume series by country of origin can be built from GACC. `build_combined.py` already passes `qty_mt` through when a GACC file has it and leaves it empty otherwise, so a later extension needs only new data, no code change. The dashboard volume charts use every row that has `qty_mt`: crude oil, coal and LNG run 2020–present; pipeline gas stays at ComTrade 2020–2024.
+
+### Crude oil volume series (rebuild 2026-10-20)
+
+`gacc_crude_oil.csv` was rebuilt in full from two GACC downloads (CN 27090000, crude petroleum oils): Jan–Dec 2025 and Jan–Sep 2026. Value and volume therefore come from the same data release, which keeps `value_per_mt_usd` consistent.
+
+- **Units and rounding** follow `fetch_comtrade.py`: `value_usd_bn = USD / 1e9` (4 decimals), `qty_mt = kg / 1e9` (4 decimals), `value_per_mt_usd = USD / (kg / 1000)` (2 decimals). The barrel column of the download is not stored.
+- **Partner names** are mapped by GACC partner code to the names already used in the repo: 105 Brunei Darussalam, 152 Azerbaijan, 252 Dem. Rep. of the Congo, 344 Russian Federation, 502 USA, 137 Turkey. All other GACC names are taken as delivered.
+- **Revisions:** 2025 values are unchanged against the previous file. Feb–Aug 2026 values differ slightly (GACC revisions in the newer download, e.g. 202607 total +0.17 bn USD, Russia 202607 5.0369 → 5.1840 bn USD). Jan and Sep 2026 are unchanged. 202608 gains one row (Syria, 408 USD).
+- **Jan/Feb:** both downloads deliver January and February as separate months; no split was needed.
+
+Rebuild procedure for future months: download HS 27090000 by month and partner with quantity from GACC, then regenerate the full file from the downloads with the same conversion rules (not row-by-row edits), so revised months are picked up as well.
+
+### Coal volume series (rebuild 2026-10-21)
+
+`gacc_coal.csv` was rebuilt in full from two GACC 8-digit downloads: Jan–Dec 2025 and Jan–Sep 2026, so value and volume come from the same data release.
+
+- **Scope:** HS 2701 = CN 27011100 (anthracite) + 27011210 (bituminous coking coal) + 27011290 (other bituminous coal) + 27011900 (other coal), summed per partner and month. Lignite (27021000) and coke (27040010/90) are in the download but excluded, as before and as in ComTrade 2701. Lignite is not small (0.6–1.2 bn USD per month, mostly from Indonesia), which is why Indonesia ranks lower here than in total coal imports and why the GACC total in `gacc_imports.csv` (incl. lignite) is higher than the sum of this file.
+- **Units, rounding and partner names** as for crude oil (see above); additional codes: 119 Laos, 701 Areas NES.
+- **Revisions:** 2025 values are unchanged against the previous file. Feb–Aug 2026 differ slightly (GACC revisions; largest 202607 +0.05 bn USD). Jan and Sep 2026 are unchanged.
+- **Continuity check:** ComTrade 2701 volumes in H2 2024 were 28–35 Mt per month, GACC 2025 21–36 Mt; no level break at the source change.
+- **TODO — lignite gap:** The sum of all partners in `gacc_coal.csv` (HS 2701, no lignite) runs roughly 10–15 Mt/month below the `gacc_imports.csv` coal aggregate (which includes lignite HS 2702). Month-to-month YoY comparisons using `gacc_coal.csv` partner totals are therefore **not comparable** with `gacc_imports.csv` totals and will produce systematically distorted figures. Fix: either add a separate `gacc_lignite.csv` (HS 27021000) and merge it into `gacc_coal.csv`, or document the gap as a hard limit and always route coal total-volume YoY comparisons through `gacc_imports.csv`.
+
+### LNG volume series and pipeline gas (rebuild 2026-10-21)
+
+`gacc_lng.csv` and `gacc_pipeline_gas.csv` were rebuilt in full from two GACC 8-digit downloads (Jan–Dec 2025, Jan–Sep 2026).
+
+- **LNG:** CN 27111100, with `qty_mt` and `value_per_mt_usd` (units, rounding and partner names as for crude oil). 2025 values unchanged; 2026 revisions in May–Aug (+0.012, +0.035, −0.020, +0.052 bn USD), other months unchanged. Continuity: ComTrade LNG H2 2024 5.8–7.1 Mt per month, GACC 2025 4.5–7.4 Mt.
+- **Pipeline gas:** CN 27112100, value only, three columns as before. Values identical to the previous file (only the row order within 202608/202609 changed to the value-descending order used everywhere). GACC publishes no quantity for this code since 2022, so the pipeline gas volume chart remains ComTrade 2020–2024. The dashboard states this in a text block directly under the *Pipeline Gas Imports by Country* heading. With the GACC data, the fixed y-axis maxima of two country charts were raised so that no bars are clipped: pipeline gas value 2 → 2.5 bn USD (Aug/Sep 2026 above 2 bn), coal quantity 35 → 40 Mt (Dec 2025: 35.2 Mt). An aggregate pipeline mass could be derived as `gacc_imports.gas_mt` minus LNG volume (e.g. 202609: 10.86 − 5.61 = 5.25 Mt), but not by country of origin; it is not used.
+- **Cross-check:** LNG + pipeline gas value per month matches `gacc_imports.gas_usd_bn` within 0.05 bn USD for 2026 (202609: 6.35 vs. 6.35).
 
 **HS codes and categorisation:**
 

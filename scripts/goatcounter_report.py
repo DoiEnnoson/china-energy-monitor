@@ -2,7 +2,9 @@
 """
 goatcounter_report.py
 Täglich: GoatCounter-Daten holen, in traffic_log.csv schreiben, traffic_monthly.csv aktualisieren.
-Montags zusätzlich: Weekly-Email mit WoW-Vergleich, MTD und MoM-Vergleich.
+Täglich außerdem: Klicks auf "Subscribe" im Newsletter-Kasten (GoatCounter-Event
+"newsletter-subscribe") in newsletter_log.csv schreiben.
+Montags zusätzlich: Weekly-Email mit WoW-Vergleich, MTD und MoM-Vergleich sowie Newsletter-Klicks.
 
 GitHub Secrets:
   GOATCOUNTER   — GoatCounter API token
@@ -24,7 +26,10 @@ SITE = "china-energy-monitor.goatcounter.com"
 REPO_ROOT = Path(__file__).parent.parent
 CSV_DAILY = REPO_ROOT / "data" / "traffic_log.csv"
 CSV_MONTHLY = REPO_ROOT / "data" / "traffic_monthly.csv"
+CSV_NEWSLETTER = REPO_ROOT / "data" / "newsletter_log.csv"
 DAILY_HEADER = ["date", "pageviews", "unique_visitors"]
+NEWSLETTER_HEADER = ["date", "subscribe_clicks"]
+NEWSLETTER_EVENT = "newsletter-subscribe"
 MONTHLY_HEADER = ["month", "pageviews", "unique_visitors"]
 
 DAY_NAMES = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
@@ -71,6 +76,20 @@ def fetch_day(day: date, token: str) -> dict:
         "pageviews": total,
         "unique_visitors": total,
     }
+
+
+def fetch_event_count(day: date, token: str, path: str = NEWSLETTER_EVENT) -> int:
+    """Count of one GoatCounter event (e.g. newsletter-subscribe) on one day."""
+    r = requests.get(
+        f"https://{SITE}/api/v0/stats/hits",
+        headers={"Authorization": f"Bearer {token}"},
+        params={"start": f"{day}T00:00:00Z", "end": f"{day}T23:59:59Z", "limit": 100},
+        timeout=30,
+    )
+    if not r.ok:
+        print(f"  API error {r.status_code} for events {day}: {r.text[:500]}")
+        r.raise_for_status()
+    return sum(int(h.get("count", 0)) for h in r.json().get("hits", []) if h.get("path") == path)
 
 
 # ── CSV I/O ───────────────────────────────────────────────────────────────────
@@ -121,6 +140,33 @@ def update_monthly_csv():
         for m in sorted(monthly):
             writer.writerow({"month": m, **monthly[m]})
     print(f"Updated monthly CSV: {len(monthly)} months")
+
+
+def newsletter_logged() -> set[str]:
+    if not CSV_NEWSLETTER.exists():
+        return set()
+    with open(CSV_NEWSLETTER, newline="") as f:
+        return {row["date"] for row in csv.DictReader(f)}
+
+
+def append_newsletter(day: date, clicks: int):
+    write_header = not CSV_NEWSLETTER.exists()
+    with open(CSV_NEWSLETTER, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=NEWSLETTER_HEADER)
+        if write_header:
+            writer.writeheader()
+        writer.writerow({"date": str(day), "subscribe_clicks": clicks})
+    print(f"Logged newsletter clicks: {day} = {clicks}")
+
+
+def newsletter_clicks(start: date, end: date) -> int:
+    if not CSV_NEWSLETTER.exists():
+        return 0
+    with open(CSV_NEWSLETTER, newline="") as f:
+        return sum(
+            int(r["subscribe_clicks"]) for r in csv.DictReader(f)
+            if start <= date.fromisoformat(r["date"]) <= end
+        )
 
 
 def read_monthly() -> list[dict]:
@@ -177,6 +223,12 @@ def send_weekly_email(week_start: date, week_end: date, today: date, user: str, 
     lm_same_end = lm_start.replace(day=today.day - 1) if today.day > 1 else lm_start
     lm_rows = read_range(lm_start, lm_same_end)
     lm_pv, lm_uv = aggregate(lm_rows)
+
+    # Newsletter: Klicks auf "Subscribe" (nicht bestätigte Abonnements — die kennt nur Substack)
+    nl_week = newsletter_clicks(week_start, week_end)
+    nl_prev = newsletter_clicks(week_start - timedelta(days=7), week_end - timedelta(days=7))
+    nl_mtd = newsletter_clicks(month_start, week_end)
+    nl_total = newsletter_clicks(date(2000, 1, 1), week_end)
 
     subject = f"CEM Traffic {week_start.strftime('%d.%m.')}–{week_end.strftime('%d.%m.%Y')}"
 
@@ -248,6 +300,18 @@ def send_weekly_email(week_start: date, week_end: date, today: date, user: str, 
 {month_table}</table>
 <p style="font-size:11px;color:#999;margin-top:4px">* laufender Monat</p>
 
+<h4 style="margin-bottom:4px;margin-top:20px">Newsletter</h4>
+<table cellpadding="5" cellspacing="0" border="0">
+<tr style="border-bottom:1px solid #ccc">
+  <th align="left">Klicks auf „Subscribe“</th><th align="right">Anzahl</th>
+</tr>
+<tr><td>Diese Woche</td><td align="right">{nl_week}</td></tr>
+<tr style="color:#666;font-size:12px"><td>Vorwoche</td><td align="right">{nl_prev}</td></tr>
+<tr><td>{mtd_label}</td><td align="right">{nl_mtd}</td></tr>
+<tr style="font-weight:bold"><td>Seit Start</td><td align="right">{nl_total}</td></tr>
+</table>
+<p style="font-size:11px;color:#999;margin-top:4px">Klicks im Anmeldekasten auf china-energy-monitor.com. Bestätigte Abonnenten: Substack-Dashboard → Subscribers.</p>
+
 <p style="margin-top:20px;font-size:11px;color:#bbb">GoatCounter · china-energy-monitor.com</p>
 </body></html>"""
 
@@ -291,6 +355,17 @@ def main():
         d += timedelta(days=1)
 
     update_monthly_csv()
+
+    # Newsletter-Klicks: ab Start des Kastens (2026-11-04), Lücken der letzten 60 Tage füllen
+    nl_logged = newsletter_logged()
+    d = max(start, date(2026, 11, 4))
+    while d <= yesterday:
+        if str(d) not in nl_logged:
+            try:
+                append_newsletter(d, fetch_event_count(d, token))
+            except Exception as exc:
+                print(f"  Skipping newsletter clicks {d}: {exc}")
+        d += timedelta(days=1)
 
     if today.weekday() == 0:  # Montag
         gmail = get_gmail_config()

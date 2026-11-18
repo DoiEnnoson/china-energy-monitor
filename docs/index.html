@@ -81,7 +81,7 @@
       --red:     #7A0404;
       --red-mid: #9E2222;
       --pos:     #0E9A84;
-      --neg:     #7A0404;
+      --neg:     #E5574B;
       --gap:     1rem;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -155,6 +155,23 @@
     .article-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
     .article-card .card-title { font-size: 0.78rem; color: var(--text); padding: 0.6rem 0.7rem 0.7rem; line-height: 1.4; }
 
+    .newsletter-box {
+      margin-top: var(--gap); background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--teal); border-radius: 4px; padding: 1rem 1.2rem;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.5rem;
+    }
+    .newsletter-text { flex: 1 1 240px; font-size: 0.85rem; line-height: 1.5; color: var(--text); }
+    .newsletter-text strong { display: block; font-size: 0.92rem; margin-bottom: 0.15rem; }
+    .newsletter-form { flex: 1 1 240px; min-width: 0; max-width: 100%; display: flex; gap: 0.5rem; }
+    .newsletter-form input[type="email"] {
+      flex: 1; min-width: 0; padding: 0.55rem 0.7rem; font: inherit; font-size: 0.85rem;
+      color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+    }
+    .newsletter-form button {
+      padding: 0.55rem 1rem; font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      color: #fff; background: var(--teal); border: 0; border-radius: 4px; white-space: nowrap;
+    }
+    .newsletter-alt { flex-basis: 100%; font-size: 0.7rem; color: var(--text2); }
     .chart-row       { display: grid; grid-template-columns: 58fr 38fr; gap: var(--gap); }
     .chart-row-equal { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
     .chart-box {
@@ -306,6 +323,20 @@
       </div>
     </div>
 
+    <!-- Newsletter signup: posts the address to Substack (chinaenergymonitor.substack.com); confirmation opens in a new tab -->
+    <div class="newsletter-box" id="newsletter">
+      <div class="newsletter-text">
+        <strong>Get the monthly update by email</strong>
+        One email per month when the new data are in: China's energy supply, imports, power generation and EV transition, with the key findings.
+      </div>
+      <form class="newsletter-form" action="https://chinaenergymonitor.substack.com/api/v1/free?nojs=true" method="post" target="_blank"
+            onsubmit="if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'newsletter-subscribe', title: 'Newsletter subscribe click', event: true });">
+        <input type="email" name="email" placeholder="Your email address" aria-label="Email address" required>
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="newsletter-alt">Free · via Substack · unsubscribe anytime · or <a href="https://chinaenergymonitor.substack.com/subscribe" target="_blank" rel="noopener">subscribe on Substack directly</a></div>
+    </div>
+
     <p class="section-label-h1">Monthly Summary</p>
     <div class="summary-box" id="month-summary">
       <p id="month-summary-power">Loading…</p>
@@ -330,22 +361,6 @@
         <img src="cem-card-4.jpg" alt="China Grid Bottleneck Slows Solar and Wind Expansion" loading="lazy">
         <div class="card-title">China Grid Bottleneck Slows Solar and Wind Expansion</div>
       </a>
-    </div>
-
-    <p class="section-label" id="fossil-section-label">Fossil Supply</p>
-    <div class="chart-row">
-      <div class="chart-box">
-        <div class="chart-title">Production vs. Imports by Energy Carrier</div>
-        <div class="chart-subtitle" id="butterfly-subtitle">TWh · ← Production &nbsp;|&nbsp; Imports →</div>
-        <canvas id="butterfly"></canvas>
-        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">Import Change Year-on-Year</div>
-        <div class="chart-subtitle" id="yoy-subtitle">percent</div>
-        <canvas id="yoy"></canvas>
-        <p class="chart-source">Source: GACC</p>
-      </div>
     </div>
 
     <p class="section-label">Power Generation Mix 2016 – present</p>
@@ -453,17 +468,17 @@
     <p class="section-label-h1" id="total-energy">Total Energy System</p>
 
     <div class="summary-box">
-      <p>This section shows China's total energy supply, combining domestic fossil fuel production with imports of coal, crude oil, and natural gas, plus clean power generation from wind, solar, hydro, and nuclear. All values are converted to energy equivalent in terawatt-hours (TWh). The second chart tracks China's fossil fuel supply only, merging imports and domestic output. For more details, refer to the <a href="#methodology">Methodology</a> section.</p>
+      <p>This section shows China's total energy supply, combining domestic fossil fuel production with imports of coal, crude oil, and natural gas, plus clean power generation from wind, solar, hydro, and nuclear. All values are converted to energy equivalent in terawatt-hours (TWh). The figures measure supply, not consumption: changes in coal, oil and gas stockpiles are not published monthly and are therefore not included, so a fall in supply can also mean that stocks were drawn down. The carrier charts break this total down by energy source. The Fossil Supply blocks below focus on coal, crude oil and natural gas, for the latest month and year-to-date: domestic production versus imports, and the change against the same period of the prior year. For more details, refer to the <a href="#methodology">Methodology</a> section.</p>
     </div>
 
     <div class="kpi-grid" style="grid-template-columns: repeat(2, 1fr);">
       <div class="kpi-box">
-        <div class="kpi-label" id="sys-month-kpi-label">Total Primary Energy</div>
+        <div class="kpi-label" id="sys-month-kpi-label">Total Primary Energy Supply</div>
         <div class="kpi-value" id="sys-month-kpi-twh">—</div>
         <div class="kpi-delta" id="sys-month-kpi-delta">—</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-label" id="sys-ytd-kpi-label">Total Primary Energy YTD</div>
+        <div class="kpi-label" id="sys-ytd-kpi-label">Total Primary Energy Supply YTD</div>
         <div class="kpi-value" id="sys-ytd-kpi-twh">—</div>
         <div class="kpi-delta" id="sys-ytd-kpi-delta">—</div>
       </div>
@@ -484,6 +499,22 @@
       </div>
     </div>
 
+    <p class="section-label" id="fossil-section-label">Fossil Supply</p>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Production vs. Imports by Energy Carrier</div>
+        <div class="chart-subtitle" id="butterfly-subtitle">TWh · ← Production &nbsp;|&nbsp; Imports →</div>
+        <canvas id="butterfly"></canvas>
+        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Import Change Year-on-Year</div>
+        <div class="chart-subtitle" id="yoy-subtitle">percent</div>
+        <canvas id="yoy"></canvas>
+        <p class="chart-source">Source: GACC</p>
+      </div>
+    </div>
+
     <p class="section-label" id="supply-ytd-label">Year-to-date Supply</p>
     <div class="chart-row">
       <div class="chart-box">
@@ -497,6 +528,20 @@
         <div class="chart-subtitle" id="supply-ytd-yoy-subtitle">YoY · percent</div>
         <canvas id="supply-ytd-yoy"></canvas>
         <p class="chart-source">Sources: NBS, GACC</p>
+      </div>
+    </div>
+    <div class="chart-row-equal" style="margin-top: var(--gap);">
+      <div class="chart-box">
+        <div class="chart-title">Fossil Supply Change Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-twh-fossil-subtitle">TWh · Production + Imports</div>
+        <div style="position: relative; height: 280px;"><canvas id="supply-ytd-twh-fossil"></canvas></div>
+        <p class="chart-source">Sources: NBS, GACC · Conversion factors: see <a href="#methodology">Methodology</a></p>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Total Energy Supply Change Year-to-Date</div>
+        <div class="chart-subtitle" id="supply-ytd-twh-total-subtitle">TWh · Fossil + Clean Power</div>
+        <div style="position: relative; height: 280px;"><canvas id="supply-ytd-twh-total"></canvas></div>
+        <p class="chart-source">Sources: NBS, GACC, <a href="https://ember-energy.org/" target="_blank" rel="noopener">Ember</a> · Conversion factors: see <a href="#methodology">Methodology</a></p>
       </div>
     </div>
 
@@ -591,9 +636,9 @@
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
-        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <div class="chart-subtitle">Million tonnes · 2020–present</div>
         <canvas id="oil-qty-country"></canvas>
-        <p class="chart-source">Source: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a></p>
+        <p class="chart-source">Sources: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a>, GACC</p>
       </div>
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Value</div>
@@ -607,9 +652,9 @@
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
-        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <div class="chart-subtitle">Million tonnes · 2020–present</div>
         <canvas id="lng-qty-country"></canvas>
-        <p class="chart-source">Source: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a></p>
+        <p class="chart-source">Sources: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a>, GACC</p>
       </div>
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Value</div>
@@ -626,9 +671,9 @@
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
-        <div class="chart-subtitle">Million tonnes · 2020–2024</div>
+        <div class="chart-subtitle">Million tonnes · 2020–present</div>
         <canvas id="coal-qty-country"></canvas>
-        <p class="chart-source">Source: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a></p>
+        <p class="chart-source">Sources: <a href="https://comtradeplus.un.org/" target="_blank" rel="noopener">UN ComTrade</a>, GACC</p>
       </div>
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Value</div>
@@ -643,6 +688,9 @@
     </div>
 
     <p class="section-label">Pipeline Gas Imports by Country</p>
+    <div class="summary-box">
+      <p>Volume data for China's pipeline gas imports by country of origin end in December 2024. The General Administration of Customs of China (GACC) still publishes monthly pipeline gas imports by supplier country, but only in US dollars: since 2022, the customs database no longer reports quantities for natural gas in gaseous state (HS 2711.21). The quantity chart therefore relies on UN ComTrade data up to 2024, while the value chart continues with GACC figures to the latest month. Total gas import volumes, pipeline gas and LNG combined, remain available in GACC's aggregate statistics and feed the <a href="#total-energy">Total Energy System</a> section.</p>
+    </div>
     <div class="chart-row-equal">
       <div class="chart-box">
         <div class="chart-title">Top 5 Suppliers by Quantity</div>
@@ -950,6 +998,13 @@
     const MONTHS_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+    /* ── Merge primär + Fallback per period (primär gewinnt, sonst Fallback) ── */
+    function mergeByPeriod(primary, fallback) {
+      const have = new Set((primary || []).map(r => String(r.period)));
+      const extra = (fallback || []).filter(r => r && r.period && !have.has(String(r.period)));
+      return [...(primary || []), ...extra].sort((a, b) => String(a.period).localeCompare(String(b.period)));
+    }
+
     /* ── CSV parser ── */
     function parseCSV(text) {
       const lines = text.trim().split('\n');
@@ -1004,7 +1059,11 @@
       fetchCSV('data/transport/china_car_sales_retail.csv'),
       fetchCSV('data/transport/china_car_sales_projection.csv'),
       fetchCSV('data/transport/fuel_savings.csv'),
-    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal, carRetail, carProj, fuelSavings]) => {
+      fetchCSV('data/fuel-imports/gacc_imports_manual.csv').catch(() => []),
+    ]).then(([ep, cap, ec, fs, gc, coal, crudeoil, lng, pipe, eb, wb, gemCoal, carRetail, carProj, fuelSavings, gcManual]) => {
+      // GACC-Importe: CEM-Pipeline primär, GACC-Handelsbilanz-Fallback für
+      // Monate, die die Energiebilanz-Pipeline noch nicht erzeugt hat.
+      gc = mergeByPeriod(gc, gcManual);
       buildDashboard(ep, cap, ec, fs, gc);
       buildSupplySection(fs, gc, eb);
       buildGenerationDetail(ep, ec);
@@ -1590,24 +1649,86 @@
       const latestEb = eb[eb.length - 1];
       const ebYear   = eb.filter(r => r.period.startsWith(curYr));
 
+      /* ── YTD supply change in TWh vs. same period last year ── */
+      /* Prior-year values are back-calculated row by row from the stored YoY percentages (same method as build_supply.py) */
+      function ytdDeltaTwh(field, yoyField, f) {
+        let cur = 0, prior = 0;
+        for (const r of fsYear) {
+          const v = +r[field], p = +r[yoyField];
+          if (isNaN(v) || isNaN(p)) return null;
+          cur += v; prior += v / (1 + p / 100);
+        }
+        return (cur - prior) * f;
+      }
+      const sumOrNull = a => a.some(v => v === null) ? null : a.reduce((s, v) => s + v, 0);
+      const fmtTwh    = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(0);
+
+      const prodYtdD = [
+        ytdDeltaTwh('coal_prod_mt',      'coal_prod_yoy_pct',      COAL_F),
+        ytdDeltaTwh('crude_oil_prod_mt', 'crude_oil_prod_yoy_pct', OIL_F),
+        ytdDeltaTwh('gas_prod_bcm',      'gas_prod_yoy_pct',       GAS_F)
+      ];
+      const imptYtdD = [
+        ytdDeltaTwh('coal_import_mt',      'coal_import_yoy_pct',      COAL_F),
+        ytdDeltaTwh('crude_oil_import_mt', 'crude_oil_import_yoy_pct', OIL_F),
+        ytdDeltaTwh('gas_import_bcm',      'gas_import_yoy_pct',       GAS_F)
+      ];
+      const cleanYtd    = +latestEb.clean_power_ytd_twh, cleanYtdYoY = +latestEb.clean_power_ytd_yoy_pct;
+      const cleanD      = isNaN(cleanYtd) || isNaN(cleanYtdYoY) ? null : cleanYtd - cleanYtd / (1 + cleanYtdYoY / 100);
+
+      const fossilD = [0, 1, 2].map(i => prodYtdD[i] === null || imptYtdD[i] === null ? null : prodYtdD[i] + imptYtdD[i]);
+      const fossilTotalD = sumOrNull(fossilD);
+      const totalD       = fossilTotalD === null || cleanD === null ? null : fossilTotalD + cleanD;
+
+      /* Net change only: green = supply grew, red = supply shrank. Value goes into the category label (readable at any width) */
+      function deltaChart(id, names, values) {
+        new Chart(document.getElementById(id), {
+          type: 'bar',
+          data: {
+            labels: names.map((n, i) => values[i] === null ? n : [n, fmtTwh(values[i]) + ' TWh']),
+            datasets: [{ label: 'Net change', data: values,
+              backgroundColor: values.map(v => v === null ? '#444' : v >= 0 ? TEAL : RED),
+              borderWidth: 0, borderRadius: 2 }]
+          },
+          options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => ctx.raw === null ? 'n/a' : `Net change: ${fmtTwh(ctx.raw)} TWh` } }
+            },
+            scales: {
+              x: { grid: { color: '#1e1a3a' }, ticks: { callback: v => fmtTwh(v) } },
+              y: { grid: { display: false }, ticks: { color: '#dbcfbf', font: { weight: '600', size: 13 } } }
+            }
+          }
+        });
+      }
+
+      const ytdVs = ytdRange + ' vs. same period ' + (+curYr - 1) + ' · TWh · net change (production + imports)';
+      document.getElementById('supply-ytd-twh-fossil-subtitle').textContent = ytdVs;
+      document.getElementById('supply-ytd-twh-total-subtitle').textContent  = ytdRange + ' vs. same period ' + (+curYr - 1) + ' · TWh · net change';
+
+      deltaChart('supply-ytd-twh-fossil', ['Coal', 'Oil', 'Gas', 'Fossil total'], [...fossilD, fossilTotalD]);
+      deltaChart('supply-ytd-twh-total',  ['Fossil', 'Clean power', 'Total'],     [fossilTotalD, cleanD, totalD]);
+
       function ebSumYr(field) {
         return ebYear.reduce((s, r) => s + (+r[field] || 0), 0);
       }
 
-      /* ── KPI boxes: Total Primary Energy — Month + YTD ── */
+      /* ── KPI boxes: Total Primary Energy Supply — Month + YTD ── */
       const monthTotal    = +latestEb.total_twh          || 0;
       const monthYoY      = +latestEb.total_yoy_pct;
       const totalYtd      = +latestEb.total_ytd_twh      || 0;
       const totalYtdYoY   = +latestEb.total_ytd_yoy_pct;
       const monthLabel    = periodToShort(latestEb.period);
 
-      document.getElementById('sys-month-kpi-label').textContent = 'Total Primary Energy — ' + monthLabel;
+      document.getElementById('sys-month-kpi-label').textContent = 'Total Primary Energy Supply — ' + monthLabel;
       document.getElementById('sys-month-kpi-twh').textContent   = Math.round(monthTotal).toLocaleString('de-DE') + ' TWh';
       const mDeltaEl = document.getElementById('sys-month-kpi-delta');
       mDeltaEl.textContent = (monthYoY >= 0 ? '+' : '') + monthYoY.toFixed(1) + '% vs. prior year';
       mDeltaEl.className   = 'kpi-delta ' + (monthYoY >= 0 ? 'pos' : 'neg');
 
-      document.getElementById('sys-ytd-kpi-label').textContent = 'Total Primary Energy — ' + ytdRange;
+      document.getElementById('sys-ytd-kpi-label').textContent = 'Total Primary Energy Supply — ' + ytdRange;
       document.getElementById('sys-ytd-kpi-twh').textContent   = Math.round(totalYtd).toLocaleString('de-DE') + ' TWh';
       const yDeltaEl = document.getElementById('sys-ytd-kpi-delta');
       yDeltaEl.textContent = (totalYtdYoY >= 0 ? '+' : '') + totalYtdYoY.toFixed(1) + '% vs. prior year';
@@ -2233,9 +2354,10 @@
       /* ── Country pairs ── */
       function buildCountryPair(rows, qtyId, valId, qMax, qStep, vMax, vStep) {
         const top    = top5(rows);
-        const ctRows = rows.filter(r => r.source === 'comtrade');
-        const vPer   = uniqSortedPeriods(rows);
-        const qPer   = uniqSortedPeriods(ctRows);
+        /* Quantity: every row that carries qty_mt (ComTrade, plus GACC once a gacc_*.csv has the column) */
+        const qtyRows = rows.filter(r => r.qty_mt !== '');
+        const vPer    = uniqSortedPeriods(rows);
+        const qPer    = uniqSortedPeriods(qtyRows);
 
         new Chart(document.getElementById(valId), {
           type: 'bar',
@@ -2256,7 +2378,7 @@
             labels: qPer.map(periodToShort),
             datasets: top.map((p, i) => ({
               label: p,
-              data: seriesByPartner(ctRows, p, 'qty_mt', qPer),
+              data: seriesByPartner(qtyRows, p, 'qty_mt', qPer),
               backgroundColor: P5_COLORS[i], borderWidth: 0,
             }))
           },
@@ -2265,10 +2387,10 @@
       }
 
       //                               qMax qStep  vMax vStep
-      buildCountryPair(coal,     'coal-qty-country', 'coal-val-country',  35, 10,   4,  1);
+      buildCountryPair(coal,     'coal-qty-country', 'coal-val-country',  40, 10,   4,  1);
       buildCountryPair(crudeoil, 'oil-qty-country',  'oil-val-country',   35, 10,  30, 10);
       buildCountryPair(lng,      'lng-qty-country',  'lng-val-country',    8,  2,   8,  2);
-      buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country',   6,  1,   2,  0.5);
+      buildCountryPair(pipe,     'pipe-qty-country', 'pipe-val-country',   6,  1, 2.5,  0.5);
 
     } /* end buildImportsSection */
 
@@ -2341,19 +2463,19 @@
         ds('GACC VpU (÷7.33)', vpuCrudeBbl, ORANGE),
         ds('Brent',            wbBrent,     GOLD,  [4, 3]),
         ds('Dubai',            wbDubai,     TEAL,  [4, 3]),
-      ], 'USD / bbl', 0, 150, 50);
+      ], 'USD / bbl', 0);
 
       /* Chart 3 — Gas vs LNG Japan */
       mkLine('bench-gas', [
         ds('GACC VpU (÷52)',  vpuGasMmbtu, TEAL),
         ds('LNG Japan',       wbLngJp,     ORANGE, [4, 3]),
-      ], 'USD / MMBtu', 0, 16, 5);
+      ], 'USD / MMBtu', 0);
 
       /* Chart 4 — Coal vs Australian Coal */
       mkLine('bench-coal', [
         ds('GACC VpU',         vpuCoal,  RED),
         ds('Coal Australia',   wbCoalAu, ORANGE, [4, 3]),
-      ], 'USD / t', 0, 150, 50);
+      ], 'USD / t', 0);
 
     } /* end buildBenchmarkSection */
 
